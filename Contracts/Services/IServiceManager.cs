@@ -4,5 +4,6 @@
     {
         ITokenService TokenService { get; }
         IAuthenticationService AuthenticationService { get; }
+        IProjectService ProjectService { get; }
     }
 }

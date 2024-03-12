@@ -10,6 +10,7 @@ namespace BuildingManager.Services
     {
         private readonly Lazy<IAuthenticationService> _authenticationService;
         private readonly Lazy<ITokenService> _tokenService;
+        private readonly Lazy<IProjectService> _projectService;
 
         public ServiceManager(
             ILoggerManager logger,
@@ -19,15 +20,12 @@ namespace BuildingManager.Services
         {
             _tokenService = new Lazy<ITokenService>(() => new TokenService(configuration, repositoryManager));
             _authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(logger,repositoryManager, this));
+            _projectService = new Lazy<IProjectService>(() => new ProjectService(logger, repositoryManager));
         }
 
         public ITokenService TokenService => _tokenService.Value;
         public IAuthenticationService AuthenticationService => _authenticationService.Value;
+        public IProjectService ProjectService => _projectService.Value;
  
-
-
-
-
-
     }
 }
