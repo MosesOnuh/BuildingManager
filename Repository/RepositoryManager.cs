@@ -9,6 +9,7 @@ namespace BuildingManager.Repository
     {
         private readonly Lazy<ITokenRepository> _tokenRepository;
         private readonly Lazy<IUserRepository> _userRepository;
+        private readonly Lazy<IProjectRepository> _projectRepository;
 
 
         public RepositoryManager(
@@ -18,9 +19,11 @@ namespace BuildingManager.Repository
         {
             _tokenRepository = new Lazy<ITokenRepository>(() => new TokenRepository(configuration, logger));
             _userRepository = new Lazy<IUserRepository>(() => new UserRepository(configuration, logger));
+            _projectRepository = new Lazy<IProjectRepository>(() => new ProjectRepository(configuration, logger)) ;
         }
 
         public ITokenRepository TokenRepository => _tokenRepository.Value;
         public IUserRepository UserRepository => _userRepository.Value;
+        public IProjectRepository ProjectRepository => _projectRepository.Value;
     }
 }

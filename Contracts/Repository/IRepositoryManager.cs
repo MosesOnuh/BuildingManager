@@ -4,5 +4,6 @@
     {
         ITokenRepository TokenRepository { get; }
         IUserRepository UserRepository { get; }
+        IProjectRepository ProjectRepository { get; }
     }
 }

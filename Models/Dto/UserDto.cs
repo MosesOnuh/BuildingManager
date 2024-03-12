@@ -1,4 +1,6 @@
-﻿namespace BuildingManager.Models.Dto
+﻿using System;
+
+namespace BuildingManager.Models.Dto
 {
     public class UserLoginReq
     {
@@ -52,6 +54,7 @@
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public int EmailVerified { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 
 }
