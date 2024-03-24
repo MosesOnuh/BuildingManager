@@ -8,7 +8,7 @@ namespace BuildingManager.Validators
 {
     public class ProjectValidator
     {
-        public void ValidateProjectCreateDto(ProjectCreateDto project)
+        public void ValidateProjectRequestDto(ProjectRequestDto project)
         {
             project.Name = SanitizeInput(project.Name).ToLower();
             project.Address = SanitizeInput(project.Address).ToLower();

@@ -46,12 +46,14 @@ namespace BuildingManager.Extensions
 
         public static void ConfigureServiceManager(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddScoped<IServiceManager, ServiceManager>();
+            //serviceCollection.AddScoped<IServiceManager, ServiceManager>();
+            serviceCollection.AddSingleton<IServiceManager, ServiceManager>();
         }
 
         public static void ConfigureRepositoryManager(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddScoped<IRepositoryManager, RepositoryManager>();
+            //serviceCollection.AddScoped<IRepositoryManager, RepositoryManager>();
+            serviceCollection.AddSingleton<IRepositoryManager, RepositoryManager>();
         }
 
 

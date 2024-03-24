@@ -4,10 +4,12 @@ using BuildingManager.Helpers;
 using BuildingManager.Models;
 using BuildingManager.Models.Dto;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
@@ -97,6 +99,38 @@ namespace BuildingManager.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
-        
+
+        public string ValidateToken(string token)
+        {
+            IConfiguration jwtSettings = _configuration.GetSection("JWT");
+            byte[] secretKey = Encoding.ASCII.GetBytes(jwtSettings.GetSection("Secret").Value);
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            tokenHandler.ValidateToken(token, new TokenValidationParameters
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtSettings.GetSection("Issuer").Value,
+                ValidAudience = jwtSettings.GetSection("Audience").Value,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("Secret").Value))
+
+            }, out SecurityToken validatedToken);
+            var jwtToken =  (JwtSecurityToken)validatedToken;
+
+            var tokenTypeClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "tokenType");
+            if (tokenTypeClaim == null) throw new Exception("Invalid token provided");
+
+            if (tokenTypeClaim.Value != "1") throw new Exception("Invalid token provided");
+
+            var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim != null)
+            {
+                return userIdClaim.Value;
+            }
+
+            throw new Exception("Invalid token provided");
+        }
     }
 }

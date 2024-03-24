@@ -11,10 +11,10 @@ namespace BuildingManager.Models.Dto
         public string Country { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public DateTime CreatedAt { get; set; }
+        //public DateTime CreatedAt { get; set; }
     }
 
-    public class ProjectCreateDto
+    public class ProjectRequestDto
     {
         public string Name { get; set; }
         public string Address { get; set; }
@@ -22,6 +22,13 @@ namespace BuildingManager.Models.Dto
         public string Country { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+    }
+
+    public class AddProjectMemberDto
+    {
+        public string ProjectId { get; set; }
+        public string Email { get; set; }
+        public string Role { get; set; }
     }
 
 }
