@@ -20,7 +20,7 @@ namespace BuildingManager.Controllers
             _service = service;
         }
 
-        [HttpPost("CreateProject")]
+        [HttpPost("user/CreateProject")]
         [ProducesResponseType(typeof(SuccessResponse<ProjectDto>), 200)]
         public async Task<IActionResult> CreateProject ([FromBody] ProjectRequestDto model) 
         {
@@ -29,7 +29,7 @@ namespace BuildingManager.Controllers
         }
 
         [Authorize]
-        [HttpGet("GetProject/{id}")]
+        [HttpGet("user/GetProject/{id}")]
         [ProducesResponseType(typeof(SuccessResponse<ProjectDto>), 200)]
         public async Task<IActionResult> GetProject(string id)
         {
@@ -51,7 +51,7 @@ namespace BuildingManager.Controllers
 
         ////carry out pagination
         [Authorize]
-        [HttpGet("GetProjects/{pageNumber:int}/{pageSize:int}")]
+        [HttpGet("user/GetProjects/{pageNumber:int}/{pageSize:int}")]
         public async Task<IActionResult> GetProjects (int pageNumber, int pageSize) 
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
@@ -65,9 +65,9 @@ namespace BuildingManager.Controllers
         }
 
 
-        //edit project
+        //Only PM can update a project
         [Authorize]
-        [HttpPut("UpdateProject")]
+        [HttpPut("PM/UpdateProject")]
         [ProducesResponseType(typeof(SuccessResponse<ProjectDto>), 200)]
         public async Task<IActionResult> UpdateProject([FromBody] ProjectDto model)
         {
@@ -89,9 +89,9 @@ namespace BuildingManager.Controllers
         }
 
 
-        //add member to project
+        //Only PM can add members to project
         [Authorize]
-        [HttpPost("AddProjectMember")]
+        [HttpPost("PM/AddProjectMember")]
         public async Task<IActionResult> AddProjectMember([FromBody] AddProjectMemberDto model)
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
@@ -100,8 +100,7 @@ namespace BuildingManager.Controllers
             }
 
             var userId = HttpContext.Items["UserId"] as string;
-
-            var (userRole, projectId) = await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
+            var (userRole, _) = await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
             if (userRole != Enums.UserRoles.PM)
             {
                 //_logger.LogError($"Error, only a PM (Project Manager) is allowed to add members to a project. User is not a PM");
@@ -164,3 +163,4 @@ namespace BuildingManager.Controllers
 
 //Note
 //When a user accept a project invite, add the user to userRole Table
+//ensure user input is validated

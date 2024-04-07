@@ -13,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.ConfigureLoggerService();
+builder.Services.ConfigureStorageService();
 // NLog: Setup NLog for Dependency injection
 builder.Logging.ClearProviders();
 builder.Host.UseNLog();

@@ -75,7 +75,8 @@ namespace BuildingManager.Repository
                     await command.ExecuteNonQueryAsync();
                    
                     int resultCode = Convert.ToInt32(resultCodeParam.Value);
-                    if (resultCode == 1) _logger.LogInfo("Successfully Checked and Deleted Token");
+                    //if (resultCode == 1) _logger.LogInfo("Successfully ran query to Check and Delete Token");
+                    _logger.LogInfo("Successfully ran query to Check and Delete Token");
 
                     return resultCode;
                 }

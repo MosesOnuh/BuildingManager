@@ -11,6 +11,7 @@ namespace BuildingManager.Repository
         private readonly Lazy<IUserRepository> _userRepository;
         private readonly Lazy<IProjectRepository> _projectRepository;
         private readonly Lazy<INotificationRepository> _notificationRepository;
+        private readonly Lazy<IActivityRepository> _activityRepository;
 
 
         public RepositoryManager(
@@ -22,6 +23,7 @@ namespace BuildingManager.Repository
             _userRepository = new Lazy<IUserRepository>(() => new UserRepository(configuration, logger));
             _projectRepository = new Lazy<IProjectRepository>(() => new ProjectRepository(configuration, logger));
             _notificationRepository = new Lazy<INotificationRepository>(() => new NotificationRepository(configuration, logger));
+            _activityRepository = new Lazy<IActivityRepository>(() => new ActivityRepository(configuration, logger));
 
         }
 
@@ -29,5 +31,6 @@ namespace BuildingManager.Repository
         public IUserRepository UserRepository => _userRepository.Value;
         public IProjectRepository ProjectRepository => _projectRepository.Value;
         public INotificationRepository NotificationRepository => _notificationRepository.Value;
+        public IActivityRepository ActivityRepository => _activityRepository.Value;
     }
 }

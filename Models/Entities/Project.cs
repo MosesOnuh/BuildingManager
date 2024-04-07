@@ -28,19 +28,13 @@ namespace BuildingManager.Models.Entities
     {
         public string ProjectId { get; set; }
         public string UserId { get; set; }
-        public string Role { get; set; }
+        //Enum 1 for PM, 2 for Other-Pro, 3 for Client
+        public int Role { get; set; }
         public string Profession { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }
 
 
- //   CREATE TABLE ProjectMembers(
- //   ProjectId NVARCHAR(250)  NOT NULL,
- //   UserId NVARCHAR(250) NOT NULL,
- //   Role NVARCHAR(200) NULL,
-	//Profession NVARCHAR(50) NOT NULL,
- //   CreatedAt DateTime NOT NULL,
-	//UpdatedAt DateTime NOT NULL,
 
 }

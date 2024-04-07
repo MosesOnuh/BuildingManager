@@ -9,7 +9,6 @@ namespace BuildingManager.Enums
         [Description("Role for other professionals")]
         OtherPro = 2,
         [Description("Role for other Client")]
-        Client = 3
-            
+        Client = 3            
     }
 }

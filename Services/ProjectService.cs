@@ -66,9 +66,9 @@ namespace BuildingManager.Services
             {
                 if (member.UserId == userId)
                 {
-                    if (member.Role == "1") return (UserRoles.PM, member.ProjectId);
-                    else if (member.Role == "2") return (UserRoles.OtherPro, member.ProjectId);
-                    else if (member.Role == "3") return (UserRoles.Client, member.ProjectId);
+                    if (member.Role == 1) return (UserRoles.PM, member.ProjectId);
+                    else if (member.Role == 2) return (UserRoles.OtherPro, member.ProjectId);
+                    else if (member.Role == 3) return (UserRoles.Client, member.ProjectId);
                     else throw new Exception("Invalid user role");
                 }
             }
@@ -91,8 +91,8 @@ namespace BuildingManager.Services
                 Address = project.Address,
                 State = project.State,
                 Country = project.Country,
-                StartDate = DateTime.Now,
-                EndDate = DateTime.Now,
+                StartDate = project.StartDate,
+                EndDate = project.EndDate,
             };
 
             return new SuccessResponse<ProjectDto>

@@ -49,3 +49,15 @@ C:\Users\PC\Documents\C# development\new dev\BuildingManager\bin\Debug\net6.0\nl
 C:\Users\PC\Documents\C# development\new dev\BuildingManager\bin\Debug\net6.0\NLog.Extensions.Logging.dll
 C:\Users\PC\Documents\C# development\new dev\BuildingManager\bin\Debug\net6.0\NLog.Web.AspNetCore.dll
 C:\Users\PC\Documents\C# development\new dev\BuildingManager\bin\Debug\net6.0\BCrypt.Net-Next.dll
+C:\Users\PC\Documents\C# development\new dev\BuildingManager\bin\Debug\net6.0\AWSSDK.Core.dll
+C:\Users\PC\Documents\C# development\new dev\BuildingManager\bin\Debug\net6.0\AWSSDK.S3.dll
+C:\Users\MY LAPTOP\OneDrive\Desktop\ICHADO\msc backup\C# development\new dev\BuildingManager\obj\Debug\net6.0\BuildingManager.csproj.AssemblyReference.cache
+C:\Users\MY LAPTOP\OneDrive\Desktop\ICHADO\msc backup\C# development\new dev\BuildingManager\obj\Debug\net6.0\BuildingManager.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\MY LAPTOP\OneDrive\Desktop\ICHADO\msc backup\C# development\new dev\BuildingManager\obj\Debug\net6.0\BuildingManager.AssemblyInfoInputs.cache
+C:\Users\MY LAPTOP\OneDrive\Desktop\ICHADO\msc backup\C# development\new dev\BuildingManager\obj\Debug\net6.0\BuildingManager.AssemblyInfo.cs
+C:\Users\MY LAPTOP\OneDrive\Desktop\ICHADO\msc backup\C# development\new dev\BuildingManager\obj\Debug\net6.0\BuildingManager.csproj.CoreCompileInputs.cache
+C:\Users\MY LAPTOP\OneDrive\Desktop\ICHADO\msc backup\C# development\new dev\BuildingManager\obj\Debug\net6.0\BuildingManager.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\MY LAPTOP\OneDrive\Desktop\ICHADO\msc backup\C# development\new dev\BuildingManager\obj\Debug\net6.0\BuildingManager.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\MY LAPTOP\OneDrive\Desktop\ICHADO\msc backup\C# development\new dev\BuildingManager\obj\Debug\net6.0\BuildingManager.sourcelink.json
+C:\Users\MY LAPTOP\OneDrive\Desktop\ICHADO\msc backup\C# development\new dev\BuildingManager\obj\Debug\net6.0\BuildingManager.dll
+C:\Users\MY LAPTOP\OneDrive\Desktop\ICHADO\msc backup\C# development\new dev\BuildingManager\obj\Debug\net6.0\BuildingManager.pdb

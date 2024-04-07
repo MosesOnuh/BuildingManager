@@ -112,7 +112,7 @@ namespace BuildingManager.Repository
                     {
                         CommandType = CommandType.StoredProcedure
                     };
-                    command.Parameters.AddWithValue("@UserEmail", userEmail); ;
+                    command.Parameters.AddWithValue("@UserEmail", userEmail);
 
                     await connection.OpenAsync();
 
