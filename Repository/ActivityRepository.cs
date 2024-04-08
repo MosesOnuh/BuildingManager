@@ -44,10 +44,7 @@ namespace BuildingManager.Repository
                         new SqlParameter("@FileExtension", activity.FileExtension),
                         new SqlParameter("@StartDate", activity.StartDate),
                         new SqlParameter("@EndDate", activity.EndDate),
-                        new SqlParameter("@ActualStartDate", activity.StartDate),
-                        new SqlParameter("@ActualEndDate", activity.EndDate),
                         new SqlParameter("@CreatedAt", activity.CreatedAt),
-                        new SqlParameter("@UpdatedAt", activity.UpdatedAt),
                     };
 
                     SqlCommand command = new("proc_CreateActivity", connection)
@@ -58,13 +55,14 @@ namespace BuildingManager.Repository
 
                     await connection.OpenAsync();
                     await command.ExecuteNonQueryAsync();
-                    _logger.LogInfo("Successfully created a new activity");
+                    _logger.LogInfo("Successfully ran query to create a new activity");
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Error inserting new activity in DB {ex.StackTrace} {ex.Message}");
-                throw new Exception("Error creating new activity");
+                //throw new Exception("Error creating new activity");
+                throw;
             }
         }
 
@@ -329,8 +327,8 @@ namespace BuildingManager.Repository
                 {
                     var parameters = new[]
                     {
-                        new SqlParameter("@ActivityId", projId),
-                        new SqlParameter("@ProjectId", activityId),
+                        new SqlParameter("@ActivityId", activityId),
+                        new SqlParameter("@ProjectId", projId),
                         new SqlParameter("@UserId", userId),
                     };
 
@@ -356,19 +354,23 @@ namespace BuildingManager.Repository
                                 Status = reader.GetInt32("Status"),
                                 Description = reader.GetString("Description"),
                                 ProjectPhase = reader.GetInt32("ProjectPhase"),
-                                FileName = reader.GetString("FileName"),
-                                StorageFileName = reader.GetString("StorageFileName"),
-                                FileExtension = reader.GetString("FileExtension"),
+                                //FileName = reader.GetString("FileName"),
+                                FileName = await reader.IsDBNullAsync(reader.GetOrdinal("FileName")) ? null : reader.GetString("FileName"),
+                                StorageFileName = await reader.IsDBNullAsync(reader.GetOrdinal("StorageFileName")) ? null : reader.GetString("StorageFileName"),
+                                FileExtension = await reader.IsDBNullAsync(reader.GetOrdinal("FileExtension")) ? null : reader.GetString("FileExtension"),
                                 StartDate = reader.GetDateTime("StartDate"),
                                 EndDate = reader.GetDateTime("EndDate"),
-                                ActualStartDate = reader.GetDateTime("ActualStartDate"),
-                                ActualEndDate = reader.GetDateTime("ActualEndDate"),
-                                CreatedAt = reader.GetDateTime("CreatedAt"),
-                                UpdatedAt = reader.GetDateTime("UpdatedAt"),
+                                //ActualStartDate = reader.GetDateTime("ActualStartDate"),
+                                ActualStartDate = await reader.IsDBNullAsync(reader.GetOrdinal("ActualStartDate")) ? null : reader.GetDateTime("ActualStartDate"),
+                                ActualEndDate = await reader.IsDBNullAsync(reader.GetOrdinal("ActualEndDate")) ? null : reader.GetDateTime("ActualEndDate"),
+                                CreatedAt = reader.GetDateTime("CreatedAt")
+                                //UpdatedAt = await reader.IsDBNullAsync(reader.GetOrdinal("UpdatedAt")) ? null : reader.GetDateTime("UpdatedAt"),
                             };
                         }
                     }
                 }
+
+                _logger.LogInfo("Successfully ran query to get activity");
 
                 if (activity != null)
                 {

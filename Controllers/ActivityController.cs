@@ -407,9 +407,9 @@ namespace BuildingManager.Controllers
 
 
         [Authorize]
-        [HttpGet("OtherPro/Getactivity/{id}")]  //activity Id
+        [HttpGet("OtherPro/Getactivity/{projectId}/{activityId}")]  //activity Id
         [ProducesResponseType(typeof(SuccessResponse<ProjectDto>), 200)]
-        public async Task<IActionResult> GetActivityOtherPro (string id)
+        public async Task<IActionResult> GetActivityOtherPro (string projectId, string activityId)
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
@@ -420,7 +420,7 @@ namespace BuildingManager.Controllers
             var userId = HttpContext.Items["UserId"] as string;
             //var projectRole = _service.ProjectService.GetUserProjectRole(userId, id); // where ID is project ID
 
-            var (userRole, projectId) = await _service.ProjectService.GetUserProjectRole(id, userId); // where ID is project ID
+            var (userRole, projId) = await _service.ProjectService.GetUserProjectRole(projectId, userId); // where ID is project ID
             if (userRole != Enums.UserRoles.OtherPro)
             {
                 //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
@@ -428,7 +428,7 @@ namespace BuildingManager.Controllers
                 return StatusCode((int)HttpStatusCode.Forbidden, err);
             }
 
-            var response = await _service.ActivityService.GetActivityOtherPro(projectId, id, userId); //where id = ActivityId
+            var response = await _service.ActivityService.GetActivityOtherPro(projId, activityId, userId); //where id = ActivityId
 
             return Ok(response);
         }
@@ -436,9 +436,9 @@ namespace BuildingManager.Controllers
 
         //To be corrected, the response output
         [Authorize]
-        [HttpGet("PM/Getactivity/{id}")]  //activity Id
+        [HttpGet("PM/Getactivity/{projectId}/{activityId}")]  //activity Id
         [ProducesResponseType(typeof(SuccessResponse<ProjectDto>), 200)]
-        public async Task<IActionResult> GetActivityPM (string id)
+        public async Task<IActionResult> GetActivityPM (string projectId, string activityId)
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
@@ -449,7 +449,7 @@ namespace BuildingManager.Controllers
             var userId = HttpContext.Items["UserId"] as string;
             //var projectRole = _service.ProjectService.GetUserProjectRole(userId, id); // where ID is project ID
 
-            var (userRole, projectId) = await _service.ProjectService.GetUserProjectRole(id, userId); // where ID is project ID
+            var (userRole, projId) = await _service.ProjectService.GetUserProjectRole(projectId, userId); // where ID is project ID
             if (userRole != Enums.UserRoles.PM)
             {
                 //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
@@ -457,7 +457,7 @@ namespace BuildingManager.Controllers
                 return StatusCode((int)HttpStatusCode.Forbidden, err);
             }
 
-            var response = await _service.ActivityService.GetActivityPM(projectId, id); //where id = ActivityId
+            var response = await _service.ActivityService.GetActivityPM(projId, activityId); //where id = ActivityId
 
             return Ok(response);
         }

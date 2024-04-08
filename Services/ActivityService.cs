@@ -43,7 +43,7 @@ namespace BuildingManager.Services
             var fileExt = Path.GetExtension(model.File.FileName);
 
             //use breakpoint to see file name before uploading to cloud
-            var documentName = $"{ Guid.NewGuid()}.{fileExt}";
+            var documentName = $"{Guid.NewGuid()}{fileExt}";
 
             var s3Object = new StorageObject()
             {
@@ -74,11 +74,20 @@ namespace BuildingManager.Services
                 EndDate = model.EndDate,
                 CreatedAt = DateTime.Now,
                 //UpdatedAt = DateTime.Now,
-                UpdatedAt = null,
+                //UpdatedAt = null,
             };
 
             //@todo: try catch: delete file if error occurs here
-            await _repository.ActivityRepository.CreateActivity(activity);
+
+            try 
+            {
+                await _repository.ActivityRepository.CreateActivity(activity);
+            } catch (Exception ex)
+            {
+                await _storage.DeleteFileAsync(_configuration["AwsConfiguration:BucketName"], documentName);
+                throw new Exception("Error creating new activity");
+            }
+            
             return new SuccessResponse<ActivityDto>
             {
                 Message = "Activity created successfully",
@@ -304,7 +313,7 @@ namespace BuildingManager.Services
             if (activity == null)
             {
                 _logger.LogError($"Error occurred when deleting the activity. The required activity was not found, check ActivityId, ProjectId and UserId provided");
-                throw new RestException(HttpStatusCode.NotFound, "Error activity to be delete was not found.");
+                throw new RestException(HttpStatusCode.NotFound, "Error activity to be deleted was not found.");
             }
 
             if (activity.Status != (int)ActivityStatus.Rejected)

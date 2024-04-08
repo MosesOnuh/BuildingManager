@@ -70,11 +70,8 @@ namespace BuildingManager.Utils.StorageManager
             try
             {
                 var credentials = new BasicAWSCredentials(_awsConfiguration.AccessKey, _awsConfiguration.SecretKey);
-                var config = new AmazonS3Config()
-                {
-                    //Todo
-                };
-                using var s3Client = new AmazonS3Client(credentials, config);
+
+                using var s3Client = new AmazonS3Client(credentials, Amazon.RegionEndpoint.USEast1);
 
                 var transferUtility = new TransferUtility(s3Client);
                 var deleteRequest = new DeleteObjectRequest()
@@ -103,11 +100,8 @@ namespace BuildingManager.Utils.StorageManager
             try
             {
                 var credentials = new BasicAWSCredentials(_awsConfiguration.AccessKey, _awsConfiguration.SecretKey);
-                var config = new AmazonS3Config()
-                {
-                    //Todo
-                };
-                using var s3Client = new AmazonS3Client(credentials, config);
+
+                using var s3Client = new AmazonS3Client(credentials, Amazon.RegionEndpoint.USEast1);
 
                 var transferUtility = new TransferUtility(s3Client);
 
