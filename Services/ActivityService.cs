@@ -501,7 +501,6 @@ namespace BuildingManager.Services
                 FileType = activity.FileExtension,
                 StartDate = activity.StartDate,
                 EndDate = activity.EndDate,
-                //ActualEndDate = activity.ActualEndDate.HasValue ? activity.ActualEndDate.Value : null,
                 ActualStartDate = activity.ActualStartDate,
                 ActualEndDate = activity.ActualEndDate,
                 CreatedAt = activity.CreatedAt
@@ -510,7 +509,7 @@ namespace BuildingManager.Services
 
             return new SuccessResponse<ActivityDto>
             {
-                Message = "Activity deleted successfully",
+                Message = "Activity gotten successfully",
                 Data = clientActivity,
             };
         }

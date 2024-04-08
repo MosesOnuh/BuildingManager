@@ -354,17 +354,14 @@ namespace BuildingManager.Repository
                                 Status = reader.GetInt32("Status"),
                                 Description = reader.GetString("Description"),
                                 ProjectPhase = reader.GetInt32("ProjectPhase"),
-                                //FileName = reader.GetString("FileName"),
                                 FileName = await reader.IsDBNullAsync(reader.GetOrdinal("FileName")) ? null : reader.GetString("FileName"),
                                 StorageFileName = await reader.IsDBNullAsync(reader.GetOrdinal("StorageFileName")) ? null : reader.GetString("StorageFileName"),
                                 FileExtension = await reader.IsDBNullAsync(reader.GetOrdinal("FileExtension")) ? null : reader.GetString("FileExtension"),
                                 StartDate = reader.GetDateTime("StartDate"),
                                 EndDate = reader.GetDateTime("EndDate"),
-                                //ActualStartDate = reader.GetDateTime("ActualStartDate"),
                                 ActualStartDate = await reader.IsDBNullAsync(reader.GetOrdinal("ActualStartDate")) ? null : reader.GetDateTime("ActualStartDate"),
                                 ActualEndDate = await reader.IsDBNullAsync(reader.GetOrdinal("ActualEndDate")) ? null : reader.GetDateTime("ActualEndDate"),
                                 CreatedAt = reader.GetDateTime("CreatedAt")
-                                //UpdatedAt = await reader.IsDBNullAsync(reader.GetOrdinal("UpdatedAt")) ? null : reader.GetDateTime("UpdatedAt"),
                             };
                         }
                     }
