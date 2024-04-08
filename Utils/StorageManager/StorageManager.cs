@@ -1,4 +1,5 @@
-﻿using Amazon.Runtime;
+﻿//using Amazon;
+using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
@@ -23,8 +24,8 @@ namespace BuildingManager.Utils.StorageManager
 
             _awsConfiguration = new AwsConfiguration()
             {
-                AccessKey = "",
-                SecretKey = ""
+                AccessKey = _configuration["AwsConfiguration:AWSAccessKey"],
+                SecretKey = _configuration["AwsConfiguration:AWSSecretKey"]
             };
 
            
@@ -35,11 +36,11 @@ namespace BuildingManager.Utils.StorageManager
             try 
             {
                 var credentials = new BasicAWSCredentials(_awsConfiguration.AccessKey, _awsConfiguration.SecretKey);
-                var config = new AmazonS3Config()
-                {
-                    //Todo
-                };
-                using var s3Client = new AmazonS3Client(credentials, config);
+                //var config = new AmazonS3Config()
+                //{
+                //    RegionEndpoint: Amazon.RegionEndpoint.USEast1
+                //};
+            using var s3Client = new AmazonS3Client(credentials, Amazon.RegionEndpoint.USEast1);
 
                 var transferUtility = new TransferUtility(s3Client);
                 var uploadRequest = new TransferUtilityUploadRequest()

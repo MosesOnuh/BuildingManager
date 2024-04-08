@@ -161,7 +161,7 @@ namespace BuildingManager.Controllers
         [Authorize]
         [HttpPost("OtherPro/UpdatePendingActivityDetails")]
         [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
-        public async Task<IActionResult> UpdateActivity(UpdateActivityDetailsDto model)
+        public async Task<IActionResult> UpdateActivity([FromBody] UpdateActivityDetailsDto model)
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
@@ -190,7 +190,7 @@ namespace BuildingManager.Controllers
         [Authorize]
         [HttpPost("OtherPro/AddActivityFile")]
         [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
-        public async Task<IActionResult> AddPendingActivityFile(AddActivityFileRequestDto model)
+        public async Task<IActionResult> AddPendingActivityFile([FromForm] AddActivityFileRequestDto model)
         {
             
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
@@ -248,7 +248,7 @@ namespace BuildingManager.Controllers
 
         //Delete pending activity
         [Authorize]
-        [HttpDelete("OtherPro/DeleteActivity/{projectId:string}/{activityId:string}")]
+        [HttpDelete("OtherPro/DeleteActivity/{projectId}/{activityId}")]
         [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
         public async Task<IActionResult> DeleteActivity(string projectId, string activityId)
         {
@@ -293,7 +293,7 @@ namespace BuildingManager.Controllers
         //@todo procedure to remove FileName, StorageFileName, FileExtension after deleting a file in the database
         //Delete pending activity
         [Authorize]
-        [HttpDelete("OtherPro/DeletePendingActivityFile/{projectId:string}/{activityId:string}")]
+        [HttpDelete("OtherPro/DeletePendingActivityFile/{projectId}/{activityId}")]
         [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
         public async Task<IActionResult> DeletePendingActivityFile(string projectId, string activityId)
         {
@@ -322,7 +322,7 @@ namespace BuildingManager.Controllers
         [Authorize]
         [HttpGet("OtherPro/DownloadActivityFile")]
         //[ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
-        public async Task<IActionResult> DownloadActivityFileOtherPro (DownloadActivityFileDto model) 
+        public async Task<IActionResult> DownloadActivityFileOtherPro ([FromBody] DownloadActivityFileDto model) 
         {
             //model
             //activity id
@@ -365,7 +365,7 @@ namespace BuildingManager.Controllers
         [Authorize]
         [HttpGet("PM/DownloadActivityFile")]
         //[ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
-        public async Task<IActionResult> DownloadActivityFilePM(DownloadActivityFileDto model)
+        public async Task<IActionResult> DownloadActivityFilePM([FromBody] DownloadActivityFileDto model)
         {
             //model
             //activity id

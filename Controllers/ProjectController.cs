@@ -164,3 +164,7 @@ namespace BuildingManager.Controllers
 //Note
 //When a user accept a project invite, add the user to userRole Table
 //ensure user input is validated
+
+//@todo
+//Add description as a field in projects table, to describe the project
+//When creating a project, add the creators details in Projectmember table

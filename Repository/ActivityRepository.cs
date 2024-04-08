@@ -23,7 +23,6 @@ namespace BuildingManager.Repository
             _logger = logger;
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
-       
 
         public async Task CreateActivity(Activity activity)
         {

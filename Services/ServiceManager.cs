@@ -24,7 +24,7 @@ namespace BuildingManager.Services
             _tokenService = new Lazy<ITokenService>(() => new TokenService(configuration, repositoryManager));
             _authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(logger,repositoryManager, this));
             _projectService = new Lazy<IProjectService>(() => new ProjectService(logger, repositoryManager));
-            _activityService = new Lazy<IActivityService>(() => new ActivityService(logger, storageManager, repositoryManager));
+            _activityService = new Lazy<IActivityService>(() => new ActivityService(configuration, logger, storageManager, repositoryManager));
         }
 
         public ITokenService TokenService => _tokenService.Value;

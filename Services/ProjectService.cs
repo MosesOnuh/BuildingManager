@@ -59,7 +59,7 @@ namespace BuildingManager.Services
             IList<ProjectMember> roleDetails = await _repository.ProjectRepository.GetProjectMemberInfo(projectId);
             if (roleDetails.Count == 0)
             {
-                throw new RestException(HttpStatusCode.NotFound, "Project with Id provided does not exist");
+                throw new RestException(HttpStatusCode.NotFound, "Project with Id provided does not exist or user is not a member of the project");
             }
 
             foreach (ProjectMember member in roleDetails)

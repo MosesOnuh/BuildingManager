@@ -48,7 +48,7 @@ namespace BuildingManager.Services
             var s3Object = new StorageObject()
             {
                 //use config to get value : _configuration.GetValue
-                BucketName = "",
+                BucketName = _configuration["AwsConfiguration:BucketName"],
                 FileStream = memoryStream,
                 Name = documentName
             };
@@ -281,7 +281,7 @@ namespace BuildingManager.Services
             var s3Object = new StorageObject()
             {
                 //use config to get value : _configuration.GetValue
-                BucketName = "",
+                BucketName = _configuration["AwsConfiguration:BucketName"],
                 FileStream = memoryStream,
                 Name = documentName
             };
@@ -321,7 +321,7 @@ namespace BuildingManager.Services
 
             //DeleteActivity file gotten from the above function
             //use config to get value : _configuration.GetValue
-            await _storage.DeleteFileAsync("@todo__BucketName", activity.StorageFileName);
+            await _storage.DeleteFileAsync(_configuration["AwsConfiguration:BucketName"], activity.StorageFileName);
 
             //Write procedure to delete only pending activities
             var (rowsDeleted, returnNum) = await _repository.ActivityRepository.DeleteActivity(projId, activityId, userId);
@@ -381,7 +381,7 @@ namespace BuildingManager.Services
 
             //DeleteActivity file gotten from the above function
             //use config to get value : _configuration.GetValue
-            await _storage.DeleteFileAsync("@todo__BucketName", activity.StorageFileName);
+            await _storage.DeleteFileAsync(_configuration["AwsConfiguration:BucketName"], activity.StorageFileName);
 
             var (rowsUpdated, returnNum) = await _repository.ActivityRepository.RemoveActivityFileDetails(projId, activityId, userId);
 
@@ -435,7 +435,7 @@ namespace BuildingManager.Services
 
             //DeleteActivity file gotten from the above function
             //use config to get value : _configuration.GetValue
-            var file = await _storage.DownloadFileAsync("@todo__BucketName", activity.StorageFileName);
+            var file = await _storage.DownloadFileAsync(_configuration["AwsConfiguration:BucketName"], activity.StorageFileName);
             return file;
         }
 
@@ -464,7 +464,7 @@ namespace BuildingManager.Services
 
             //DeleteActivity file gotten from the above function
             //use config to get value : _configuration.GetValue
-            var file = await _storage.DownloadFileAsync("@todo__BucketName", activity.StorageFileName);
+            var file = await _storage.DownloadFileAsync(_configuration["AwsConfiguration:BucketName"], activity.StorageFileName);
             return file;
         }
 

@@ -79,12 +79,12 @@ namespace BuildingManager.Repository
                         {
                             ProjectMember memberDetails = new ProjectMember
                             {
-                                ProjectId = reader.GetString(0),
-                                UserId = reader.GetString(1),
-                                Role = reader.GetInt32(2),
-                                Profession = reader.GetString(3),
-                                CreatedAt = reader.GetDateTime(4),
-                                UpdatedAt = reader.GetDateTime(5),
+                                ProjectId = reader.GetString("ProjectId"),
+                                UserId = reader.GetString("UserId"),
+                                Role = reader.GetInt32("Role"),
+                                Profession = reader.GetString("Profession"),
+                                CreatedAt = reader.GetDateTime("CreatedAt"),
+                                UpdatedAt = reader.GetDateTime("UpdatedAt"),
 
                             };
 
