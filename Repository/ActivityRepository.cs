@@ -394,8 +394,8 @@ namespace BuildingManager.Repository
                 {
                     var parameters = new[]
                     {
-                        new SqlParameter("@ActivityId", projId),
-                        new SqlParameter("@ProjectId", activityId),
+                        new SqlParameter("@ActivityId", activityId),
+                        new SqlParameter("@ProjectId", projId),
                     };
 
 
@@ -485,35 +485,39 @@ namespace BuildingManager.Repository
                 _logger.LogError($"Error deleting an activity in DB {ex.StackTrace} {ex.Message}");
                 throw new Exception("Error deleting an activity");
             }
-        }
+        }     
 
-        public async Task<(int, IList<ActivityDto>)> GetProjectPhaseActivitiesOtherPro(ActivitiesDtoPaged model, string UserId) 
+        public async Task<(int, IList<ActivityDto>)> GetProjectPhaseActivitiesOtherPro(ActivitiesDtoPaged model, string userId)
         {
-            try
+            try 
             {
-                using (SqlConnection connection = new(_connectionString))
-                {
-                    var parameters = new[]
-                    {
-                        new SqlParameter("@ProjectId", model.ProjectId),
-                        new SqlParameter("@UserId", UserId),
-                        new SqlParameter("@ProjectPhase", model.ProjectPhase),
-                        new SqlParameter("@PageNumber", model.PageNumber),
-                        new SqlParameter("@PageSize", model.PageSize),
-                        new SqlParameter("@TotalCount", SqlDbType.Int) {Direction = ParameterDirection.Output},
-                    };
+                int totalCount = 0;
+                IList<ActivityDto> activities = new List<ActivityDto>();
 
-                    using (SqlCommand command = new SqlCommand("proc_GetProjectPhaseActivitiesPaged"))
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+
+                    using (SqlCommand command = connection.CreateCommand())
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddRange(parameters);
+                        command.CommandText = "proc_GetProjectPhaseActivitiesPaged";
+
+                        command.Parameters.AddWithValue("@ProjectId", model.ProjectId);
+                        command.Parameters.AddWithValue("@UserId", userId);
+                        command.Parameters.AddWithValue("@ProjectPhase", model.ProjectPhase);
+                        command.Parameters.AddWithValue("@PageNumber", model.PageNumber);
+                        command.Parameters.AddWithValue("@PageSize", model.PageSize);
+
+                        SqlParameter totalCountParameter = new SqlParameter("@TotalCount", SqlDbType.Int);
+                        totalCountParameter.Direction = ParameterDirection.Output;
+                        command.Parameters.Add(totalCountParameter);
 
                         using (SqlDataReader reader = await command.ExecuteReaderAsync())
                         {
-                            List<ActivityDto> activities = new List<ActivityDto>();
                             while (await reader.ReadAsync())
                             {
-                                activities.Add(new ActivityDto
+                                ActivityDto activity = new ActivityDto
                                 {
                                     Id = reader.GetString("Id"),
                                     ProjectId = reader.GetString("ProjectId"),
@@ -522,30 +526,31 @@ namespace BuildingManager.Repository
                                     Status = reader.GetInt32("Status"),
                                     Description = reader.GetString("Description"),
                                     ProjectPhase = reader.GetInt32("ProjectPhase"),
-                                    FileName = reader.GetString("FileName"),
-                                    StorageFileName = reader.GetString("StorageFileName"),
-                                    FileType = reader.GetString("FileExtension"),
+                                    FileName = reader.IsDBNull(reader.GetOrdinal("FileName")) ? null : reader.GetString("FileName"),
+                                    StorageFileName = reader.IsDBNull(reader.GetOrdinal("StorageFileName")) ? null : reader.GetString("StorageFileName"),
+                                    //FileExtension = reader.IsDBNull(reader.GetOrdinal("FileExtension")) ? null : reader.GetString("FileExtension"),
                                     StartDate = reader.GetDateTime("StartDate"),
                                     EndDate = reader.GetDateTime("EndDate"),
-                                    ActualStartDate = reader.GetDateTime("ActualStartDate"),
-                                    ActualEndDate = reader.GetDateTime("ActualEndDate"),
-                                    CreatedAt = reader.GetDateTime("CreatedAt"),
-                                });
+                                    ActualStartDate = reader.IsDBNull(reader.GetOrdinal("ActualStartDate")) ? null : reader.GetDateTime("ActualStartDate"),
+                                    ActualEndDate = reader.IsDBNull(reader.GetOrdinal("ActualEndDate")) ? null : reader.GetDateTime("ActualEndDate"),
+                                    CreatedAt = reader.GetDateTime("CreatedAt")
+                                };
+                                activities.Add(activity);
                             }
-
-                            int totalCount = (int)command.Parameters["@TotalCount"].Value;
-                            _logger.LogInfo("Successfully ran query to activity per phase");
-                            return (totalCount, activities);
                         }
-                    }
 
+                        totalCount = (int)command.Parameters["@TotalCount"].Value;
+                        _logger.LogInfo("Successfully ran query to activity per phase");
+                    }
                 }
+
+                return (totalCount, activities);
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Error getting activities per phase {ex.StackTrace} {ex.Message}");
-                throw new Exception("Error getting activities per phase ");
-            }
+                throw new Exception("Error getting activities per phase");
+            }           
         }
 
         public async Task<(int, IList<ActivityAndMemberDto>)> GetProjectPhaseActivitiesPM(ActivitiesDtoPaged model)
@@ -587,13 +592,13 @@ namespace BuildingManager.Repository
                                     Status = reader.GetInt32("Status"),
                                     Description = reader.GetString("Description"),
                                     ProjectPhase = reader.GetInt32("ProjectPhase"),
-                                    FileName = reader.GetString("FileName"),
-                                    StorageFileName = reader.GetString("StorageFileName"),
-                                    FileType = reader.GetString("FileExtension"),
+                                    FileName = await reader.IsDBNullAsync(reader.GetOrdinal("FileName")) ? null : reader.GetString("FileName"),
+                                    StorageFileName = await reader.IsDBNullAsync(reader.GetOrdinal("StorageFileName")) ? null : reader.GetString("StorageFileName"),
+                                    //FileType = await reader.IsDBNullAsync(reader.GetOrdinal("FileExtension")) ? null : reader.GetString("FileExtension"),
                                     StartDate = reader.GetDateTime("StartDate"),
                                     EndDate = reader.GetDateTime("EndDate"),
-                                    ActualStartDate = reader.GetDateTime("ActualStartDate"),
-                                    ActualEndDate = reader.GetDateTime("ActualEndDate"),
+                                    ActualStartDate = await reader.IsDBNullAsync(reader.GetOrdinal("ActualStartDate")) ? null : reader.GetDateTime("ActualStartDate"),
+                                    ActualEndDate = await reader.IsDBNullAsync(reader.GetOrdinal("ActualEndDate")) ? null : reader.GetDateTime("ActualEndDate"),
                                     CreatedAt = reader.GetDateTime("CreatedAt"),
                                 });
                             }

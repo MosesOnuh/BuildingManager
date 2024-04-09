@@ -507,7 +507,7 @@ namespace BuildingManager.Services
                 ProjectPhase = activity.ProjectPhase,
                 FileName = activity.FileName,
                 StorageFileName = activity.StorageFileName,
-                FileType = activity.FileExtension,
+                //FileType = activity.FileExtension,
                 StartDate = activity.StartDate,
                 EndDate = activity.EndDate,
                 ActualStartDate = activity.ActualStartDate,
@@ -562,23 +562,35 @@ namespace BuildingManager.Services
 
         public async Task<PageResponse<IList<ActivityDto>>> GetProjectPhaseActivitiesOtherPro(ActivitiesDtoPaged model, string UserId)
         {
+
             var (totalCount, activities) = await _repository.ActivityRepository.GetProjectPhaseActivitiesOtherPro(model, UserId);
-
-            //try-catch here
-            int totalPages = (int)Math.Ceiling((double)totalCount / (double)model.PageSize);
-
-            return new PageResponse<IList<ActivityDto>>()
+            try 
             {
-                Data = activities,
-                Pagination = new Pagination()
+               
 
+                //try-catch here
+                int totalPages = (int)Math.Ceiling((double)totalCount / (double)model.PageSize);
+
+                return new PageResponse<IList<ActivityDto>>()
                 {
-                    TotalPages = totalPages,
-                    PageSize = model.PageSize,
-                    ActualDataSize = activities.Count,
-                    TotalCount = totalCount
-                }
-            };
+                    Data = activities,
+                    Pagination = new Pagination()
+
+                    {
+                        TotalPages = totalPages,
+                        PageSize = model.PageSize,
+                        ActualDataSize = activities.Count,
+                        TotalCount = totalCount
+                    }
+                };
+            } catch (Exception ex) {
+                _logger.LogError($"Error getting activities per phase--------------here------------------ {ex.StackTrace} {ex.Message}");
+                throw new Exception("Error getting activities per phase ----------here--SERVICE ");
+
+            }
+            
+
+           
         }
 
         public async Task<PageResponse<IList<ActivityAndMemberDto>>> GetProjectPhaseActivitiesPM(ActivitiesDtoPaged model)

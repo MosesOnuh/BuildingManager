@@ -49,7 +49,7 @@ namespace BuildingManager.Models.Dto
         public int ProjectPhase { get; set; }
         public string? FileName { get; set; }
         public string? StorageFileName { get; set; }
-        public string? FileType { get; set; }
+        //public string? FileType { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public DateTime? ActualStartDate { get; set; }
@@ -153,7 +153,7 @@ namespace BuildingManager.Models.Dto
         public int ProjectPhase { get; set; }
         public string? FileName { get; set; }
         public string? StorageFileName { get; set; }
-        public string? FileType { get; set; }
+        //public string? FileType { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public DateTime? ActualStartDate { get; set; }
