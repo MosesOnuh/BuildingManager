@@ -557,29 +557,32 @@ namespace BuildingManager.Repository
         {
             try
             {
-                using (SqlConnection connection = new(_connectionString))
-                {
-                    var parameters = new[]
-                    {
-                        new SqlParameter("@ProjectId", model.ProjectId),
-                        new SqlParameter("@ProjectPhase", model.ProjectPhase),
-                        new SqlParameter("@PageNumber", model.PageNumber),
-                        new SqlParameter("@PageSize", model.PageSize),
-                        new SqlParameter("@TotalCount", SqlDbType.Int) {Direction = ParameterDirection.Output},
-                    };
- 
+                int totalCount = 0;
+                IList<ActivityAndMemberDto> activities = new List<ActivityAndMemberDto>();
 
-                    using (SqlCommand command = new SqlCommand("proc_GetProjectPhaseActivitiesPagedPM"))
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+
+                    using (SqlCommand command = connection.CreateCommand())
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddRange(parameters);
+                        command.CommandText = "proc_GetProjectPhaseActivitiesPagedPM";
+
+                        command.Parameters.AddWithValue("@ProjectId", model.ProjectId);
+                        command.Parameters.AddWithValue("@ProjectPhase", model.ProjectPhase);
+                        command.Parameters.AddWithValue("@PageNumber", model.PageNumber);
+                        command.Parameters.AddWithValue("@PageSize", model.PageSize);
+
+                        SqlParameter totalCountParameter = new SqlParameter("@TotalCount", SqlDbType.Int);
+                        totalCountParameter.Direction = ParameterDirection.Output;
+                        command.Parameters.Add(totalCountParameter);
 
                         using (SqlDataReader reader = await command.ExecuteReaderAsync())
                         {
-                            List<ActivityAndMemberDto> activities = new List<ActivityAndMemberDto>();
                             while (await reader.ReadAsync())
                             {
-                                activities.Add(new ActivityAndMemberDto
+                                ActivityAndMemberDto activity = new ActivityAndMemberDto
                                 {
                                     UserId = reader.GetString("UserId"),
                                     FirstName = reader.GetString("FirstName"),
@@ -600,20 +603,22 @@ namespace BuildingManager.Repository
                                     ActualStartDate = await reader.IsDBNullAsync(reader.GetOrdinal("ActualStartDate")) ? null : reader.GetDateTime("ActualStartDate"),
                                     ActualEndDate = await reader.IsDBNullAsync(reader.GetOrdinal("ActualEndDate")) ? null : reader.GetDateTime("ActualEndDate"),
                                     CreatedAt = reader.GetDateTime("CreatedAt"),
-                                });
+                                };
+                                activities.Add(activity);
                             }
-
-                            int totalCount = (int)command.Parameters["@TotalCount"].Value;
-                            _logger.LogInfo("Successfully ran query to activity per phase for PM");
-                            return (totalCount, activities);
                         }
+
+                        totalCount = (int)command.Parameters["@TotalCount"].Value;
+                        _logger.LogInfo("Successfully ran query to activity per phase");
                     }
                 }
+
+                return (totalCount, activities);
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Error getting activities per phase {ex.StackTrace} {ex.Message}");
-                throw new Exception("Error getting activities per phase ");
+                throw new Exception("Error getting activities per phase");
             }
         }
 

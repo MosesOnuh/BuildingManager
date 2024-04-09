@@ -113,9 +113,11 @@ namespace BuildingManager.Services
             // the status can be updated to 2 or 3
 
             //validate the StatusAction and ensure that it is either 2 or 3
-            if (model.StatusAction != (int)ActivityStatus.Approved || model.StatusAction != (int)ActivityStatus.Rejected)
+            if (model.StatusAction != (int)ActivityStatus.Approved && model.StatusAction != (int)ActivityStatus.Rejected)
+            //if (model.StatusAction != 2 && model.StatusAction != 3)
+
             {
-                throw new RestException(HttpStatusCode.BadRequest, "Error StatusAction can only be to approve or reject an activity");
+                    throw new RestException(HttpStatusCode.BadRequest, "Error StatusAction can only be to approve or reject an activity");
             }
 
             var (rowsUpdated, returnNum) = await _repository.ActivityRepository.UpdateActivityApprovalStatus(model);
@@ -166,8 +168,8 @@ namespace BuildingManager.Services
 
             if (rowsUpdated == 0 && returnNum == 1)
             {
-                _logger.LogError($"Error activity has not been approved, only approved activity can be changed to done");
-                throw new Exception("Error activity has not been approved, only approved activity can be changed to done");
+                _logger.LogError($"Error only approved activity can be changed to done");
+                throw new Exception("Error only approved activity can be changed to done");
             }
 
             if (rowsUpdated == 0 && returnNum == 2)
@@ -220,6 +222,8 @@ namespace BuildingManager.Services
             };
         }
 
+        //validate input
+        //ensure that for project phase only 1,2 and 3 can be passed
         public async Task<SuccessResponse<ActivityDto>> UpdatePendingActivity(UpdateActivityDetailsDto model, string userId)
         {
             var(rowsUpdated, returnNum) = await _repository.ActivityRepository.UpdatePendingActivity(model, userId);
@@ -331,15 +335,15 @@ namespace BuildingManager.Services
                 throw new Exception("Error cannot delete an activity that is not rejected");
             }
 
-            if (activity.StorageFileName == null)
+            if (activity.StorageFileName != null)
             {
-                _logger.LogError($"Error activity does not have any file stored");
-                throw new RestException(HttpStatusCode.InternalServerError, "Error activity does not have a file to delete.");
+                //_logger.LogError($"Error activity does not have any file stored");
+                //throw new RestException(HttpStatusCode.InternalServerError, "Error activity does not have a file to delete.");
+                //DeleteActivity file gotten from the above function
+                //use config to get value : _configuration.GetValue
+                await _storage.DeleteFileAsync(_configuration["AwsConfiguration:BucketName"], activity.StorageFileName);
             }
-
-            //DeleteActivity file gotten from the above function
-            //use config to get value : _configuration.GetValue
-            await _storage.DeleteFileAsync(_configuration["AwsConfiguration:BucketName"], activity.StorageFileName);
+           
 
             //Write procedure to delete only pending activities
             var (rowsDeleted, returnNum) = await _repository.ActivityRepository.DeleteActivity(projId, activityId, userId);
@@ -438,20 +442,12 @@ namespace BuildingManager.Services
                 throw new RestException(HttpStatusCode.NotFound, "Error activity whose file is to be downloaded was not found.");
             }
 
-            //if (activity.Status != (int)ActivityStatus.Pending)
-            //{
-            //    _logger.LogError($"Error attempted to delete the file of an activity that is not pending");
-            //    throw new Exception("Error cannot delete the file of an activity that is not pending");
-            //}
-
             if (activity.StorageFileName == null)
             {
                 _logger.LogError($"Error activity does not have any file stored");
                 throw new RestException(HttpStatusCode.InternalServerError, "Error activity does not have a file.");
             }
 
-
-            //DeleteActivity file gotten from the above function
             //use config to get value : _configuration.GetValue
             var file = await _storage.DownloadFileAsync(_configuration["AwsConfiguration:BucketName"], activity.StorageFileName);
             return file;
@@ -467,20 +463,12 @@ namespace BuildingManager.Services
                 throw new RestException(HttpStatusCode.NotFound, "Error activity whose file is to be downloaded was not found.");
             }
 
-            //if (activity.Status != (int)ActivityStatus.Pending)
-            //{
-            //    _logger.LogError($"Error attempted to delete the file of an activity that is not pending");
-            //    throw new Exception("Error cannot delete the file of an activity that is not pending");
-            //}
-
             if (activity.StorageFileName == null)
             {
                 _logger.LogError($"Error activity does not have any file stored");
                 throw new RestException(HttpStatusCode.InternalServerError, "Error activity does not have a file.");
             }
 
-
-            //DeleteActivity file gotten from the above function
             //use config to get value : _configuration.GetValue
             var file = await _storage.DownloadFileAsync(_configuration["AwsConfiguration:BucketName"], activity.StorageFileName);
             return file;
@@ -567,8 +555,6 @@ namespace BuildingManager.Services
             try 
             {
                
-
-                //try-catch here
                 int totalPages = (int)Math.Ceiling((double)totalCount / (double)model.PageSize);
 
                 return new PageResponse<IList<ActivityDto>>()
@@ -584,34 +570,39 @@ namespace BuildingManager.Services
                     }
                 };
             } catch (Exception ex) {
-                _logger.LogError($"Error getting activities per phase--------------here------------------ {ex.StackTrace} {ex.Message}");
-                throw new Exception("Error getting activities per phase ----------here--SERVICE ");
-
-            }
-            
-
-           
+                _logger.LogError($"Error getting activities per phase in the service layer {ex.StackTrace} {ex.Message}");
+                throw new Exception("Error getting activities per phase");
+            }                     
         }
 
         public async Task<PageResponse<IList<ActivityAndMemberDto>>> GetProjectPhaseActivitiesPM(ActivitiesDtoPaged model)
         {
             var (totalCount, activities) = await _repository.ActivityRepository.GetProjectPhaseActivitiesPM(model);
 
-            //try-catch here
-            int totalPages = (int)Math.Ceiling((double)totalCount / (double)model.PageSize);
-
-            return new PageResponse<IList<ActivityAndMemberDto>>()
+            try 
             {
-                Data = activities,
-                Pagination = new Pagination()
+                int totalPages = (int)Math.Ceiling((double)totalCount / (double)model.PageSize);
 
+                return new PageResponse<IList<ActivityAndMemberDto>>()
                 {
-                    TotalPages = totalPages,
-                    PageSize = model.PageSize,
-                    ActualDataSize = activities.Count,
-                    TotalCount = totalCount
-                }
-            };
+                    Data = activities,
+                    Pagination = new Pagination()
+
+                    {
+                        TotalPages = totalPages,
+                        PageSize = model.PageSize,
+                        ActualDataSize = activities.Count,
+                        TotalCount = totalCount
+                    }
+                };
+            } catch (Exception ex) 
+            {
+                _logger.LogError($"Error getting activities per phase in the service layer {ex.StackTrace} {ex.Message}");
+                throw new Exception("Error getting activities per phase");
+            }
+
+            //try-catch here
+            
         }
     }    
 }

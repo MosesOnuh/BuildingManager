@@ -70,7 +70,7 @@ namespace BuildingManager.Controllers
 
 
         [Authorize]
-        [HttpPost("PM/ApproveActivity")]
+        [HttpPost("PM/ActivityApproval")]
         [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
         public async Task<IActionResult> ActivityApproval([FromBody] ActivityStatusUpdateDto model)
         {
@@ -127,6 +127,9 @@ namespace BuildingManager.Controllers
         }
 
         //use this endpoint to add project startdate and enddate and to edit the start date and end date
+        // add validation
+        //input user actual start date and actual enddate for acitivity that is approved or if it is done
+        //Note: actual start date and actual done date cannot be greater than todays date i.e. date it is being inputted.
         [Authorize]
         [HttpPost("OtherPro/UpdateActivityActualDates")]
         [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
