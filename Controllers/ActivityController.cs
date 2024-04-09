@@ -40,14 +40,18 @@ namespace BuildingManager.Controllers
             //ensure the name of the files are in lower case when saving it
 
             // Check file size (max 30MB)
-            if (model.File.Length > 30 * 1024 * 1024)
+            if (model.File != null)
             {
-                var err = new ErrorResponse<ActivityDto>()
+                if (model.File.Length > 30 * 1024 * 1024)
                 {
-                    Message = "File size cannot exceed 30MB"
-                };
-                return BadRequest(err);
+                    var err = new ErrorResponse<ActivityDto>()
+                    {
+                        Message = "File size cannot exceed 30MB"
+                    };
+                    return BadRequest(err);
+                }
             }
+            
 
             var (userRole, _) = await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
             if (userRole != Enums.UserRoles.OtherPro)

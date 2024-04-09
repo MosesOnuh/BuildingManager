@@ -12,7 +12,7 @@ namespace BuildingManager.Models.Entities
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 
 
@@ -30,9 +30,10 @@ namespace BuildingManager.Models.Entities
         public string UserId { get; set; }
         //Enum 1 for PM, 2 for Other-Pro, 3 for Client
         public int Role { get; set; }
-        public string Profession { get; set; }
+        //public string Profession { get; set; }
+        public int Profession { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 
 

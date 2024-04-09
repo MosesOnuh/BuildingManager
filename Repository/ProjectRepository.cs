@@ -82,9 +82,10 @@ namespace BuildingManager.Repository
                                 ProjectId = reader.GetString("ProjectId"),
                                 UserId = reader.GetString("UserId"),
                                 Role = reader.GetInt32("Role"),
-                                Profession = reader.GetString("Profession"),
+                                Profession = reader.GetInt32("Profession"),
                                 CreatedAt = reader.GetDateTime("CreatedAt"),
-                                UpdatedAt = reader.GetDateTime("UpdatedAt"),
+                                //UpdatedAt = reader.GetDateTime("UpdatedAt"),
+                                UpdatedAt = await reader.IsDBNullAsync(reader.GetOrdinal("UpdatedAt")) ? null : reader.GetDateTime("UpdatedAt"),
 
                             };
 

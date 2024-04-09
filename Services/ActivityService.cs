@@ -38,23 +38,32 @@ namespace BuildingManager.Services
             //send file to S3 bucket
             //write procedure to create Activity
 
+            String? fileExt = null;
+            String? documentName = null;
+
+
             await using var memoryStream = new MemoryStream();
-            await model.File.CopyToAsync(memoryStream);
-            var fileExt = Path.GetExtension(model.File.FileName);
-
-            //use breakpoint to see file name before uploading to cloud
-            var documentName = $"{Guid.NewGuid()}{fileExt}";
-
-            var s3Object = new StorageObject()
+            if (model.File != null)
             {
-                //use config to get value : _configuration.GetValue
-                BucketName = _configuration["AwsConfiguration:BucketName"],
-                FileStream = memoryStream,
-                Name = documentName
-            };
+                await model.File.CopyToAsync(memoryStream);
+                //var fileExt = Path.GetExtension(model.File.FileName);
+                fileExt = Path.GetExtension(model.File.FileName);
 
+                //var documentName = $"{Guid.NewGuid()}{fileExt}";
+                documentName = $"{Guid.NewGuid()}{fileExt}";
+
+                var s3Object = new StorageObject()
+                {
+                    //use config to get value : _configuration.GetValue
+                    BucketName = _configuration["AwsConfiguration:BucketName"],
+                    FileStream = memoryStream,
+                    Name = documentName
+                };
+
+
+                await _storage.UploadFileAsync(s3Object);
+            }
             
-            await _storage.UploadFileAsync(s3Object);
 
             var activity = new Activity
             {
@@ -67,7 +76,7 @@ namespace BuildingManager.Services
                 Description = model.Description,
                 //@Todo: when validating the request ensure that the value is only possible enum values
                 ProjectPhase = model.ProjectPhase,
-                FileName = model.File.FileName,
+                FileName = model.File != null ? model.File.FileName : null,
                 StorageFileName = documentName,
                 FileExtension = fileExt,
                 StartDate = model.StartDate,
@@ -84,7 +93,7 @@ namespace BuildingManager.Services
                 await _repository.ActivityRepository.CreateActivity(activity);
             } catch (Exception ex)
             {
-                await _storage.DeleteFileAsync(_configuration["AwsConfiguration:BucketName"], documentName);
+                if (model.File != null) await _storage.DeleteFileAsync(_configuration["AwsConfiguration:BucketName"], documentName);
                 throw new Exception("Error creating new activity");
             }
             

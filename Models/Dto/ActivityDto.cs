@@ -28,7 +28,7 @@ namespace BuildingManager.Models.Dto
         public string Description { get; set; }
         //Enum 1 for pre-construction, 2 for construction, 3 for Post-construction
         public int ProjectPhase { get; set; }
-        public IFormFile File { get; set; }
+        public IFormFile? File { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         //public DateTime? ActualStartDate { get; set; }
@@ -141,7 +141,7 @@ namespace BuildingManager.Models.Dto
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int Role { get; set; }
-        public string Profession { get; set; }
+        public int Profession { get; set; }
 
         public string ProjectId { get; set; }
         public string ActivityId { get; set; }       
