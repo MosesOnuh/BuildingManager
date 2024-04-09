@@ -114,7 +114,7 @@ namespace BuildingManager.Models.Dto
        // public DateTime TimeStamp { get; set; }
     }
 
-    public class DownloadActivityFileDto
+    public class ActivityFileDto
     {
         public string ProjectId { get; set; }
         public string ActivityId { get; set; }

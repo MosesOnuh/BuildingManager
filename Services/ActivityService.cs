@@ -254,6 +254,27 @@ namespace BuildingManager.Services
 
         public async Task<SuccessResponse<ActivityDto>> UpdatePendingActivityFile(AddActivityFileRequestDto model, string userId)
         {
+
+            var activity = await _repository.ActivityRepository.GetActivityOtherPro(model.ProjectId, model.ActivityId, userId);
+
+            if (activity == null)
+            {
+                _logger.LogError($"Error occurred when updating the activity. The required activity was not found, check ActivityId, ProjectId and UserId provided");
+                throw new RestException(HttpStatusCode.NotFound, "Error activity to be updated was not found.");
+            }
+
+            if (activity.Status != (int)ActivityStatus.Pending)
+            {
+                _logger.LogError($"Error attempted to update the file details of an activity that is not pending");
+                throw new Exception("Error cannot update an activity that is not pending");
+            }
+
+            if (activity.StorageFileName != null)
+            {
+                _logger.LogError($"Error attempted to update the file details of an activity that has a file stored. File stored should be deleted first before adding a new file");
+                throw new Exception("Error cannot add a file to an activity that already has a file.");
+            }
+
             await using var memoryStream = new MemoryStream();
             await model.File.CopyToAsync(memoryStream);
             var fileExt = Path.GetExtension(model.File.FileName);
@@ -374,13 +395,13 @@ namespace BuildingManager.Services
 
 
         //@todo procedure to remove FileName, StorageFileName, FileExtension after deleting a file in the database
-        public async Task<SuccessResponse<ActivityDto>> DeleteActivityFile(string projId, string activityId, string userId)
+        public async Task<SuccessResponse<ActivityDto>> DeleteActivityFile(ActivityFileDto model, string userId)
         {
             //get file details from activity gotten from db
             //delete file in cloud
             //deleteactivity in db
 
-            var activity = await _repository.ActivityRepository.GetActivityOtherPro(projId, activityId, userId);
+            var activity = await _repository.ActivityRepository.GetActivityOtherPro(model.ProjectId, model.ActivityId, userId);
 
             if (activity == null)
             {
@@ -388,11 +409,15 @@ namespace BuildingManager.Services
                 throw new RestException(HttpStatusCode.NotFound, "Error activity whose file is to be delete was not found.");
             }
 
+
+
             if (activity.Status != (int)ActivityStatus.Pending)
             {
                 _logger.LogError($"Error attempted to delete the file of an activity that is not pending");
                 throw new Exception("Error cannot delete the file of an activity that is not pending");
             }
+
+
 
             if (activity.StorageFileName == null)
             {
@@ -405,7 +430,7 @@ namespace BuildingManager.Services
             //use config to get value : _configuration.GetValue
             await _storage.DeleteFileAsync(_configuration["AwsConfiguration:BucketName"], activity.StorageFileName);
 
-            var (rowsUpdated, returnNum) = await _repository.ActivityRepository.RemoveActivityFileDetails(projId, activityId, userId);
+            var (rowsUpdated, returnNum) = await _repository.ActivityRepository.RemoveActivityFileDetails(model.ProjectId, model.ActivityId, userId);
 
             if (rowsUpdated == 0 && returnNum == 0)
             {
@@ -428,11 +453,12 @@ namespace BuildingManager.Services
 
             return new SuccessResponse<ActivityDto>
             {
-                Message = "Activity deleted successfully",
+                Message = "Activity file deleted successfully",
             };
         }
 
-        public async Task<GetObjectResponse> DownloadActivityFileOtherPro(DownloadActivityFileDto model, string userId) 
+        //validate request to ensure that a file name is passed
+        public async Task<GetObjectResponse> DownloadActivityFileOtherPro(ActivityFileDto model, string userId) 
         {
             var activity = await _repository.ActivityRepository.GetActivityOtherPro(model.ProjectId, model.ActivityId, userId);
 
@@ -440,6 +466,12 @@ namespace BuildingManager.Services
             {
                 _logger.LogError($"Error occurred when downloading the activity File. The required activity was not found, check ActivityId, ProjectId and UserId provided");
                 throw new RestException(HttpStatusCode.NotFound, "Error activity whose file is to be downloaded was not found.");
+            }
+
+            if (model.FileName != activity.FileName)
+            {
+                _logger.LogError($"Error activity does not have any file stored");
+                throw new RestException(HttpStatusCode.NotFound, "Error activity does not have the file provided.");
             }
 
             if (activity.StorageFileName == null)
@@ -453,7 +485,9 @@ namespace BuildingManager.Services
             return file;
         }
 
-        public async Task<GetObjectResponse> DownloadActivityFilePM(DownloadActivityFileDto model)
+
+        //validate request to ensure that a file name is passed
+        public async Task<GetObjectResponse> DownloadActivityFilePM(ActivityFileDto model)
         {
             var activity = await _repository.ActivityRepository.GetActivityPM(model.ProjectId, model.ActivityId);
 
@@ -461,6 +495,12 @@ namespace BuildingManager.Services
             {
                 _logger.LogError($"Error occurred when downloading the activity File. The required activity was not found, check ActivityId and ProjectId provided");
                 throw new RestException(HttpStatusCode.NotFound, "Error activity whose file is to be downloaded was not found.");
+            }
+
+            if (model.FileName != activity.FileName)
+            {
+                _logger.LogError($"Error activity does not have any file stored");
+                throw new RestException(HttpStatusCode.NotFound, "Error activity does not have the file provided.");
             }
 
             if (activity.StorageFileName == null)

@@ -70,7 +70,7 @@ namespace BuildingManager.Controllers
 
 
         [Authorize]
-        [HttpPost("PM/ActivityApproval")]
+        [HttpPatch("PM/ActivityApproval")]
         [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
         public async Task<IActionResult> ActivityApproval([FromBody] ActivityStatusUpdateDto model)
         {
@@ -100,7 +100,7 @@ namespace BuildingManager.Controllers
 
        
         [Authorize]
-        [HttpPost("OtherPro/UpdateActivityToDone")]
+        [HttpPatch("OtherPro/UpdateActivityToDone")]
         [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
         public async Task<IActionResult> UpdateActivityToDone([FromBody] ActivityStatusUpdateDto model)
         {
@@ -131,7 +131,7 @@ namespace BuildingManager.Controllers
         //input user actual start date and actual enddate for acitivity that is approved or if it is done
         //Note: actual start date and actual done date cannot be greater than todays date i.e. date it is being inputted.
         [Authorize]
-        [HttpPost("OtherPro/UpdateActivityActualDates")]
+        [HttpPatch("OtherPro/UpdateActivityActualDates")]
         [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
         public async Task<IActionResult> UpdateActivityActualDates([FromBody] ActivityActualDatesDto model)
         {
@@ -166,7 +166,7 @@ namespace BuildingManager.Controllers
 
 
         [Authorize]
-        [HttpPost("OtherPro/UpdatePendingActivityDetails")]
+        [HttpPatch("OtherPro/UpdatePendingActivityDetails")]
         [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
         public async Task<IActionResult> UpdateActivity([FromBody] UpdateActivityDetailsDto model)
         {
@@ -194,8 +194,9 @@ namespace BuildingManager.Controllers
         }
 
         //otherpro can add a file to a pending  activity
+        //validate form request and ensure that a file is always passed to the request
         [Authorize]
-        [HttpPost("OtherPro/AddActivityFile")]
+        [HttpPatch("OtherPro/AddActivityFile")]
         [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
         public async Task<IActionResult> AddPendingActivityFile([FromForm] AddActivityFileRequestDto model)
         {
@@ -257,7 +258,7 @@ namespace BuildingManager.Controllers
         [Authorize]
         [HttpDelete("OtherPro/DeleteActivity/{projectId}/{activityId}")]
         [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
-        public async Task<IActionResult> DeleteActivity(string projectId, string activityId)
+        public async Task<IActionResult> DeleteActivity( string projectId,string activityId)
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
@@ -266,6 +267,7 @@ namespace BuildingManager.Controllers
             }
 
             var userId = HttpContext.Items["UserId"] as string;
+
 
             var (userRole, projId) = await _service.ProjectService.GetUserProjectRole(projectId, userId); // where ID is project ID
             if (userRole != Enums.UserRoles.OtherPro)
@@ -277,7 +279,7 @@ namespace BuildingManager.Controllers
             }
 
             //OtherPro can delete only pending activity
-            var response = await _service.ActivityService.DeleteActivity (projId, activityId, userId);
+            var response = await _service.ActivityService.DeleteActivity(projectId, activityId, userId);
 
             //@Todo: Delete activity storage file function 
 
@@ -285,24 +287,16 @@ namespace BuildingManager.Controllers
         }
 
 
-
-        ///////////////////////// Check this out ///////////////////
-        /// <summary>
-        /// /
-        /// </summary>
-        /// <param name="projectId"></param>
-        /// <param name="activityId"></param>
-        /// <returns></returns>
-        /// <exception cref="RestException"></exception>
-
-
-
         //@todo procedure to remove FileName, StorageFileName, FileExtension after deleting a file in the database
         //Delete pending activity
         [Authorize]
-        [HttpDelete("OtherPro/DeletePendingActivityFile/{projectId}/{activityId}")]
+        [HttpDelete("OtherPro/DeletePendingActivityFile")]
         [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
-        public async Task<IActionResult> DeletePendingActivityFile(string projectId, string activityId)
+        public async Task<IActionResult> DeletePendingActivityFile(
+            [FromQuery(Name = "projectId")] string projectId,
+            [FromQuery(Name = "ActivityId")] string activityId,
+            [FromQuery(Name = "FileName")] string fileName
+            )
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
@@ -312,7 +306,14 @@ namespace BuildingManager.Controllers
 
             var userId = HttpContext.Items["UserId"] as string;
 
-            var (userRole, projId) = await _service.ProjectService.GetUserProjectRole(projectId, userId); // where ID is project ID
+            var model = new ActivityFileDto
+            {
+                ProjectId = projectId,
+                ActivityId = activityId,
+                FileName = fileName
+            };
+
+            var (userRole, projId) = await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
             if (userRole != Enums.UserRoles.OtherPro)
             {
                 //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
@@ -322,14 +323,18 @@ namespace BuildingManager.Controllers
             }
 
             //OtherPro can delete only pending activity
-            var response = await _service.ActivityService.DeleteActivityFile(projId, activityId, userId);
+            var response = await _service.ActivityService.DeleteActivityFile(model, userId);
             return Ok(response);
         }
 
         [Authorize]
         [HttpGet("OtherPro/DownloadActivityFile")]
         //[ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
-        public async Task<IActionResult> DownloadActivityFileOtherPro ([FromBody] DownloadActivityFileDto model) 
+        public async Task<IActionResult> DownloadActivityFileOtherPro(
+            [FromQuery(Name = "projectId")] string projectId,
+            [FromQuery(Name = "ActivityId")] string activityId,
+            [FromQuery(Name = "FileName")] string fileName
+            )
         {
             //model
             //activity id
@@ -356,6 +361,13 @@ namespace BuildingManager.Controllers
 
             var userId = HttpContext.Items["UserId"] as string;
 
+            var model = new ActivityFileDto
+            {
+                ProjectId = projectId,
+                ActivityId = activityId,
+                FileName = fileName
+            };
+
             var (userRole, projId) = await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
             if (userRole != Enums.UserRoles.OtherPro)
             {
@@ -372,7 +384,11 @@ namespace BuildingManager.Controllers
         [Authorize]
         [HttpGet("PM/DownloadActivityFile")]
         //[ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
-        public async Task<IActionResult> DownloadActivityFilePM([FromBody] DownloadActivityFileDto model)
+        public async Task<IActionResult> DownloadActivityFilePM(
+            [FromQuery(Name = "projectId")] string projectId,
+            [FromQuery(Name = "ActivityId")] string activityId,
+            [FromQuery(Name = "FileName")] string fileName
+            )
         {
             //model
             //activity id
@@ -398,6 +414,13 @@ namespace BuildingManager.Controllers
             }
 
             var userId = HttpContext.Items["UserId"] as string;
+
+            var model = new ActivityFileDto
+            {
+                ProjectId = projectId,
+                ActivityId = activityId,
+                FileName = fileName
+            };
 
             var (userRole, projId) = await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
             if (userRole != Enums.UserRoles.PM)
@@ -473,7 +496,13 @@ namespace BuildingManager.Controllers
         //carry out pagination
         [Authorize]
         [HttpGet("OtherPro/GetProjectPhaseActivities")]
-        public async Task<IActionResult> GetProjectPhaseActivitiesOtherPro ([FromBody] ActivitiesDtoPaged model)
+        public async Task<IActionResult> GetProjectPhaseActivitiesOtherPro 
+            (
+            [FromQuery(Name = "projectId")] string projectId,
+            [FromQuery(Name = "projectPhase")] int projectPhase,
+            [FromQuery(Name = "pageNumber")] int pageNumber,
+            [FromQuery(Name = "pageSize")] int pageSize
+            )
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
@@ -482,6 +511,14 @@ namespace BuildingManager.Controllers
             }
 
             var userId = HttpContext.Items["UserId"] as string;
+
+            var model = new ActivitiesDtoPaged
+            {
+                ProjectId = projectId,
+                ProjectPhase = projectPhase,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
 
             var (userRole, projId) = await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
             if (userRole != Enums.UserRoles.OtherPro)
@@ -497,7 +534,12 @@ namespace BuildingManager.Controllers
 
         [Authorize]
         [HttpGet("PM/GetProjectPhaseActivities")]
-        public async Task<IActionResult> GetProjectPhaseActivitiesPM([FromBody] ActivitiesDtoPaged model)
+        public async Task<IActionResult> GetProjectPhaseActivitiesPM(
+            [FromQuery(Name = "projectId")] string projectId,
+            [FromQuery(Name = "projectPhase")] int projectPhase,
+            [FromQuery(Name = "pageNumber")] int pageNumber,
+            [FromQuery(Name = "pageSize")] int pageSize
+            )
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
@@ -506,6 +548,14 @@ namespace BuildingManager.Controllers
             }
 
             var userId = HttpContext.Items["UserId"] as string;
+
+            var model = new ActivitiesDtoPaged
+            {
+                ProjectId = projectId,
+                ProjectPhase = projectPhase,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
 
             var (userRole, projId) = await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
             if (userRole != Enums.UserRoles.PM)
