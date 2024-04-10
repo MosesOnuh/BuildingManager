@@ -25,7 +25,7 @@ namespace BuildingManager.Services
             _repository = repository;
         }
 
-        public async Task<SuccessResponse<ProjectDto>> CreateProject(ProjectRequestDto model)
+        public async Task<SuccessResponse<ProjectDto>> CreateProject(ProjectRequestDto model, string userId)
         {
             _logger.LogInfo("Creating a new Project");
             var validate = new ProjectValidator();
@@ -41,10 +41,27 @@ namespace BuildingManager.Services
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now,
                 CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
+                //UpdatedAt = DateTime.Now,
             };
 
             await _repository.ProjectRepository.CreateProject(project);
+
+            var memberShip = new ProjectMember
+            {
+                ProjectId = project.Id,
+                UserId = userId,
+                Role = (int)UserRoles.PM,
+                Profession = (int)UserProfession.ProjectManager,
+                CreatedAt = DateTime.Now,
+            };
+
+            var returnNum = await _repository.ProjectRepository.CreateProjectMembership(memberShip);
+            if ( returnNum == 1)
+            {
+                _logger.LogError($"Error user is already a member of this project");
+                throw new RestException(HttpStatusCode.Conflict, "Error user is already a member of this project");
+            }
+
             return new SuccessResponse<ProjectDto>
             {
                 Message = "Project created successfully",
@@ -115,32 +132,75 @@ namespace BuildingManager.Services
             };
         }
 
-        public async Task<SuccessResponse<ProjectDto>> AddProjectMember(AddProjectMemberDto model)
+        //public async Task<SuccessResponse<ProjectDto>> AddProjectMember(AddProjectMemberDto model)
+
+        //procedure should check if user already has an invite
+        public async Task<SuccessResponse<ProjectDto>> CreateProjectMembershipNotification(InviteNotificationRequestDto model, string pmID)
         {
             //check if user exist
             //if user doesn't exist send email invite else continue
             // create user notification for invited user to join project (use user email and project id and role)
             _logger.LogInfo("Adding a member Project");
 
-            bool emailExist = await _repository.UserRepository.CheckEmailExists(model.Email);
-            if (!emailExist)
+            //bool emailExist = await _repository.UserRepository.CheckEmailExists(model.Email);
+            //if (!emailExist)
+            //{
+            //    //Send mail using queing functiontionality telling the user to join building manager inorder to join the project he/she was invited to
+            //}
+
+            if (model.Profession != (int)UserProfession.Client && 
+                model.Profession != (int)UserProfession.ProjectManager &&
+                model.Profession != (int)UserProfession.Architect &&
+                model.Profession != (int)UserProfession.SiteEngineer &&
+                model.Profession != (int)UserProfession.StructuralEngineer &&
+                model.Profession != (int)UserProfession.MandE_Engineer &&
+                model.Profession != (int)UserProfession.QuantitySurveyor &&
+                model.Profession != (int)UserProfession.LandSurveyor &&
+                model.Profession != (int)UserProfession.BrickLayer &&
+                model.Profession != (int)UserProfession.IronBender &&
+                model.Profession != (int)UserProfession.Technician &&
+                model.Profession != (int)UserProfession.Labourer &&
+                model.Profession != (int)UserProfession.Others
+                )
             {
-                //Send mail using queing functiontionality telling the user to join building manager inorder to join the project he/she was invited to
+                _logger.LogError($"Error value for Profession is not accepted");
+                throw new RestException(HttpStatusCode.BadRequest, "Error value for Profession is not accepted");
+            }
+
+            int userRole = 0;
+
+            if (model.Profession == (int)UserProfession.Client)
+            {
+                userRole = (int)UserRoles.Client;
+            }else if (model.Profession == (int)UserProfession.ProjectManager)
+            {
+                userRole = (int)UserRoles.PM;
+            }else
+            {
+                userRole = (int)UserRoles.OtherPro;
             }
 
             InviteNotification newInvite = new()
             {
                 Id = Guid.NewGuid().ToString(),
+                PmId = pmID,
                 Email = model.Email,
                 ProjectId = model.ProjectId,
-                UserRole = model.Role,
+                Profession = model.Profession,
+                Role = userRole ,
+                Status = (int)InviteNotificationStatus.Pending,
                 CreatedAt = DateTime.Now,
             };
 
-            await _repository.NotificationRepository.CreateInviteNotification(newInvite);
+            var returnNum = await _repository.NotificationRepository.CreateInviteNotification(newInvite);
+            if (returnNum == 1)
+            {
+                _logger.LogError($"Error user has already been invited to join this project");
+                throw new RestException(HttpStatusCode.Conflict, "Error user has already been invited to join this project");
+            }
             return new SuccessResponse<ProjectDto>
             {
-                Message = "Add member to project notification created",
+                Message = "Project invite successfully sent to user",
             };
         }
 
@@ -162,6 +222,70 @@ namespace BuildingManager.Services
                     ActualDataSize = projects.Count,
                     TotalCount = totalCount
                 }
+            };
+        }
+
+        public async Task<SuccessResponse<ProjectDto>> ProjectInviteAcceptance(ProjectInviteStatusUpdateDto model, string userId)
+        {
+            //write procedure to check the status of the activity and if the status is one then 
+            // the status can be updated to 2 or 3
+
+            //validate the StatusAction and ensure that it is either 2 or 3
+            if (model.StatusAction != (int)InviteNotificationStatus.Accepted && model.StatusAction != (int)InviteNotificationStatus.Rejected)
+            {
+                throw new RestException(HttpStatusCode.BadRequest, "Error StatusAction can only be to approve or reject an activity");
+            }
+
+            if (model.StatusAction == (int)InviteNotificationStatus.Accepted)
+            {
+
+                var (success, returnNum) = await _repository.ProjectRepository.AcceptProjectInvite(model, userId);
+                if (success == 0 && returnNum == 1)
+                {
+                    _logger.LogError($"Error occurred when accepting project invite. The required invite notification may not exist, check parameters passed into the query");
+                    throw new RestException(HttpStatusCode.NotFound, "Error failed to accept Project Invite. Notification Invite not found");
+                }
+
+                if (success == 0 && returnNum == 2)
+                {
+                    _logger.LogError($"Error the project invite has already been accepted or rejected");
+                    throw new Exception("Error the project invite has already been accepted or rejected");
+                }
+
+                if (success != 1 && returnNum != 0)
+                {
+                    _logger.LogError($"Error failed to accept Project Invite");
+                    throw new Exception("Error failed to accept Project Invite");
+                }
+
+                return new SuccessResponse<ProjectDto>
+                {
+                    Message = "Successfully accepted request to join project",
+                };
+            }
+
+            var (rowsUpdated, returnedNum) = await _repository.ProjectRepository.RejectProjectInvite(model, userId);
+            if (rowsUpdated == 0 && returnedNum == 0)
+            {
+                _logger.LogError($"Error occurred when rejecting project invite. The required invite notification may not exist, check parameters passed into the query");
+                throw new RestException(HttpStatusCode.NotFound, "Error failed to accept Project Invite. Notification Invite not found");
+            }
+
+            if (rowsUpdated == 0 && returnedNum == 1)
+            {
+                _logger.LogError($"Error the project invite has already been accepted or rejected");
+                throw new Exception("Error the project invite has already been accepted or rejected");
+            }
+
+            if (rowsUpdated == 0)
+            {
+                _logger.LogError($"Error failed to accept Project Invite");
+                throw new Exception("Error failed to accept Project Invite");
+            }
+
+            return new SuccessResponse<ProjectDto>
+            {
+                Message = "Successfully rejected request to join project",
             };
         }
     }

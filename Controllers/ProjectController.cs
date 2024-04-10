@@ -20,11 +20,19 @@ namespace BuildingManager.Controllers
             _service = service;
         }
 
+        [Authorize]
         [HttpPost("user/CreateProject")]
         [ProducesResponseType(typeof(SuccessResponse<ProjectDto>), 200)]
         public async Task<IActionResult> CreateProject ([FromBody] ProjectRequestDto model) 
         {
-            var response = await _service.ProjectService.CreateProject(model);
+            if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
+            {
+                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                return Unauthorized(err);
+            }
+
+            var userId = HttpContext.Items["UserId"] as string;
+            var response = await _service.ProjectService.CreateProject(model, userId);
             return Ok(response);
         }
 
@@ -35,7 +43,8 @@ namespace BuildingManager.Controllers
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                throw new RestException(HttpStatusCode.Unauthorized, "No token provided in Authorization header");
+                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                return Unauthorized(err);
             }
 
             var userId = HttpContext.Items["UserId"] as string;
@@ -56,7 +65,8 @@ namespace BuildingManager.Controllers
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                throw new RestException(HttpStatusCode.Unauthorized, "No token provided in Authorization header");
+                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                return Unauthorized(err);
             }
 
             var userId = HttpContext.Items["UserId"] as string;
@@ -73,7 +83,8 @@ namespace BuildingManager.Controllers
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                throw new RestException(HttpStatusCode.Unauthorized, "No token provided in Authorization header");
+                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                return Unauthorized(err);
             }
 
             var userId = HttpContext.Items["UserId"] as string;
@@ -82,7 +93,9 @@ namespace BuildingManager.Controllers
             if (userRole != Enums.UserRoles.PM)
             {
                 //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to update a project. User is not a PM");
-                throw new RestException(HttpStatusCode.Forbidden, "Only PM is allowed to update a Project.");
+                // throw new RestException(HttpStatusCode.Forbidden, "Only PM is allowed to update a Project.");
+                var err = new ErrorResponse<ActivityDto> { Message = "User does not have sufficient permission" };
+                return StatusCode((int)HttpStatusCode.Forbidden, err);
             }
             var response = await _service.ProjectService.UpdateProject(model);
             return Ok(response);
@@ -90,13 +103,15 @@ namespace BuildingManager.Controllers
 
 
         //Only PM can add members to project
+        //Put check to ensure that A pm can not send an invite to himself
         [Authorize]
-        [HttpPost("PM/AddProjectMember")]
-        public async Task<IActionResult> AddProjectMember([FromBody] AddProjectMemberDto model)
+        [HttpPost("PM/ProjectMemberInvite")]
+        public async Task<IActionResult> InviteUserToProject([FromBody] InviteNotificationRequestDto model)
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                throw new RestException(HttpStatusCode.Unauthorized, "No token provided in Authorization header");
+                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                return Unauthorized(err);
             }
 
             var userId = HttpContext.Items["UserId"] as string;
@@ -104,15 +119,91 @@ namespace BuildingManager.Controllers
             if (userRole != Enums.UserRoles.PM)
             {
                 //_logger.LogError($"Error, only a PM (Project Manager) is allowed to add members to a project. User is not a PM");
-                throw new RestException(HttpStatusCode.Forbidden, "Only PM is allowed to add members to a Project.");
+                //throw new RestException(HttpStatusCode.Forbidden, "Only PM is allowed to add members to a Project.");
+                var err = new ErrorResponse<ActivityDto> { Message = "User does not have sufficient permission" };
+                return StatusCode((int)HttpStatusCode.Forbidden, err);
             }
 
             //check if user exist
             //if user doesn't exist send email invite else continue
             // create user notification for invited user to join project (use user email and project id and role)
-            var response = await _service.ProjectService.AddProjectMember(model);
+            //var response = await _service.ProjectService.AddProjectMember(model);
+            var response = await _service.ProjectService.CreateProjectMembershipNotification(model,  userId);
             return Ok(response);
         }
+        //when creating a notification if it already exist update the invite and change to pending
+
+        //invite acceptance endpoint i.e. to accept or reject an invite 
+        //when accepted add user to project member table
+        // create two procedures 1 to accept and 2 to reject 
+        // accept procedure will add the user to projectmember table--transaction
+        //delete procedure will change status to 3 --> make necessary validation in db that only 3 can be passed. create a rep function that recieves any value
+        //response message is based on input passed into the request
+
+
+
+        [Authorize]
+        [HttpPatch("OtherPro/InviteAcceptance")]
+        [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
+        public async Task<IActionResult> ProjectInviteAcceptance([FromBody] ProjectInviteStatusUpdateDto model)
+        {
+            if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
+            {
+                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                return Unauthorized(err);
+            }
+
+            var userId = HttpContext.Items["UserId"] as string;
+
+            var response = await _service.ProjectService.ProjectInviteAcceptance(model, userId);
+
+            return Ok(response);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //pm will have page in projects for sent invites
+
+
+        //authorize
+        //per page
+        ////Get user Invite Notifications by email  // check invite status and get only the ones pending
+        //public async Task IActionResult GetUserInvites(string id)
+        //{
+        //    //return OK();
+        //}
+
+        //pm get sent invites for project
+
+        //authorize
+        ////Get a user Invite counts by Email // check status // count those with pending status
+        //public async Task IActionResult CountUserInvites(string id)
+        //{
+        //    //return OK();
+        //}
+
+
+        //authorize
+        ////Get a user Invite Notification by notivication ID
+        //public async Task IActionResult GetUserInvites(string id)
+        //{
+        //    //return OK();
+        //}
+
+
 
 
         //get all :using project Id, join userroles and users table  using user id 
@@ -168,3 +259,7 @@ namespace BuildingManager.Controllers
 //@todo
 //Add description as a field in projects table, to describe the project
 //When creating a project, add the creators details in Projectmember table
+
+
+//important
+//create procedure for CreateProjectMembership(ProjectMember memberShip) : proc_CreateProjectMembership

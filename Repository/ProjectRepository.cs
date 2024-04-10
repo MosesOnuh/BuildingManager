@@ -38,7 +38,7 @@ namespace BuildingManager.Repository
                         new SqlParameter("@StartDate", project.StartDate),
                         new SqlParameter("@EndDate", project.EndDate),
                         new SqlParameter("@CreatedAt", project.CreatedAt),
-                        new SqlParameter("@UpdatedAt", project.UpdatedAt),
+                        new SqlParameter("@UpdatedAt", DBNull.Value),
                     };
 
                     SqlCommand command = new("proc_CreateProject", connection)
@@ -56,6 +56,45 @@ namespace BuildingManager.Repository
             {
                 _logger.LogError($"Error inserting new project in DB {ex.StackTrace} {ex.Message}");
                 throw new Exception("Error creating new project");
+            }
+        }
+
+
+        //check if user is already a member of the project
+        public async Task<int> CreateProjectMembership(ProjectMember model)
+        {
+            try
+            {
+                using (SqlConnection connection = new(_connectionString))
+                {
+                    var parameters = new[]
+                    {
+                        new SqlParameter("@ProjectId", model.ProjectId),
+                        new SqlParameter("@UserId", model.UserId),
+                        new SqlParameter("@Role", model.Role),
+                        new SqlParameter("@Profession", model.Profession),
+                        new SqlParameter("@CreatedAt", model.CreatedAt),
+                        new SqlParameter("@UpdatedAt", DBNull.Value),
+                        new SqlParameter("@ResultCode", SqlDbType.Int){ Direction = ParameterDirection.Output},
+                    };
+                    //if returned num is 1 then project membership already exist
+                    //if 0 all is well
+                    SqlCommand command = new("proc_CreateProjectMembership", connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    command.Parameters.AddRange(parameters);
+
+                    await connection.OpenAsync();
+                    await command.ExecuteNonQueryAsync();
+                    _logger.LogInfo("Successfully created a new project membership");
+                    return (int)command.Parameters["@ResultCode"].Value;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error inserting new project member in DB {ex.StackTrace} {ex.Message}");
+                throw new Exception("Error creating new project member");
             }
         }
 
@@ -239,6 +278,85 @@ namespace BuildingManager.Repository
             {
                 _logger.LogError($"Error getting projeCts by id and page {ex.StackTrace} {ex.Message}");
                 throw new Exception("Error getting projects by id and page");
+            }
+        }
+
+
+        //ProjectRepository.model, userId){}
+        public async Task<(int, int)> AcceptProjectInvite(ProjectInviteStatusUpdateDto model, string userId)
+        {
+            try
+            {
+                using (SqlConnection connection = new(_connectionString))
+                {
+                    var parameters = new[]
+                    {
+                    new SqlParameter("@InviteNotificationId", model.InviteNotificationId),
+                    new SqlParameter("@ProjectId", model.ProjectId),
+                    new SqlParameter("@UserId", userId),
+                    //new SqlParameter("@UpdatedStatus", model.StatusAction),
+                    new SqlParameter("@ResultCode", SqlDbType.Int){ Direction = ParameterDirection.Output},
+                    new SqlParameter("@Success", SqlDbType.Int){ Direction = ParameterDirection.Output},
+                    };
+
+                    //R = 1, success = 0-- Invite to project not found for User
+                    //R = 2, success = 0-- User has already accepted or rejected invite
+                    //R = 0, success = 1  success
+                    SqlCommand command = new("proc_AcceptProjectInvite", connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    command.Parameters.AddRange(parameters);
+
+                    await connection.OpenAsync();
+                    await command.ExecuteNonQueryAsync();
+                    _logger.LogInfo("Successfully ran query to accept project invite");
+
+                    return ((int)command.Parameters["@Success"].Value, (int)command.Parameters["@ResultCode"].Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error accepting project invit in DB {ex.StackTrace} {ex.Message}");
+                throw new Exception("Error accepting project invite");
+            }
+        }
+
+        public async Task<(int, int)> RejectProjectInvite(ProjectInviteStatusUpdateDto model, string userId) { 
+            try
+            {
+                using (SqlConnection connection = new(_connectionString))
+                {
+                    var parameters = new[]
+                    {
+                        new SqlParameter("@InviteNotificationId", model.InviteNotificationId),
+                        new SqlParameter("@ProjectId", model.ProjectId),
+                        new SqlParameter("@UserId", userId),
+                        //new SqlParameter("@UpdatedStatus", model.StatusAction),
+                        new SqlParameter("@ResultCode", SqlDbType.Int){ Direction = ParameterDirection.Output},
+                        new SqlParameter("@RowsUpdated", SqlDbType.Int){ Direction = ParameterDirection.Output},
+                     };
+
+                    //procedure returns @ResultCode = 0, @RowsUpdated = 0 if the activity is not found
+                    //procedure will return @ResultCode = 1, @RowsUpdated = 0 if the activity is not pending
+                    //procedure will return  @ResultCode = 2, @RowsUpdated = 1; if the update is successful
+                    SqlCommand command = new("proc_RejectProjectInvite", connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    command.Parameters.AddRange(parameters);
+
+                    await connection.OpenAsync();
+                    await command.ExecuteNonQueryAsync();
+                    _logger.LogInfo("Successfully ran query to reject project invite");
+
+                    return ((int)command.Parameters["@RowsUpdated"].Value, (int)command.Parameters["@ResultCode"].Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error rejecting project invit in DB {ex.StackTrace} {ex.Message}");
+                throw new Exception("Error rejecting project invite");
             }
         }
     }

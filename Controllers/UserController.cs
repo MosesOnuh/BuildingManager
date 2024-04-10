@@ -37,3 +37,8 @@ namespace BuildingManager.Controllers
         }
     }
 }
+
+
+//write procedure to check this
+//bool phoneExist = await _repository.UserRepository.CheckPhoneExists(model.PhoneNumber):  proc_checkPhonelExists
+//validate request

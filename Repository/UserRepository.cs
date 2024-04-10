@@ -62,6 +62,49 @@ namespace BuildingManager.Repository
             }
         }
 
+        public async Task<bool> CheckPhoneExists(string phoneNumber)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    SqlCommand command = new("proc_checkPhonelExists", connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    command.Parameters.AddWithValue("@PhoneNumber", phoneNumber);
+
+                    await connection.OpenAsync();
+
+                    //Execute the stored procedure and get the result
+                    var result = await command.ExecuteScalarAsync();
+
+                    if (result != null)
+                    {
+                        if ((int)result == 1)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        // Invalid result returned from the stored procedure
+                        _logger.LogError($"Error invalid result returned from proc_checkPhoneExists for {phoneNumber}");
+                        throw new Exception("Error checking if phone number exist");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error at checkEmailExists procedure with {phoneNumber} {ex.StackTrace} {ex.Message}");
+                throw;
+            }
+        }
+
         public async Task SignUp(User user)
         {
             try 
@@ -77,7 +120,7 @@ namespace BuildingManager.Repository
                         new SqlParameter("@PhoneNumber", user.PhoneNumber),
                         new SqlParameter("@Password", user.Password),
                         new SqlParameter("@CreatedAt", user.CreatedAt),
-                        new SqlParameter("@UpdatedAt", user.UpdatedAt),
+                        new SqlParameter("@UpdatedAt", DBNull.Value),
                         new SqlParameter("@EmailVerified", user.EmailVerified)
                     };
 

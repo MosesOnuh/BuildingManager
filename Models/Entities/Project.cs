@@ -15,15 +15,6 @@ namespace BuildingManager.Models.Entities
         public DateTime? UpdatedAt { get; set; }
     }
 
-
-
-    //public class ProjectUserRoleDetails
-    //{
-    //    public string ProjectId { get; set; }
-    //    public string UserId { get; set; }
-    //    public string Role { get; set; }
-    //}
-
     public class ProjectMember
     {
         public string ProjectId { get; set; }
@@ -36,6 +27,7 @@ namespace BuildingManager.Models.Entities
         public DateTime? UpdatedAt { get; set; }
     }
 
+    
 
 
 }

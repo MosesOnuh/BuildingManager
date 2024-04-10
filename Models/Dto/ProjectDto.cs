@@ -24,11 +24,11 @@ namespace BuildingManager.Models.Dto
         public DateTime EndDate { get; set; }
     }
 
-    public class AddProjectMemberDto
-    {
-        public string ProjectId { get; set; }
-        public string Email { get; set; }
-        public int Role { get; set; }
-    }
+    //public class AddProjectMemberDto
+    //{
+    //    public string ProjectId { get; set; }
+    //    public string Email { get; set; }
+    //    public int Role { get; set; }
+    //}
 
 }

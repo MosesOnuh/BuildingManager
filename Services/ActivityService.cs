@@ -562,25 +562,6 @@ namespace BuildingManager.Services
                 throw new RestException(HttpStatusCode.NotFound, "Error activity was not found.");
             }
 
-            //var clientActivity = new ActivityDto()
-            //{
-            //    Id = activity.Id,
-            //    ProjectId = activity.ProjectId,
-            //    UserId = activity.UserId,
-            //    Name = activity.Name,
-            //    Status = activity.Status,
-            //    Description = activity.Description,
-            //    ProjectPhase = activity.ProjectPhase,
-            //    FileName = activity.FileName,
-            //    StorageFileName = activity.StorageFileName,
-            //    FileType = activity.FileExtension,
-            //    StartDate = activity.StartDate,
-            //    EndDate = activity.EndDate,
-            //    ActualStartDate = activity.ActualStartDate,
-            //    ActualEndDate = activity.ActualEndDate,
-            //    CreatedAt = activity.CreatedAt
-            //};
-
             return new SuccessResponse<ActivityAndMemberDto>
             {
                 Message = "Activity get activity successfully",

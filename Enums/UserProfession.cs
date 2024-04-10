@@ -1,6 +1,6 @@
 ﻿namespace BuildingManager.Enums
 {
-    public enum Profession
+    public enum UserProfession
     {
         Client = 1,
         ProjectManager = 2,

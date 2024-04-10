@@ -6,6 +6,6 @@ namespace BuildingManager.Contracts.Repository
 {
     public interface INotificationRepository
     {
-        Task CreateInviteNotification(InviteNotification model);
+        Task<int> CreateInviteNotification(InviteNotification model);
     }
 }

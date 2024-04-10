@@ -19,7 +19,7 @@ namespace BuildingManager.Repository
             _logger = logger;
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
-       public async Task CreateInviteNotification(InviteNotification model)
+       public async Task<int> CreateInviteNotification(InviteNotification model)
         {
             try
             {
@@ -28,10 +28,14 @@ namespace BuildingManager.Repository
                     var parameters = new[]
                     {
                         new SqlParameter("@Id", model.Id),
+                        new SqlParameter("@PmId", model.PmId),
                         new SqlParameter("@Email", model.Email),
                         new SqlParameter("@ProjectId", model.ProjectId),
-                        new SqlParameter("@userRole", model.UserRole),
+                        new SqlParameter("@Role", model.Role),
+                        new SqlParameter("@Profession", model.Profession),
                         new SqlParameter("@CreatedAt", model.CreatedAt),
+                        new SqlParameter("@UpdatedAt", DBNull.Value),
+                        new SqlParameter("@ResultCode", SqlDbType.Int){ Direction = ParameterDirection.Output},
                     };
 
                     SqlCommand command = new("proc_CreateInviteNotification", connection)
@@ -43,6 +47,7 @@ namespace BuildingManager.Repository
                     await connection.OpenAsync();
                     await command.ExecuteNonQueryAsync();
                     _logger.LogInfo("Successfully Created a Project Invite Notification");
+                    return (int)command.Parameters["@ResultCode"].Value;
                 }
             }
             catch (Exception ex)

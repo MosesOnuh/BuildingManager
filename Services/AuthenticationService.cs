@@ -65,7 +65,13 @@ namespace BuildingManager.Services
             bool emailExist = await _repository.UserRepository.CheckEmailExists(model.Email);
             if (emailExist)
             {
-                throw new RestException(HttpStatusCode.BadRequest, "Email address already exists.");
+                throw new RestException(HttpStatusCode.Conflict, "Email address already exists.");
+            }
+
+            bool phoneExist = await _repository.UserRepository.CheckPhoneExists(model.PhoneNumber);
+            if (phoneExist)
+            {
+                throw new RestException(HttpStatusCode.Conflict, "Phone number already exists.");
             }
 
             var user = new User
@@ -108,3 +114,9 @@ namespace BuildingManager.Services
     }
     
 }
+
+
+
+//write procedure to check this
+//bool phoneExist = await _repository.UserRepository.CheckPhoneExists(model.PhoneNumber):  proc_checkPhonelExists
+//validate request
