@@ -16,6 +16,8 @@ namespace BuildingManager.Contracts.Services
         Task<SuccessResponse<ProjectDto>> CreateProjectMembershipNotification(InviteNotificationRequestDto model, string pmID);
         Task<PageResponse<IList<ProjectDto>>> GetProjectsPaged(string userId, int pageNumber, int pageSize);
         Task<SuccessResponse<ProjectDto>> ProjectInviteAcceptance(ProjectInviteStatusUpdateDto model, string userId);
+        Task<PageResponse<IList<InviteResponseDto>>> GetProjectInvitesPaged(ProjectInvitesDtoPaged invites, string userId);
+        
     }
 }
 

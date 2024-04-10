@@ -359,6 +359,72 @@ namespace BuildingManager.Repository
                 throw new Exception("Error rejecting project invite");
             }
         }
+
+        
+
+        public async Task<(int, IList<InviteResponseDto>)> GetProjectInvites(ProjectInvitesDtoPaged model, string userId)
+        {
+            try
+            {
+                int totalCount = 0;
+                IList<InviteResponseDto> invites = new List<InviteResponseDto>();
+
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+
+                    using (SqlCommand command = connection.CreateCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.CommandText = "proc_GetProjectInvitesPaged";
+                        command.Parameters.AddWithValue("@ProjectId", model.ProjectId);
+                        command.Parameters.AddWithValue("@UserId", userId);
+                        command.Parameters.AddWithValue("@PageNumber", model.PageNumber);
+                        command.Parameters.AddWithValue("@PageSize", model.PageSize);
+
+                        SqlParameter totalCountParameter = new SqlParameter("@TotalCount", SqlDbType.Int);
+                        totalCountParameter.Direction = ParameterDirection.Output;
+                        command.Parameters.Add(totalCountParameter);
+
+                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                InviteResponseDto invite = new InviteResponseDto
+                                {
+                                    Id = reader.GetString("Id"),
+                                    ProjectId = reader.GetString("ProjectId"),
+                                    ProjectName = reader.GetString("ProjectName"),
+                                    PmId = reader.GetString("PmId"),
+                                    PmFirstName = reader.GetString("PmFirstName"),
+                                    PmLastName = reader.GetString("PmLastName"),
+                                    PmEmail = reader.GetString("PmEmail"),
+                                    PmPhoneNum = reader.GetString("PmPhoneNum"),
+                                    PmProjectProfession = reader.GetInt32("PmProjectProfession"),
+                                    UserEmail = reader.GetString("UserEmail"),
+                                    UserRole = reader.GetInt32("Role"),
+                                    UserProfession = reader.GetInt32("Profession"),
+                                    Status = reader.GetInt32("Status"),
+                                    CreatedAt = reader.GetDateTime("CreatedAt"),
+                                };
+                                invites.Add(invite);
+                            }
+                        }
+
+                        totalCount = (int)command.Parameters["@TotalCount"].Value;
+                        _logger.LogInfo("Successfully ran query to get project invites");
+                    }
+                }
+
+                return (totalCount, invites);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error getting project invites {ex.StackTrace} {ex.Message}");
+                throw new Exception("Error getting project invites");
+            }
+        }
+
     }
 }
 

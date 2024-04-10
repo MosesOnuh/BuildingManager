@@ -15,5 +15,6 @@ namespace BuildingManager.Contracts.Repository
         Task<(int, IList<ProjectDto>)> GetProjectsPaged(string userId, int pageNumber, int pageSize);
         Task<(int, int)> AcceptProjectInvite(ProjectInviteStatusUpdateDto model, string userId);
         Task<(int, int)> RejectProjectInvite(ProjectInviteStatusUpdateDto model, string userId);
+        Task<(int, IList<InviteResponseDto>)> GetProjectInvites(ProjectInvitesDtoPaged model, string userId);
     }
 }

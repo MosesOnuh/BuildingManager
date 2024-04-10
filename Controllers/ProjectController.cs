@@ -161,6 +161,32 @@ namespace BuildingManager.Controllers
         }
 
 
+        [Authorize]
+        [HttpGet("user/GetProjectInvites/{pageNumber:int}/{pageSize:int}")]
+        public async Task<IActionResult> GetProjectInvitesPaged (
+            [FromQuery(Name = "projectId")] string projectId,
+            //[FromQuery(Name = "projectPhase")] int projectPhase,
+            [FromQuery(Name = "pageNumber")] int pageNumber,
+            [FromQuery(Name = "pageSize")] int pageSize
+            )
+        {
+            if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
+            {
+                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                return Unauthorized(err);
+            }
+
+            var invites = new ProjectInvitesDtoPaged
+            {
+                ProjectId = projectId,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
+
+            var userId = HttpContext.Items["UserId"] as string;
+            var response = await _service.ProjectService.GetProjectInvitesPaged(invites, userId);
+            return Ok(response);
+        }
 
 
 

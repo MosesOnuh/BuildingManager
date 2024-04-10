@@ -621,7 +621,6 @@ namespace BuildingManager.Repository
                 throw new Exception("Error getting activities per phase");
             }
         }
-
     }
 }
         

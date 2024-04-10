@@ -288,6 +288,33 @@ namespace BuildingManager.Services
                 Message = "Successfully rejected request to join project",
             };
         }
+
+        public async Task<PageResponse<IList<InviteResponseDto>>> GetProjectInvitesPaged(ProjectInvitesDtoPaged model, string userId)
+        {
+        
+         var (totalCount, invites) = await _repository.ProjectRepository.GetProjectInvites(model, userId);
+            try 
+            {
+               
+                int totalPages = (int)Math.Ceiling((double)totalCount / (double)model.PageSize);
+
+                return new PageResponse<IList<InviteResponseDto>>()
+                {
+                    Data = invites,
+                    Pagination = new Pagination()
+
+                    {
+                        TotalPages = totalPages,
+                        PageSize = model.PageSize,
+                        ActualDataSize = invites.Count,
+                        TotalCount = totalCount
+                    }
+                };
+            } catch (Exception ex) {
+                _logger.LogError($"Error getting invites in the service layer {ex.StackTrace} {ex.Message}");
+                throw new Exception("Error getting project invites");
+            }  
+}
     }
 }
 
