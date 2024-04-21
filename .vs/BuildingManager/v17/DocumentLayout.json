@@ -1,0 +1,702 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\controllers\\activitycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:controllers\\activitycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\services\\projectservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:services\\projectservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\controllers\\projectcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:controllers\\projectcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\repository\\activityrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:repository\\activityrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\services\\activityservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:services\\activityservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\models\\dto\\activitydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:models\\dto\\activitydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\contracts\\repository\\iactivityrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:contracts\\repository\\iactivityrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\contracts\\services\\iactivityservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:contracts\\services\\iactivityservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\models\\dto\\projectdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:models\\dto\\projectdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\models\\dto\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:models\\dto\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\utils\\storagemanager\\istoragemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:utils\\storagemanager\\istoragemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\utils\\storagemanager\\storagemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:utils\\storagemanager\\storagemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\models\\entities\\activity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:models\\entities\\activity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\repository\\projectrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:repository\\projectrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\contracts\\repository\\irepositorymanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:contracts\\repository\\irepositorymanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\contracts\\repository\\iprojectrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:contracts\\repository\\iprojectrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\contracts\\repository\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:contracts\\repository\\iuserrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\enums\\projectphase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:enums\\projectphase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\helpers\\response.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:helpers\\response.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\enums\\userroles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:enums\\userroles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\validators\\projectvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:validators\\projectvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\enums\\userverification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:enums\\userverification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\extensions\\serviceextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:extensions\\serviceextension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\services\\servicemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:services\\servicemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\utils\\logger\\loggermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:utils\\logger\\loggermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\contracts\\services\\iprojectservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:contracts\\services\\iprojectservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\configurationmodels\\awsconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:configurationmodels\\awsconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\models\\entities\\project.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:models\\entities\\project.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\repository\\notificationrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:repository\\notificationrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\models\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:models\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\contracts\\repository\\inotificationrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:contracts\\repository\\inotificationrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\models\\dto\\invitenotificationdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:models\\dto\\invitenotificationdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\contracts\\services\\iauthenticationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:contracts\\services\\iauthenticationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\middlewares\\errorhandlingmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:middlewares\\errorhandlingmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\middlewares\\authenticationmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:middlewares\\authenticationmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\helpers\\restexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:helpers\\restexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\.gitignore||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:.gitignore||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\.gitattributes||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:.gitattributes||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\utils\\logger\\iloggermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:utils\\logger\\iloggermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\contracts\\repository\\itokenrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:contracts\\repository\\itokenrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\my laptop\\onedrive\\desktop\\ichado\\msc backup\\c# development\\new dev\\buildingmanager\\buildingmanager.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:buildingmanager.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 337,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ProjectService.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Services\\ProjectService.cs",
+              "RelativeDocumentMoniker": "Services\\ProjectService.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Services\\ProjectService.cs",
+              "RelativeToolTip": "Services\\ProjectService.cs",
+              "ViewState": "AQIAAI4AAAAAAAAAAAAiwKIAAAArAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.567Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ActivityController.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Controllers\\ActivityController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ActivityController.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Controllers\\ActivityController.cs",
+              "RelativeToolTip": "Controllers\\ActivityController.cs",
+              "ViewState": "AQIAAL8BAAAAAAAAAAAvwNUBAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.2Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ActivityService.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Services\\ActivityService.cs",
+              "RelativeDocumentMoniker": "Services\\ActivityService.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Services\\ActivityService.cs",
+              "RelativeToolTip": "Services\\ActivityService.cs",
+              "ViewState": "AQIAAAgBAAAAAAAAAAAqwBsBAAAVAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.534Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ProjectDto.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Models\\Dto\\ProjectDto.cs",
+              "RelativeDocumentMoniker": "Models\\Dto\\ProjectDto.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Models\\Dto\\ProjectDto.cs",
+              "RelativeToolTip": "Models\\Dto\\ProjectDto.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAxAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.637Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "UserDto.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Models\\Dto\\UserDto.cs",
+              "RelativeDocumentMoniker": "Models\\Dto\\UserDto.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Models\\Dto\\UserDto.cs",
+              "RelativeToolTip": "Models\\Dto\\UserDto.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACsAAAAvAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.653Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "IStorageManager.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Utils\\StorageManager\\IStorageManager.cs",
+              "RelativeDocumentMoniker": "Utils\\StorageManager\\IStorageManager.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Utils\\StorageManager\\IStorageManager.cs",
+              "RelativeToolTip": "Utils\\StorageManager\\IStorageManager.cs",
+              "ViewState": "AQIAAAcAAAAAAAAAAAAzwAkAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.606Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Activity.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Models\\Entities\\Activity.cs",
+              "RelativeDocumentMoniker": "Models\\Entities\\Activity.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Models\\Entities\\Activity.cs",
+              "RelativeToolTip": "Models\\Entities\\Activity.cs",
+              "ViewState": "AQIAAAUAAAAAAAAAAAAAwBkAAAAYAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.539Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ProjectRepository.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Repository\\ProjectRepository.cs",
+              "RelativeDocumentMoniker": "Repository\\ProjectRepository.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Repository\\ProjectRepository.cs",
+              "RelativeToolTip": "Repository\\ProjectRepository.cs",
+              "ViewState": "AQIAAM4AAAAAaGZmZmYewO4AAAAPAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.548Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "IRepositoryManager.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Contracts\\Repository\\IRepositoryManager.cs",
+              "RelativeDocumentMoniker": "Contracts\\Repository\\IRepositoryManager.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Contracts\\Repository\\IRepositoryManager.cs",
+              "RelativeToolTip": "Contracts\\Repository\\IRepositoryManager.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAA3AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.558Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "IProjectRepository.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Contracts\\Repository\\IProjectRepository.cs",
+              "RelativeDocumentMoniker": "Contracts\\Repository\\IProjectRepository.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Contracts\\Repository\\IProjectRepository.cs",
+              "RelativeToolTip": "Contracts\\Repository\\IProjectRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.562Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "Response.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Helpers\\Response.cs",
+              "RelativeDocumentMoniker": "Helpers\\Response.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Helpers\\Response.cs",
+              "RelativeToolTip": "Helpers\\Response.cs",
+              "ViewState": "AQIAAAIAAAAAAAAAAAAxwCoAAAAvAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.571Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "IUserRepository.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Contracts\\Repository\\IUserRepository.cs",
+              "RelativeDocumentMoniker": "Contracts\\Repository\\IUserRepository.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Contracts\\Repository\\IUserRepository.cs",
+              "RelativeToolTip": "Contracts\\Repository\\IUserRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwAkAAAA1AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.574Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "ProjectPhase.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Enums\\ProjectPhase.cs",
+              "RelativeDocumentMoniker": "Enums\\ProjectPhase.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Enums\\ProjectPhase.cs",
+              "RelativeToolTip": "Enums\\ProjectPhase.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.578Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "UserRoles.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Enums\\UserRoles.cs",
+              "RelativeDocumentMoniker": "Enums\\UserRoles.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Enums\\UserRoles.cs",
+              "RelativeToolTip": "Enums\\UserRoles.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.587Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "ProjectValidator.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Validators\\ProjectValidator.cs",
+              "RelativeDocumentMoniker": "Validators\\ProjectValidator.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Validators\\ProjectValidator.cs",
+              "RelativeToolTip": "Validators\\ProjectValidator.cs",
+              "ViewState": "AQIAAA0AAACA//////8fwAgAAAAhAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.59Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "UserVerification.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Enums\\UserVerification.cs",
+              "RelativeDocumentMoniker": "Enums\\UserVerification.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Enums\\UserVerification.cs",
+              "RelativeToolTip": "Enums\\UserVerification.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.594Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "ServiceExtension.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Extensions\\ServiceExtension.cs",
+              "RelativeDocumentMoniker": "Extensions\\ServiceExtension.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Extensions\\ServiceExtension.cs",
+              "RelativeToolTip": "Extensions\\ServiceExtension.cs",
+              "ViewState": "AQIAAA8AAADAzMzMzMwywBsAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.598Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "ServiceManager.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Services\\ServiceManager.cs",
+              "RelativeDocumentMoniker": "Services\\ServiceManager.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Services\\ServiceManager.cs",
+              "RelativeToolTip": "Services\\ServiceManager.cs",
+              "ViewState": "AQIAAAcAAAAANDMzMzMLwBwAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.602Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "LoggerManager.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Utils\\Logger\\LoggerManager.cs",
+              "RelativeDocumentMoniker": "Utils\\Logger\\LoggerManager.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Utils\\Logger\\LoggerManager.cs",
+              "RelativeToolTip": "Utils\\Logger\\LoggerManager.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAAeAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.61Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "IProjectService.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Contracts\\Services\\IProjectService.cs",
+              "RelativeDocumentMoniker": "Contracts\\Services\\IProjectService.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Contracts\\Services\\IProjectService.cs",
+              "RelativeToolTip": "Contracts\\Services\\IProjectService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.615Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "AwsConfiguration.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\ConfigurationModels\\AwsConfiguration.cs",
+              "RelativeDocumentMoniker": "ConfigurationModels\\AwsConfiguration.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\ConfigurationModels\\AwsConfiguration.cs",
+              "RelativeToolTip": "ConfigurationModels\\AwsConfiguration.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.62Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "Project.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Models\\Entities\\Project.cs",
+              "RelativeDocumentMoniker": "Models\\Entities\\Project.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Models\\Entities\\Project.cs",
+              "RelativeToolTip": "Models\\Entities\\Project.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAB4AAAA2AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.624Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Models\\Entities\\User.cs",
+              "RelativeDocumentMoniker": "Models\\Entities\\User.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Models\\Entities\\User.cs",
+              "RelativeToolTip": "Models\\Entities\\User.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.627Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "NotificationRepository.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Repository\\NotificationRepository.cs",
+              "RelativeDocumentMoniker": "Repository\\NotificationRepository.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Repository\\NotificationRepository.cs",
+              "RelativeToolTip": "Repository\\NotificationRepository.cs",
+              "ViewState": "AQIAAA0AAAAAODMzMzPjvyEAAABIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.633Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "INotificationRepository.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Contracts\\Repository\\INotificationRepository.cs",
+              "RelativeDocumentMoniker": "Contracts\\Repository\\INotificationRepository.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Contracts\\Repository\\INotificationRepository.cs",
+              "RelativeToolTip": "Contracts\\Repository\\INotificationRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwAcAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.641Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "InviteNotificationDto.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Models\\Dto\\InviteNotificationDto.cs",
+              "RelativeDocumentMoniker": "Models\\Dto\\InviteNotificationDto.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Models\\Dto\\InviteNotificationDto.cs",
+              "RelativeToolTip": "Models\\Dto\\InviteNotificationDto.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAPAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.646Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "IAuthenticationService.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Contracts\\Services\\IAuthenticationService.cs",
+              "RelativeDocumentMoniker": "Contracts\\Services\\IAuthenticationService.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Contracts\\Services\\IAuthenticationService.cs",
+              "RelativeToolTip": "Contracts\\Services\\IAuthenticationService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.65Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "AuthenticationMiddleware.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Middlewares\\AuthenticationMiddleware.cs",
+              "RelativeDocumentMoniker": "Middlewares\\AuthenticationMiddleware.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Middlewares\\AuthenticationMiddleware.cs",
+              "RelativeToolTip": "Middlewares\\AuthenticationMiddleware.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACIAAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.657Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "ErrorHandlingMiddleware.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Middlewares\\ErrorHandlingMiddleware.cs",
+              "RelativeDocumentMoniker": "Middlewares\\ErrorHandlingMiddleware.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Middlewares\\ErrorHandlingMiddleware.cs",
+              "RelativeToolTip": "Middlewares\\ErrorHandlingMiddleware.cs",
+              "ViewState": "AQIAACcAAACAAQAAAAAowBwAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.662Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "RestException.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Helpers\\RestException.cs",
+              "RelativeDocumentMoniker": "Helpers\\RestException.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Helpers\\RestException.cs",
+              "RelativeToolTip": "Helpers\\RestException.cs",
+              "ViewState": "AQIAAAIAAAAAAAAAAAAwwAwAAABSAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.667Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": ".gitignore",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\.gitignore",
+              "RelativeDocumentMoniker": ".gitignore",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\.gitignore",
+              "RelativeToolTip": ".gitignore",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAQAAAA",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHgSURBVEhLtZVdTsJAFIWroTyDK3ELJuCbsA1ZhQRFRETkV6yV8AAsgAI\u002BugW3wAr0RUop7Tj3dmagtLXFhJOc3mEynXu\u002BSWmlg4oQcsSGqOFwSKcIzAcY7rFZdeZkWf42DOMsl7v8ZNsEazAYEMuyXF5zr7nXWG3bJqPRiMznc6Kqb1\u002BtdueUbePSMasoSASiN0sW2AJbwrSRMKwBJZNJKZVOJeJx\u002BaPRbHma\u002BDbAqzOMpBPa5DydxiZsSijGKoo30MZjrH8pm81iVRQFKygmxxNs6K9\u002Bv4/nvlqZ1CticBuOl8IGWS4NogsviWmuSe2p7uH2EMAKTQsn2FUmkxUnEKher4dPjH9ymjogva47BNXHWhgBXCRpomnOxB6KRKCqKhJsznoneUD6BSOoPFSjEUwnByJQlFf8l7rTO6ndyalZcm7TNEn5vhJG4CD8h\u002BAikwkn6HZf8F3jSSu8OfNt/yx0sqIEpbtyOAGsmE4nzsQeikTQ7jwTkxKItCyxX2qenBsIirelcAJAmB2KoNlq4/Psl1Z4K/UuQeGmGIGA6n02xbqPgIBuwH4FqN5o4vMMKYOSBhkI8oVrTwfPBwdWxOQYWt7D/P5duT768D7HJhFtU9MBVj5XyF\u002B59jywJOkX7ucXnGOxDX8AAAAASUVORK5CYII=",
+              "WhenOpened": "2024-04-02T19:02:18.671Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-04-02T19:02:18.675Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": ".gitattributes",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\.gitattributes",
+              "RelativeDocumentMoniker": ".gitattributes",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\.gitattributes",
+              "RelativeToolTip": ".gitattributes",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABwAAAAZAAAA",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHgSURBVEhLtZVdTsJAFIWroTyDK3ELJuCbsA1ZhQRFRETkV6yV8AAsgAI\u002BugW3wAr0RUop7Tj3dmagtLXFhJOc3mEynXu\u002BSWmlg4oQcsSGqOFwSKcIzAcY7rFZdeZkWf42DOMsl7v8ZNsEazAYEMuyXF5zr7nXWG3bJqPRiMznc6Kqb1\u002BtdueUbePSMasoSASiN0sW2AJbwrSRMKwBJZNJKZVOJeJx\u002BaPRbHma\u002BDbAqzOMpBPa5DydxiZsSijGKoo30MZjrH8pm81iVRQFKygmxxNs6K9\u002Bv4/nvlqZ1CticBuOl8IGWS4NogsviWmuSe2p7uH2EMAKTQsn2FUmkxUnEKher4dPjH9ymjogva47BNXHWhgBXCRpomnOxB6KRKCqKhJsznoneUD6BSOoPFSjEUwnByJQlFf8l7rTO6ndyalZcm7TNEn5vhJG4CD8h\u002BAikwkn6HZf8F3jSSu8OfNt/yx0sqIEpbtyOAGsmE4nzsQeikTQ7jwTkxKItCyxX2qenBsIirelcAJAmB2KoNlq4/Psl1Z4K/UuQeGmGIGA6n02xbqPgIBuwH4FqN5o4vMMKYOSBhkI8oVrTwfPBwdWxOQYWt7D/P5duT768D7HJhFtU9MBVj5XyF\u002B59jywJOkX7ucXnGOxDX8AAAAASUVORK5CYII=",
+              "WhenOpened": "2024-04-02T19:02:18.679Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "ILoggerManager.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Utils\\Logger\\ILoggerManager.cs",
+              "RelativeDocumentMoniker": "Utils\\Logger\\ILoggerManager.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Utils\\Logger\\ILoggerManager.cs",
+              "RelativeToolTip": "Utils\\Logger\\ILoggerManager.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.685Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "ITokenRepository.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Contracts\\Repository\\ITokenRepository.cs",
+              "RelativeDocumentMoniker": "Contracts\\Repository\\ITokenRepository.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Contracts\\Repository\\ITokenRepository.cs",
+              "RelativeToolTip": "Contracts\\Repository\\ITokenRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAABKAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.689Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "BuildingManager.csproj",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\BuildingManager.csproj",
+              "RelativeDocumentMoniker": "BuildingManager.csproj",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\BuildingManager.csproj",
+              "RelativeToolTip": "BuildingManager.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAAKAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-04-02T19:02:18.7Z"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 116,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ProjectController.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Controllers\\ProjectController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ProjectController.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Controllers\\ProjectController.cs",
+              "RelativeToolTip": "Controllers\\ProjectController.cs",
+              "ViewState": "AQIAAC8AAAAAAAAAAAAAAD4AAAAVAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-06T13:30:02.021Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ActivityRepository.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Repository\\ActivityRepository.cs",
+              "RelativeDocumentMoniker": "Repository\\ActivityRepository.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Repository\\ActivityRepository.cs",
+              "RelativeToolTip": "Repository\\ActivityRepository.cs",
+              "ViewState": "AQIAAJYBAAAAAAAAAAAYwKEBAAA8AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-04T14:20:51.952Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "IActivityService.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Contracts\\Services\\IActivityService.cs",
+              "RelativeDocumentMoniker": "Contracts\\Services\\IActivityService.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Contracts\\Services\\IActivityService.cs",
+              "RelativeToolTip": "Contracts\\Services\\IActivityService.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAqwBkAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.895Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ActivityDto.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Models\\Dto\\ActivityDto.cs",
+              "RelativeDocumentMoniker": "Models\\Dto\\ActivityDto.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Models\\Dto\\ActivityDto.cs",
+              "RelativeToolTip": "Models\\Dto\\ActivityDto.cs",
+              "ViewState": "AQIAADoAAAAAAAAAAAAIwEgAAAAnAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.543Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "IActivityRepository.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Contracts\\Repository\\IActivityRepository.cs",
+              "RelativeDocumentMoniker": "Contracts\\Repository\\IActivityRepository.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Contracts\\Repository\\IActivityRepository.cs",
+              "RelativeToolTip": "Contracts\\Repository\\IActivityRepository.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAwwBQAAABAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-02T19:02:18.888Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "StorageManager.cs",
+              "DocumentMoniker": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Utils\\StorageManager\\StorageManager.cs",
+              "RelativeDocumentMoniker": "Utils\\StorageManager\\StorageManager.cs",
+              "ToolTip": "C:\\Users\\MY LAPTOP\\OneDrive\\Desktop\\ICHADO\\msc backup\\C# development\\new dev\\BuildingManager\\Utils\\StorageManager\\StorageManager.cs",
+              "RelativeToolTip": "Utils\\StorageManager\\StorageManager.cs",
+              "ViewState": "AQIAAFIAAAAAAAAAAAAMwEIAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-04T12:33:15.7Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

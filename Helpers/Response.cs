@@ -24,4 +24,24 @@
         }
         public T? Error { get; set; }
     }
+
+    public class PageResponse<T> : Response
+    {
+        public PageResponse()
+        {
+            Success = true;
+        }
+
+        public T? Data { get; set; }
+        public Pagination? Pagination { get; set; }
+    }
+
+    public class Pagination
+    {
+        public int TotalPages { get; set; }
+        public int PageSize { get; set; }
+        public int ActualDataSize { get; set; }
+        public int TotalCount { get; set; }
+    }
+
 }

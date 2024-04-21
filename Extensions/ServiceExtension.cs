@@ -1,8 +1,10 @@
-﻿using BuildingManager.Contracts.Repository;
+﻿using Amazon.S3;
+using BuildingManager.Contracts.Repository;
 using BuildingManager.Contracts.Services;
 using BuildingManager.Repository;
 using BuildingManager.Services;
 using BuildingManager.Utils.Logger;
+using BuildingManager.Utils.StorageManager;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +19,12 @@ namespace BuildingManager.Extensions
         {
             serviceCollection.AddSingleton<ILoggerManager, LoggerManager>();
         }
+
+        public static void ConfigureStorageService(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddTransient<IStorageManager, StorageManager>();
+        }
+
 
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration) 
         {
@@ -46,12 +54,14 @@ namespace BuildingManager.Extensions
 
         public static void ConfigureServiceManager(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddScoped<IServiceManager, ServiceManager>();
+            //serviceCollection.AddScoped<IServiceManager, ServiceManager>();
+            serviceCollection.AddSingleton<IServiceManager, ServiceManager>();
         }
 
         public static void ConfigureRepositoryManager(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddScoped<IRepositoryManager, RepositoryManager>();
+            //serviceCollection.AddScoped<IRepositoryManager, RepositoryManager>();
+            serviceCollection.AddSingleton<IRepositoryManager, RepositoryManager>();
         }
 
 

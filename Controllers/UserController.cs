@@ -28,7 +28,7 @@ namespace BuildingManager.Controllers
             return Ok(response);
         }
 
-        [HttpPost("Signup")]
+        [HttpPost("signup")]
         [ProducesResponseType(typeof(SuccessResponse<UserDto>), 200)]
         public async Task<IActionResult> SignUp([FromBody] UserCreateDto model)
         {
@@ -37,3 +37,8 @@ namespace BuildingManager.Controllers
         }
     }
 }
+
+
+//write procedure to check this
+//bool phoneExist = await _repository.UserRepository.CheckPhoneExists(model.PhoneNumber):  proc_checkPhonelExists
+//validate request

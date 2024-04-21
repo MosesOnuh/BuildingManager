@@ -1,13 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "Nj3eZ+y1luAcjvv0J+CPY1O65ygrncltoJ+pyZ8pNxTf6H29xjV2+l2BWV1xyhWwuAZKuOIYy7T2ZuryWAqdnQ==",
+  "dgSpecHash": "+brKDu2F/FLBrW4grN/DLQO9Zpzddk7UUANq+xeZu9I6XuHgoA/qTjzkZNP7TgaR2Yk8K9tJ7t6gh+fLS1j5SQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\PC\\Documents\\C# development\\new dev\\BuildingManager\\BuildingManager.csproj",
+  "projectFilePath": "C:\\Users\\PC\\Desktop\\MosesMscBackup 6 april\\BuildingManager\\BuildingManager.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\PC\\.nuget\\packages\\asp.versioning.abstractions\\6.2.1\\asp.versioning.abstractions.6.2.1.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\asp.versioning.http\\6.4.0\\asp.versioning.http.6.4.0.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\asp.versioning.mvc\\6.4.0\\asp.versioning.mvc.6.4.0.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\asp.versioning.mvc.apiexplorer\\6.4.0\\asp.versioning.mvc.apiexplorer.6.4.0.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\awssdk.core\\3.7.303.5\\awssdk.core.3.7.303.5.nupkg.sha512",
+    "C:\\Users\\PC\\.nuget\\packages\\awssdk.s3\\3.7.307.6\\awssdk.s3.3.7.307.6.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.27\\microsoft.aspnetcore.authentication.jwtbearer.6.0.27.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",

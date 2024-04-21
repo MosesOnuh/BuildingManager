@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v6.0": {
       "BuildingManager/1.0.0": {
         "dependencies": {
+          "AWSSDK.S3": "3.7.307.6",
           "Asp.Versioning.Mvc.ApiExplorer": "6.4.0",
           "BCrypt.Net-Next": "4.0.3",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "6.0.27",
@@ -63,6 +64,25 @@
           "lib/net6.0/Asp.Versioning.Mvc.ApiExplorer.dll": {
             "assemblyVersion": "6.4.0.0",
             "fileVersion": "6.4.8397.948"
+          }
+        }
+      },
+      "AWSSDK.Core/3.7.303.5": {
+        "runtime": {
+          "lib/netcoreapp3.1/AWSSDK.Core.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.303.5"
+          }
+        }
+      },
+      "AWSSDK.S3/3.7.307.6": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.303.5"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/AWSSDK.S3.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.307.6"
           }
         }
       },
@@ -421,6 +441,20 @@
       "sha512": "sha512-HFEJNtvnEsjhZ5LyLtD5jhVc7n40oHLfIJNl6L6YJgmDstTAt+2SEL17RpnzvwtR7JbS7X0D0Vds+86pt2u3SA==",
       "path": "asp.versioning.mvc.apiexplorer/6.4.0",
       "hashPath": "asp.versioning.mvc.apiexplorer.6.4.0.nupkg.sha512"
+    },
+    "AWSSDK.Core/3.7.303.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-IkjyAhd502f87j+MG8G+ENnKsNpB6Rq7aUUxS58VeMOrglT6jX9Y8FALiR6JHpmxphLSAEBzTw1NlWDC2fuZog==",
+      "path": "awssdk.core/3.7.303.5",
+      "hashPath": "awssdk.core.3.7.303.5.nupkg.sha512"
+    },
+    "AWSSDK.S3/3.7.307.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Gqk+5rIh8IxOfXDDq54BwFQ4h2iD9t5F5qzee3qv2vCoY3sgZ0o5Hwil6YmNKiILiy/w/r1FkqeKdH0NNQN6tA==",
+      "path": "awssdk.s3/3.7.307.6",
+      "hashPath": "awssdk.s3.3.7.307.6.nupkg.sha512"
     },
     "BCrypt.Net-Next/4.0.3": {
       "type": "package",
