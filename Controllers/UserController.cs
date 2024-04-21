@@ -28,7 +28,7 @@ namespace BuildingManager.Controllers
             return Ok(response);
         }
 
-        [HttpPost("Signup")]
+        [HttpPost("signup")]
         [ProducesResponseType(typeof(SuccessResponse<UserDto>), 200)]
         public async Task<IActionResult> SignUp([FromBody] UserCreateDto model)
         {

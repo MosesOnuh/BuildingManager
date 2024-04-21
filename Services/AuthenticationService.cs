@@ -68,11 +68,11 @@ namespace BuildingManager.Services
                 throw new RestException(HttpStatusCode.Conflict, "Email address already exists.");
             }
 
-            bool phoneExist = await _repository.UserRepository.CheckPhoneExists(model.PhoneNumber);
-            if (phoneExist)
-            {
-                throw new RestException(HttpStatusCode.Conflict, "Phone number already exists.");
-            }
+            //bool phoneExist = await _repository.UserRepository.CheckPhoneExists(model.PhoneNumber);
+            //if (phoneExist)
+            //{
+            //    throw new RestException(HttpStatusCode.Conflict, "Phone number already exists.");
+            //}
 
             var user = new User
             {

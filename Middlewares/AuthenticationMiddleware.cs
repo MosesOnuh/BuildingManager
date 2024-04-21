@@ -1,4 +1,5 @@
 ﻿using BuildingManager.Contracts.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -26,18 +27,20 @@ namespace BuildingManager.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
+            var endpoint = context.GetEndpoint();
+            if (endpoint?.Metadata.GetMetadata<AuthorizeAttribute>() != null)
+            {
+                var authorizationHandler = context.Request.Headers["Authorization"].ToString();
+                if (!string.IsNullOrEmpty(authorizationHandler) && authorizationHandler.StartsWith("Bearer "))
+                {
+                    var token = authorizationHandler.Substring("Bearer ".Length).Trim();
+                    SetUserToContext(context, token);
+                   // await _next(context);
+                }
+            }
 
-            var authorizationHandler = context.Request.Headers["Authorization"].ToString();
-            if (!string.IsNullOrEmpty(authorizationHandler) && authorizationHandler.StartsWith("Bearer "))
-            {
-                var token = authorizationHandler.Substring("Bearer ".Length).Trim();
-                SetUserToContext(context, token);
-                await _next(context);
-            }
-            else
-            {
-                await _next(context);
-            }
+            await _next(context);
+            
         }
 
         private void SetUserToContext(HttpContext context, string token)

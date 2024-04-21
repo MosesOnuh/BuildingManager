@@ -22,5 +22,6 @@ namespace BuildingManager.Contracts.Repository
         Task<(int, int)> RemoveActivityFileDetails(string projId, string activityId, string  userId);
         Task<(int, IList<ActivityDto>)> GetProjectPhaseActivitiesOtherPro (ActivitiesDtoPaged model, string UserId);
         Task<(int, IList<ActivityAndMemberDto>)> GetProjectPhaseActivitiesPM(ActivitiesDtoPaged model);
+        Task<(int, IList<ActivityAndMemberDto>)> GetProjectActivities(string projectId);
     }
 }

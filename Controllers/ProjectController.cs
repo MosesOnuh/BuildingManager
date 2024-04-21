@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using System.Net;
 using System;
+using BuildingManager.Contracts.Repository;
+using BuildingManager.Models.Entities;
 
 namespace BuildingManager.Controllers
 {
@@ -15,9 +17,11 @@ namespace BuildingManager.Controllers
     public class ProjectController : ControllerBase
     {
         private readonly IServiceManager _service;
-        public ProjectController(IServiceManager service)
+        private readonly IRepositoryManager _repository;
+        public ProjectController(IServiceManager service, IRepositoryManager repository)
         {
             _service = service;
+            _repository = repository;
         }
 
         [Authorize]
@@ -33,6 +37,39 @@ namespace BuildingManager.Controllers
 
             var userId = HttpContext.Items["UserId"] as string;
             var response = await _service.ProjectService.CreateProject(model, userId);
+            return Ok(response);
+        }
+
+        [Authorize]
+        [HttpGet("user/GetProjMemberDetails/{id}")]
+        [ProducesResponseType(typeof(SuccessResponse<ProjectDto>), 200)]
+        public async Task<IActionResult> GetProjMemberDetails(string id)
+        {
+            if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
+            {
+                var err = new ErrorResponse<ProjectMemberDetails> { Message = "No token provided in Authorization header" };
+                return Unauthorized(err);
+            }
+
+            var userId = HttpContext.Items["UserId"] as string;
+            //var projectRole = _service.ProjectService.GetUserProjectRole(userId, id); // where ID is project ID
+
+            //var (_, projectId) = await _service.ProjectService.GetUserProjectRole(id, userId); // where ID is project ID
+
+            var members = await _repository.ProjectRepository.GetProjMemberDetails(id, userId); // where ID is project ID
+            
+            if (members.Count == 0) {
+                var err = new ErrorResponse<ActivityDto> { Message = "Project with Id provided does not exist or user is not a member of the project" };
+                return StatusCode((int)HttpStatusCode.NotFound, err);
+            }
+
+            var response = new SuccessResponse<ProjectMemberDetails>
+            {
+                Message = "member successfully gotten",
+                Data = members[0]
+            };
+
+
             return Ok(response);
         }
 
@@ -57,10 +94,9 @@ namespace BuildingManager.Controllers
             return Ok(response);
         }
 
-
-        ////carry out pagination
-        [Authorize]
-        [HttpGet("user/GetProjects/{pageNumber:int}/{pageSize:int}")]
+            ////carry out pagination
+            [Authorize]
+        [HttpGet("user/GetProjects/{pageNumber}/{pageSize}")]
         public async Task<IActionResult> GetProjects (int pageNumber, int pageSize) 
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
@@ -70,6 +106,7 @@ namespace BuildingManager.Controllers
             }
 
             var userId = HttpContext.Items["UserId"] as string;
+            //var response = await _service.ProjectService.GetProjectsPaged(userId, Convert.ToInt32(pageNumber), Convert.ToInt32(pageSize));
             var response = await _service.ProjectService.GetProjectsPaged(userId, pageNumber, pageSize);
             return Ok(response);
         }

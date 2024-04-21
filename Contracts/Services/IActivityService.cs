@@ -25,5 +25,6 @@ namespace BuildingManager.Contracts.Services
         Task<SuccessResponse<ActivityDto>> UpdateActivityActualDates(ActivityActualDatesDto model, string userId);
         Task<PageResponse<IList<ActivityDto>>> GetProjectPhaseActivitiesOtherPro(ActivitiesDtoPaged model, string UserId);
         Task<PageResponse<IList<ActivityAndMemberDto>>> GetProjectPhaseActivitiesPM(ActivitiesDtoPaged model);
+        Task<SuccessResponse<IList<ActivityAndMemberDto>>> GetProjectActivities(string projectId);
     }
 }

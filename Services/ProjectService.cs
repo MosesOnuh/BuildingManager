@@ -208,21 +208,28 @@ namespace BuildingManager.Services
         {
             var (totalCount, projects) = await _repository.ProjectRepository.GetProjectsPaged(userId, pageNumber, pageSize);
 
-            //try-catch here
-            int totalPages = (int)Math.Ceiling((double)totalCount / (double)pageSize);
-
-            return new PageResponse<IList<ProjectDto>>()
+            try 
             {
-                Data = projects,
-                Pagination = new Pagination()
+                int totalPages = (int)Math.Ceiling((double)totalCount / (double)pageSize);
 
+                return new PageResponse<IList<ProjectDto>>()
                 {
-                    TotalPages = totalPages,
-                    PageSize = pageSize,
-                    ActualDataSize = projects.Count,
-                    TotalCount = totalCount
-                }
-            };
+                    Data = projects,
+                    Pagination = new Pagination()
+
+                    {
+                        TotalPages = totalPages,
+                        PageSize = pageSize,
+                        ActualDataSize = projects.Count,
+                        TotalCount = totalCount
+                    }
+                };
+            } catch(Exception ex)
+            {
+                _logger.LogError($"Error getting projects in the service layer {ex.StackTrace} {ex.Message}");
+                throw new Exception("Error getting projects");
+            }
+            
         }
 
         public async Task<SuccessResponse<ProjectDto>> ProjectInviteAcceptance(ProjectInviteStatusUpdateDto model, string userId)

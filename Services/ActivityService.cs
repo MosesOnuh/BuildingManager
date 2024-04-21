@@ -625,5 +625,19 @@ namespace BuildingManager.Services
             //try-catch here
             
         }
+
+        public async Task<SuccessResponse<IList<ActivityAndMemberDto>>> GetProjectActivities(string projectId)
+        {
+            var (_, activities) = await _repository.ActivityRepository.GetProjectActivities(projectId);
+
+                return new SuccessResponse<IList<ActivityAndMemberDto>>()
+                {
+                    Data = activities,
+                    Message = "Successfully got activities"
+                };
+
+            //try-catch here
+
+        }
     }    
 }

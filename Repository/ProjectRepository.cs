@@ -98,6 +98,52 @@ namespace BuildingManager.Repository
             }
         }
 
+        public async Task<IList<ProjectMemberDetails>> GetProjMemberDetails(string projectId, string userId)
+        {
+            List<ProjectMemberDetails> memberDetails = new();
+            try
+            {
+                using (SqlConnection connection = new(_connectionString))
+                {
+                    SqlCommand command = new("proc_GetProjMemberDetails", connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    command.Parameters.AddWithValue("@ProjectId", projectId);
+                    command.Parameters.AddWithValue("@UserId", userId);
+                    await connection.OpenAsync();
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (reader.Read())
+                        {
+                            ProjectMemberDetails memberDetail = new ProjectMemberDetails
+                            {
+                                ProjectName = reader.GetString("Name"),
+                                FirstName = reader.GetString("FirstName"),
+                                LastName = reader.GetString("LastName"),
+                                ProjectId = reader.GetString("ProjectId"),
+                                UserId = reader.GetString("UserId"),
+                                Role = reader.GetInt32("Role"),
+                                Profession = reader.GetInt32("Profession"),
+                                CreatedAt = reader.GetDateTime("CreatedAt"),
+                                //UpdatedAt = reader.GetDateTime("UpdatedAt"),
+                                // UpdatedAt = await reader.IsDBNullAsync(reader.GetOrdinal("UpdatedAt")) ? null : reader.GetDateTime("UpdatedAt"),
+
+                            };
+
+                            memberDetails.Add(memberDetail);
+                        }
+                    }
+                }
+                _logger.LogInfo("Successfully got project member details");
+                return memberDetails;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error getting project member details from DB {ex.StackTrace} {ex.Message}");
+                throw new Exception("Error getting project member details");
+            }
+        }
 
         public async Task<IList<ProjectMember>> GetProjectMemberInfo(string projectId)
         {
@@ -117,14 +163,15 @@ namespace BuildingManager.Repository
                         while (reader.Read())
                         {
                             ProjectMember memberDetails = new ProjectMember
-                            {
+                            {  
+                               
                                 ProjectId = reader.GetString("ProjectId"),
                                 UserId = reader.GetString("UserId"),
                                 Role = reader.GetInt32("Role"),
                                 Profession = reader.GetInt32("Profession"),
                                 CreatedAt = reader.GetDateTime("CreatedAt"),
                                 //UpdatedAt = reader.GetDateTime("UpdatedAt"),
-                                UpdatedAt = await reader.IsDBNullAsync(reader.GetOrdinal("UpdatedAt")) ? null : reader.GetDateTime("UpdatedAt"),
+                               // UpdatedAt = await reader.IsDBNullAsync(reader.GetOrdinal("UpdatedAt")) ? null : reader.GetDateTime("UpdatedAt"),
 
                             };
 
@@ -234,27 +281,42 @@ namespace BuildingManager.Repository
         {
             try
             {
-                using (SqlConnection connection = new(_connectionString))
-                {
-                    var parameters = new[]
-                    {
-                        new SqlParameter("@UserId", userId),
-                        new SqlParameter("@PageNumber", pageNumber),
-                        new SqlParameter("@PageSize", pageSize),
-                        new SqlParameter("@TotalCount", SqlDbType.Int) {Direction = ParameterDirection.Output},
-                    };
+                int totalCount = 0;
+                IList<ProjectDto> projects = new List<ProjectDto>();
 
-                    using (SqlCommand command = new SqlCommand("proc_GetProjectsPaged"))
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+
+                    //var parameters = new[]
+                    //{
+                    //    new SqlParameter("@UserId", userId),
+                    //    new SqlParameter("@PageNumber", pageNumber),
+                    //    new SqlParameter("@PageSize", pageSize),
+                    //    new SqlParameter("@TotalCount", SqlDbType.Int) {Direction = ParameterDirection.Output},
+                    //};
+
+                    //using (SqlCommand command = new SqlCommand("proc_GetProjectsPaged"))
+                    using (SqlCommand command = connection.CreateCommand())
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddRange(parameters);
+                        command.CommandText = "proc_GetMemberProjectsPaged";
+                        command.Parameters.AddWithValue("@UserId", userId);
+                        command.Parameters.AddWithValue("@PageNumber", pageNumber);
+                        command.Parameters.AddWithValue("@PageSize", pageSize);
+
+                        SqlParameter totalCountParameter = new SqlParameter("@TotalCount", SqlDbType.Int);
+                        totalCountParameter.Direction = ParameterDirection.Output;
+                        command.Parameters.Add(totalCountParameter);
+                        //command.CommandType = CommandType.StoredProcedure;
+                        //command.Parameters.AddRange(parameters);
 
                         using (SqlDataReader reader = await command.ExecuteReaderAsync())
                         {
-                            List<ProjectDto> projects = new List<ProjectDto>();
+                            
                             while (await reader.ReadAsync())
                             {
-                                projects.Add(new ProjectDto
+                                ProjectDto project = new ProjectDto
                                 {
                                     Id = reader.GetString("Id"),
                                     Name = reader.GetString("Name"),
@@ -263,17 +325,20 @@ namespace BuildingManager.Repository
                                     Country = reader.GetString("Country"),
                                     StartDate = reader.GetDateTime("StartDate"),
                                     EndDate = reader.GetDateTime("EndDate")
-                                });
+                                };
+                                projects.Add(project);
                             }
-
-                            int totalCount = (int)command.Parameters["@TotalCount"].Value;
-
-                            return (totalCount, projects);
+                           
                         }
-                    }
+                        totalCount = (int)command.Parameters["@TotalCount"].Value;
+                        _logger.LogInfo("Successfully ran query to get projects");
 
+                    }
                 }
+
+                return (totalCount, projects);
             }
+           
             catch (Exception ex)
             {
                 _logger.LogError($"Error getting projeCts by id and page {ex.StackTrace} {ex.Message}");

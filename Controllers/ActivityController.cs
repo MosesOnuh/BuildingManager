@@ -2,9 +2,11 @@
 using BuildingManager.Enums;
 using BuildingManager.Helpers;
 using BuildingManager.Models.Dto;
+using BuildingManager.Utils.Logger;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -15,7 +17,8 @@ namespace BuildingManager.Controllers
     public class ActivityController : ControllerBase
     {
         private readonly IServiceManager _service;
-        public ActivityController(IServiceManager service)
+        private readonly ILoggerManager _logger;
+        public ActivityController(IServiceManager service, ILoggerManager logger)
         {
             _service = service;
         }
@@ -423,8 +426,8 @@ namespace BuildingManager.Controllers
             };
 
             var (userRole, projId) = await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
-            if (userRole != Enums.UserRoles.PM)
-            {
+            if (userRole != Enums.UserRoles.PM && userRole != Enums.UserRoles.Client)
+             {
                 //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
                 //throw new RestException(HttpStatusCode.Forbidden, "Only OtherPro can delete a pending or rejected activity.");
                 var err = new ErrorResponse<ActivityDto> { Message = "User does not have sufficient permission" };
@@ -458,9 +461,19 @@ namespace BuildingManager.Controllers
                 return StatusCode((int)HttpStatusCode.Forbidden, err);
             }
 
-            var response = await _service.ActivityService.GetActivityOtherPro(projId, activityId, userId); //where id = ActivityId
+            try 
+            {
+                var response = await _service.ActivityService.GetActivityOtherPro(projId, activityId, userId); //where id = ActivityId
+                return StatusCode(200, response);
+                //return Ok(response);
+            }
+            catch (Exception ex) 
+            {
+                _logger.LogError($"Error sending response{ex.StackTrace} {ex.Message}");
+                throw new Exception("Error sending response");
+            }
 
-            return Ok(response);
+            
         }
 
 
@@ -480,7 +493,8 @@ namespace BuildingManager.Controllers
             //var projectRole = _service.ProjectService.GetUserProjectRole(userId, id); // where ID is project ID
 
             var (userRole, projId) = await _service.ProjectService.GetUserProjectRole(projectId, userId); // where ID is project ID
-            if (userRole != Enums.UserRoles.PM)
+            //if (userRole != Enums.UserRoles.PM)
+            if (userRole != Enums.UserRoles.PM && userRole != Enums.UserRoles.Client)
             {
                 //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
                 var err = new ErrorResponse<ActivityAndMemberDto> { Message = "User does not have sufficient permission" };
@@ -558,7 +572,7 @@ namespace BuildingManager.Controllers
             };
 
             var (userRole, projId) = await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
-            if (userRole != Enums.UserRoles.PM)
+            if (userRole != Enums.UserRoles.PM && userRole != Enums.UserRoles.Client)
             {
                 //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
                 var err = new ErrorResponse<ActivityAndMemberDto> { Message = "User does not have sufficient permission" };
@@ -566,6 +580,26 @@ namespace BuildingManager.Controllers
             }
 
             var response = await _service.ActivityService.GetProjectPhaseActivitiesPM(model);
+            return Ok(response);
+        }
+
+        [Authorize]
+        [HttpGet("user/Getactivities/{projectId}")]  //activity Id
+        //[ProducesResponseType(typeof(SuccessResponse<ProjectDto>), 200)]
+        public async Task<IActionResult> Getactivities(string projectId)
+        {
+            if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
+            {
+                var err = new ErrorResponse<ActivityAndMemberDto> { Message = "No token provided in Authorization header" };
+                return Unauthorized(err);
+            }
+
+            var userId = HttpContext.Items["UserId"] as string;
+            //var projectRole = _service.ProjectService.GetUserProjectRole(userId, id); // where ID is project ID
+
+             await _service.ProjectService.GetUserProjectRole(projectId, userId); // where ID is project ID
+
+            var response = await _service.ActivityService.GetProjectActivities(projectId);
             return Ok(response);
         }
 

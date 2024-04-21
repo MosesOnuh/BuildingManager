@@ -12,6 +12,6 @@ namespace BuildingManager.Models
         public string Password { get; set; }      
         public int EmailVerified { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        public DateTime? UpdatedAt { get; set; } = DateTime.Now;
     }
 }

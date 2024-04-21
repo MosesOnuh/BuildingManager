@@ -172,8 +172,10 @@ namespace BuildingManager.Repository
                                 PhoneNumber = reader.GetString(4),
                                 Password = reader.GetString(5),
                                 CreatedAt = reader.GetDateTime(6),
-                                UpdatedAt = reader.GetDateTime(7),
-                                EmailVerified = reader.GetInt32(8),
+                                //UpdatedAt = reader.GetDateTime(7),
+                                UpdatedAt = await reader.IsDBNullAsync(reader.GetOrdinal("UpdatedAt")) ? null : reader.GetDateTime("UpdatedAt"),
+                                EmailVerified = reader.GetInt32(8)
+                                ,
                             }; 
                         }
                     }

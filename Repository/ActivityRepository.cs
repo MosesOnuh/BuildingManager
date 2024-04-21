@@ -621,6 +621,78 @@ namespace BuildingManager.Repository
                 throw new Exception("Error getting activities per phase");
             }
         }
+
+
+
+        public async Task<(int, IList<ActivityAndMemberDto>)> GetProjectActivities(string projectId)
+        {
+            try
+            {
+                int totalCount = 0;
+                IList<ActivityAndMemberDto> activities = new List<ActivityAndMemberDto>();
+
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+
+                    using (SqlCommand command = connection.CreateCommand())
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        //command.CommandText = "proc_GetProjectPhaseActivitiesPagedPM";
+                        command.CommandText = "proc_GetProjectActivities";
+
+                        command.Parameters.AddWithValue("@ProjectId", projectId);
+                        //command.Parameters.AddWithValue("@ProjectPhase", model.ProjectPhase);
+                        //command.Parameters.AddWithValue("@PageNumber", model.PageNumber);
+                        //command.Parameters.AddWithValue("@PageSize", model.PageSize);
+
+                        SqlParameter totalCountParameter = new SqlParameter("@TotalCount", SqlDbType.Int);
+                        totalCountParameter.Direction = ParameterDirection.Output;
+                        command.Parameters.Add(totalCountParameter);
+
+                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                ActivityAndMemberDto activity = new ActivityAndMemberDto
+                                {
+                                    UserId = reader.GetString("UserId"),
+                                    FirstName = reader.GetString("FirstName"),
+                                    LastName = reader.GetString("LastName"),
+                                    Role = reader.GetInt32("Role"),
+                                    Profession = reader.GetInt32("Profession"),
+                                    ProjectId = reader.GetString("ProjectId"),
+                                    ActivityId = reader.GetString("ActivityId"),
+                                    ActivityName = reader.GetString("ActivityName"),
+                                    Status = reader.GetInt32("Status"),
+                                    Description = reader.GetString("Description"),
+                                    ProjectPhase = reader.GetInt32("ProjectPhase"),
+                                    FileName = await reader.IsDBNullAsync(reader.GetOrdinal("FileName")) ? null : reader.GetString("FileName"),
+                                    StorageFileName = await reader.IsDBNullAsync(reader.GetOrdinal("StorageFileName")) ? null : reader.GetString("StorageFileName"),
+                                    //FileType = await reader.IsDBNullAsync(reader.GetOrdinal("FileExtension")) ? null : reader.GetString("FileExtension"),
+                                    StartDate = reader.GetDateTime("StartDate"),
+                                    EndDate = reader.GetDateTime("EndDate"),
+                                    ActualStartDate = await reader.IsDBNullAsync(reader.GetOrdinal("ActualStartDate")) ? null : reader.GetDateTime("ActualStartDate"),
+                                    ActualEndDate = await reader.IsDBNullAsync(reader.GetOrdinal("ActualEndDate")) ? null : reader.GetDateTime("ActualEndDate"),
+                                    CreatedAt = reader.GetDateTime("CreatedAt"),
+                                };
+                                activities.Add(activity);
+                            }
+                        }
+
+                        totalCount = (int)command.Parameters["@TotalCount"].Value;
+                        _logger.LogInfo("Successfully ran query to activities");
+                    }
+                }
+
+                return (totalCount, activities);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error getting activities {ex.StackTrace} {ex.Message}");
+                throw new Exception("Error getting activities");
+            }
+        }
     }
 }
         
