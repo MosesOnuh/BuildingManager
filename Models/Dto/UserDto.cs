@@ -10,7 +10,6 @@ namespace BuildingManager.Models.Dto
 
     public class LoggedinUserDto
     {
-        //Guid string
         public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

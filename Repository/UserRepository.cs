@@ -193,5 +193,59 @@ namespace BuildingManager.Repository
                 throw new Exception("Error getting user by email");
             }
         }
+
+        public async Task<User?> GetUserById(string userId)
+        {
+            User? user = null;
+            try
+            {
+                using (SqlConnection connection = new(_connectionString))
+                {
+
+
+                    SqlCommand command = new("proc_GetUserById", connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    command.Parameters.AddWithValue("@UserId", userId);
+
+                    await connection.OpenAsync();
+
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        if (reader.Read())
+                        {
+                            user = new User
+                            {
+                                Id = reader.GetString(0),
+                                FirstName = reader.GetString(1),
+                                LastName = reader.GetString(2),
+                                Email = reader.GetString(3),
+                                PhoneNumber = reader.GetString(4),
+                                Password = reader.GetString(5),
+                                CreatedAt = reader.GetDateTime(6),
+                                //UpdatedAt = reader.GetDateTime(7),
+                                UpdatedAt = await reader.IsDBNullAsync(reader.GetOrdinal("UpdatedAt")) ? null : reader.GetDateTime("UpdatedAt"),
+                                EmailVerified = reader.GetInt32(8)
+                                ,
+                            };
+                        }
+                    }
+                }
+
+                if (user != null)
+                {
+                    _logger.LogInfo("Successfully got user");
+                }
+
+                return user;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error getting user by Id {ex.StackTrace} {ex.Message}");
+                throw new Exception("Error getting user by Id");
+            }
+        }
     }
 }
+

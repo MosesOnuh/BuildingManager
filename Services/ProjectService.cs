@@ -55,12 +55,13 @@ namespace BuildingManager.Services
                 CreatedAt = DateTime.Now,
             };
 
-            var returnNum = await _repository.ProjectRepository.CreateProjectMembership(memberShip);
-            if ( returnNum == 1)
-            {
-                _logger.LogError($"Error user is already a member of this project");
-                throw new RestException(HttpStatusCode.Conflict, "Error user is already a member of this project");
-            }
+            await _repository.ProjectRepository.CreateProjectMembership(memberShip);
+            //var returnNum = await _repository.ProjectRepository.CreateProjectMembership(memberShip);
+            //if ( returnNum == 1)
+            //{
+            //    _logger.LogError($"Error user is already a member of this project");
+            //    throw new RestException(HttpStatusCode.Conflict, "Error user is already a member of this project");
+            //}
 
             return new SuccessResponse<ProjectDto>
             {
@@ -68,8 +69,6 @@ namespace BuildingManager.Services
             };
         }
 
-
-        //public async Task<UserRoles> GetUserProjectRole(string projectId, string userId)
         public async Task<(UserRoles, string)> GetUserProjectRole(string projectId, string userId)
         {
             _logger.LogInfo("Getting User's Project role");
@@ -132,8 +131,6 @@ namespace BuildingManager.Services
             };
         }
 
-        //public async Task<SuccessResponse<ProjectDto>> AddProjectMember(AddProjectMemberDto model)
-
         //procedure should check if user already has an invite
         public async Task<SuccessResponse<ProjectDto>> CreateProjectMembershipNotification(InviteNotificationRequestDto model, string pmID)
         {
@@ -167,8 +164,7 @@ namespace BuildingManager.Services
                 throw new RestException(HttpStatusCode.BadRequest, "Error value for Profession is not accepted");
             }
 
-            int userRole = 0;
-
+            int userRole;
             if (model.Profession == (int)UserProfession.Client)
             {
                 userRole = (int)UserRoles.Client;
@@ -193,10 +189,16 @@ namespace BuildingManager.Services
             };
 
             var returnNum = await _repository.NotificationRepository.CreateInviteNotification(newInvite);
-            if (returnNum == 1)
+            if (returnNum == 0)
             {
-                _logger.LogError($"Error user has already been invited to join this project");
-                throw new RestException(HttpStatusCode.Conflict, "Error user has already been invited to join this project");
+                _logger.LogError($"Error user does Not have an Account");
+                throw new RestException(HttpStatusCode.NotFound, "Error user does not have an account");
+            }
+
+            if(returnNum == 1)
+            {
+                _logger.LogError($"Error user is already a member of this project");
+                throw new RestException(HttpStatusCode.Conflict, "Error user is already a member of this project");
             }
             return new SuccessResponse<ProjectDto>
             {
@@ -246,7 +248,7 @@ namespace BuildingManager.Services
             if (model.StatusAction == (int)InviteNotificationStatus.Accepted)
             {
 
-                var (success, returnNum) = await _repository.ProjectRepository.AcceptProjectInvite(model, userId);
+                var (success, returnNum) = await _repository.NotificationRepository.AcceptProjectInvite(model, userId);
                 if (success == 0 && returnNum == 1)
                 {
                     _logger.LogError($"Error occurred when accepting project invite. The required invite notification may not exist, check parameters passed into the query");
@@ -271,7 +273,7 @@ namespace BuildingManager.Services
                 };
             }
 
-            var (rowsUpdated, returnedNum) = await _repository.ProjectRepository.RejectProjectInvite(model, userId);
+            var (rowsUpdated, returnedNum) = await _repository.NotificationRepository.RejectProjectInvite(model, userId);
             if (rowsUpdated == 0 && returnedNum == 0)
             {
                 _logger.LogError($"Error occurred when rejecting project invite. The required invite notification may not exist, check parameters passed into the query");
@@ -295,17 +297,24 @@ namespace BuildingManager.Services
                 Message = "Successfully rejected request to join project",
             };
         }
+            
 
-        public async Task<PageResponse<IList<InviteResponseDto>>> GetProjectInvitesPaged(ProjectInvitesDtoPaged model, string userId)
+        public async Task<IList<ReceivedInviteRespDto>> GetReceivedProjectInvites( string userId)
         {
-        
-         var (totalCount, invites) = await _repository.ProjectRepository.GetProjectInvites(model, userId);
-            try 
+            var receivedInvites = await _repository.NotificationRepository.GetReceivedProjectInvites(userId);
+
+            return receivedInvites;          
+        }
+
+        public async Task<PageResponse<IList<SentInviteRespDto>>> GetSentProjectInvites(SentProjInvitesDtoPaged model)
+        {
+            var (totalCount, invites) = await _repository.NotificationRepository.GetSentProjectInvites(model);
+            try
             {
-               
+
                 int totalPages = (int)Math.Ceiling((double)totalCount / (double)model.PageSize);
 
-                return new PageResponse<IList<InviteResponseDto>>()
+                return new PageResponse<IList<SentInviteRespDto>>()
                 {
                     Data = invites,
                     Pagination = new Pagination()
@@ -317,11 +326,41 @@ namespace BuildingManager.Services
                         TotalCount = totalCount
                     }
                 };
-            } catch (Exception ex) {
-                _logger.LogError($"Error getting invites in the service layer {ex.StackTrace} {ex.Message}");
-                throw new Exception("Error getting project invites");
-            }  
-}
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error getting sent invites in the service layer {ex.StackTrace} {ex.Message}");
+                throw new Exception("Error getting sent project invites");
+            }
+        }
+
+
+
+        //public async Task<PageResponse<IList<InviteResponseDto>>> GetProjectInvitesPaged(ProjectInvitesDtoPaged model, string userId)
+        //{
+        //    var (totalCount, invites) = await _repository.NotificationRepository.GetProjectInvites(model, userId);
+        //    try 
+        //    {
+
+        //        int totalPages = (int)Math.Ceiling((double)totalCount / (double)model.PageSize);
+
+        //        return new PageResponse<IList<InviteResponseDto>>()
+        //        {
+        //            Data = invites,
+        //            Pagination = new Pagination()
+
+        //            {
+        //                TotalPages = totalPages,
+        //                PageSize = model.PageSize,
+        //                ActualDataSize = invites.Count,
+        //                TotalCount = totalCount
+        //            }
+        //        };
+        //    } catch (Exception ex) {
+        //        _logger.LogError($"Error getting invites in the service layer {ex.StackTrace} {ex.Message}");
+        //        throw new Exception("Error getting project invites");
+        //    }  
+        //}
     }
 }
 

@@ -87,5 +87,33 @@ namespace BuildingManager.Repository
                 throw new Exception("Error deleting Refresh token details");
             }
         }
+
+
+        
+        public async Task DeleteRefreshTokens(string userId)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    SqlCommand command = new SqlCommand("proc_DeleteRefreshTokens", connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+
+                    command.Parameters.AddWithValue("@UserId", userId);
+                    await connection.OpenAsync();
+                    await command.ExecuteNonQueryAsync();
+                   
+                    _logger.LogInfo("Successfully ran query to Delete Token");
+
+                }
+            }
+            catch (Exception ex) 
+            {
+                _logger.LogError($"Error deleting Refresh token details in DB {ex.StackTrace} {ex.Message}");
+                throw new Exception("Error deleting Refresh token details");
+            }
+        }
     }
 }

@@ -8,6 +8,7 @@ namespace BuildingManager.Contracts.Services
     {
         Task<SuccessResponse<TokenResponse>> Login(UserLoginReq model);
         Task<SuccessResponse<UserDto>> SignUp(UserCreateDto model);
-
+        Task<SuccessResponse<TokenResponse>> GenerateTokens(TokenReq model);
+        Task<SuccessResponse<TokenResponse>> Logout(string userId);
     }
 }

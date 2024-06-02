@@ -9,5 +9,6 @@ namespace BuildingManager.Contracts.Repository
         Task<bool> CheckPhoneExists(string phoneNumber);
         Task SignUp(User user);
         Task<User?> GetUserByEmail(string userEmail);
+        Task<User?> GetUserById(string userId);
     }
 }

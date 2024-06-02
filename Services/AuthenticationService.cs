@@ -19,6 +19,7 @@ namespace BuildingManager.Services
         private readonly ILoggerManager _logger;
         private readonly IRepositoryManager _repository;
         private readonly IServiceManager _service;
+        
 
         public AuthenticationService(
                 ILoggerManager logger,
@@ -55,6 +56,49 @@ namespace BuildingManager.Services
                     Data = tokenDetails
                 };
             }
+
+
+        public async Task<SuccessResponse<TokenResponse>> Logout(string userId)
+        {
+            await _repository.TokenRepository.DeleteRefreshTokens(userId);
+            return new SuccessResponse<TokenResponse>
+            {
+                Message = "Tokens successfully deleted",
+                Data = null
+            };
+        }
+
+
+        //validate request
+        public async Task<SuccessResponse<TokenResponse>> GenerateTokens(TokenReq model)
+        {
+            _logger.LogInfo("Generating new tokens");
+            //var validate = new UserValidator();
+            //validate.ValidateUserUserLoginReq(model);
+
+            
+            //bool verified = VerifyPassword(model.Password, user.Password);
+
+            //if (!verified)
+            //{
+            //    throw new RestException(HttpStatusCode.Unauthorized, "Wrong Email or Password");
+            //}
+
+            var userId = _service.TokenService.ValidateRefreshToken(model.RefreshToken);
+            var user = await _repository.UserRepository.GetUserById(userId);
+            if (user == null)
+            {
+                throw new RestException(HttpStatusCode.NotFound, "User does not exist.");
+            };
+
+            var tokenDetails = await _service.TokenService.GenerateTokens(user, model.RefreshToken);
+
+            return new SuccessResponse<TokenResponse>
+            {
+                Message = "Successfully generated tokens",
+                Data = tokenDetails
+            };
+        }
 
         public async Task<SuccessResponse<UserDto>> SignUp(UserCreateDto model)
         {

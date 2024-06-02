@@ -8,5 +8,6 @@ namespace BuildingManager.Contracts.Services
     {
         Task<TokenResponse> GenerateTokens(User user, string prevToken);
         string ValidateToken(string token);
+        string ValidateRefreshToken(string token);
     }
 }

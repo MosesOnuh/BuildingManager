@@ -65,7 +65,9 @@ namespace BuildingManager.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddMinutes(int.Parse(accessTokenExpiration)),
+                Expires = DateTime.UtcNow.AddSeconds(20),
+             
+                //Expires = DateTime.Now.AddMinutes(int.Parse(accessTokenExpiration)),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKey), SecurityAlgorithms.HmacSha256)
             };
 
@@ -90,7 +92,7 @@ namespace BuildingManager.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddHours(int.Parse(refreshTokenExpiration)),
+                Expires = DateTime.UtcNow.AddHours(int.Parse(refreshTokenExpiration)),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKey), SecurityAlgorithms.HmacSha256)
             };
 
@@ -111,11 +113,11 @@ namespace BuildingManager.Services
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 ValidateLifetime = true,
+                
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = jwtSettings.GetSection("Issuer").Value,
                 ValidAudience = jwtSettings.GetSection("Audience").Value,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("Secret").Value))
-
             }, out SecurityToken validatedToken);
             var jwtToken =  (JwtSecurityToken)validatedToken;
 
@@ -124,7 +126,45 @@ namespace BuildingManager.Services
 
             if (tokenTypeClaim.Value != "1") throw new Exception("Invalid token provided");
 
+            //if (DateTime.UtcNow > jwtToken.ValidTo) throw new Exception("token expired");
+            if (DateTime.UtcNow > jwtToken.ValidTo) throw new RestException(HttpStatusCode.Unauthorized, "token expired");
+
             var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim != null)
+            {
+                return userIdClaim.Value;
+            }
+
+            throw new Exception("Invalid token provided");
+        }
+
+
+        public string ValidateRefreshToken(string token)
+        {
+            IConfiguration jwtSettings = _configuration.GetSection("JWT");
+            byte[] secretKey = Encoding.ASCII.GetBytes(jwtSettings.GetSection("Secret").Value);
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            tokenHandler.ValidateToken(token, new TokenValidationParameters
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtSettings.GetSection("Issuer").Value,
+                ValidAudience = jwtSettings.GetSection("Audience").Value,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("Secret").Value))
+
+            }, out SecurityToken validatedToken);
+            var jwtToken = (JwtSecurityToken)validatedToken;
+
+            var tokenTypeClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "tokenType");
+            if (tokenTypeClaim == null) throw new Exception("Invalid token provided");
+
+            if (tokenTypeClaim.Value != "2") throw new Exception("Invalid token provided");
+
+            var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (DateTime.UtcNow > jwtToken.ValidTo) throw new Exception("token expired");
             if (userIdClaim != null)
             {
                 return userIdClaim.Value;
