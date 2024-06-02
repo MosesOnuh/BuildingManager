@@ -61,7 +61,8 @@ namespace BuildingManager.Repository
 
 
         //check if user is already a member of the project
-        public async Task<int> CreateProjectMembership(ProjectMember model)
+        //public async Task<int> CreateProjectMembership(ProjectMember model)
+        public async Task CreateProjectMembership(ProjectMember model)
         {
             try
             {
@@ -75,7 +76,7 @@ namespace BuildingManager.Repository
                         new SqlParameter("@Profession", model.Profession),
                         new SqlParameter("@CreatedAt", model.CreatedAt),
                         new SqlParameter("@UpdatedAt", DBNull.Value),
-                        new SqlParameter("@ResultCode", SqlDbType.Int){ Direction = ParameterDirection.Output},
+                        //new SqlParameter("@ResultCode", SqlDbType.Int){ Direction = ParameterDirection.Output},
                     };
                     //if returned num is 1 then project membership already exist
                     //if 0 all is well
@@ -88,7 +89,7 @@ namespace BuildingManager.Repository
                     await connection.OpenAsync();
                     await command.ExecuteNonQueryAsync();
                     _logger.LogInfo("Successfully created a new project membership");
-                    return (int)command.Parameters["@ResultCode"].Value;
+                    //return (int)command.Parameters["@ResultCode"].Value;
                 }
             }
             catch (Exception ex)
@@ -346,150 +347,7 @@ namespace BuildingManager.Repository
             }
         }
 
-
-        //ProjectRepository.model, userId){}
-        public async Task<(int, int)> AcceptProjectInvite(ProjectInviteStatusUpdateDto model, string userId)
-        {
-            try
-            {
-                using (SqlConnection connection = new(_connectionString))
-                {
-                    var parameters = new[]
-                    {
-                    new SqlParameter("@InviteNotificationId", model.InviteNotificationId),
-                    new SqlParameter("@ProjectId", model.ProjectId),
-                    new SqlParameter("@UserId", userId),
-                    //new SqlParameter("@UpdatedStatus", model.StatusAction),
-                    new SqlParameter("@ResultCode", SqlDbType.Int){ Direction = ParameterDirection.Output},
-                    new SqlParameter("@Success", SqlDbType.Int){ Direction = ParameterDirection.Output},
-                    };
-
-                    //R = 1, success = 0-- Invite to project not found for User
-                    //R = 2, success = 0-- User has already accepted or rejected invite
-                    //R = 0, success = 1  success
-                    SqlCommand command = new("proc_AcceptProjectInvite", connection)
-                    {
-                        CommandType = CommandType.StoredProcedure
-                    };
-                    command.Parameters.AddRange(parameters);
-
-                    await connection.OpenAsync();
-                    await command.ExecuteNonQueryAsync();
-                    _logger.LogInfo("Successfully ran query to accept project invite");
-
-                    return ((int)command.Parameters["@Success"].Value, (int)command.Parameters["@ResultCode"].Value);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error accepting project invit in DB {ex.StackTrace} {ex.Message}");
-                throw new Exception("Error accepting project invite");
-            }
-        }
-
-        public async Task<(int, int)> RejectProjectInvite(ProjectInviteStatusUpdateDto model, string userId) { 
-            try
-            {
-                using (SqlConnection connection = new(_connectionString))
-                {
-                    var parameters = new[]
-                    {
-                        new SqlParameter("@InviteNotificationId", model.InviteNotificationId),
-                        new SqlParameter("@ProjectId", model.ProjectId),
-                        new SqlParameter("@UserId", userId),
-                        //new SqlParameter("@UpdatedStatus", model.StatusAction),
-                        new SqlParameter("@ResultCode", SqlDbType.Int){ Direction = ParameterDirection.Output},
-                        new SqlParameter("@RowsUpdated", SqlDbType.Int){ Direction = ParameterDirection.Output},
-                     };
-
-                    //procedure returns @ResultCode = 0, @RowsUpdated = 0 if the activity is not found
-                    //procedure will return @ResultCode = 1, @RowsUpdated = 0 if the activity is not pending
-                    //procedure will return  @ResultCode = 2, @RowsUpdated = 1; if the update is successful
-                    SqlCommand command = new("proc_RejectProjectInvite", connection)
-                    {
-                        CommandType = CommandType.StoredProcedure
-                    };
-                    command.Parameters.AddRange(parameters);
-
-                    await connection.OpenAsync();
-                    await command.ExecuteNonQueryAsync();
-                    _logger.LogInfo("Successfully ran query to reject project invite");
-
-                    return ((int)command.Parameters["@RowsUpdated"].Value, (int)command.Parameters["@ResultCode"].Value);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error rejecting project invit in DB {ex.StackTrace} {ex.Message}");
-                throw new Exception("Error rejecting project invite");
-            }
-        }
-
         
-
-        public async Task<(int, IList<InviteResponseDto>)> GetProjectInvites(ProjectInvitesDtoPaged model, string userId)
-        {
-            try
-            {
-                int totalCount = 0;
-                IList<InviteResponseDto> invites = new List<InviteResponseDto>();
-
-                using (SqlConnection connection = new SqlConnection(_connectionString))
-                {
-                    await connection.OpenAsync();
-
-                    using (SqlCommand command = connection.CreateCommand())
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-                        command.CommandText = "proc_GetProjectInvitesPaged";
-                        command.Parameters.AddWithValue("@ProjectId", model.ProjectId);
-                        command.Parameters.AddWithValue("@UserId", userId);
-                        command.Parameters.AddWithValue("@PageNumber", model.PageNumber);
-                        command.Parameters.AddWithValue("@PageSize", model.PageSize);
-
-                        SqlParameter totalCountParameter = new SqlParameter("@TotalCount", SqlDbType.Int);
-                        totalCountParameter.Direction = ParameterDirection.Output;
-                        command.Parameters.Add(totalCountParameter);
-
-                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
-                        {
-                            while (await reader.ReadAsync())
-                            {
-                                InviteResponseDto invite = new InviteResponseDto
-                                {
-                                    Id = reader.GetString("Id"),
-                                    ProjectId = reader.GetString("ProjectId"),
-                                    ProjectName = reader.GetString("ProjectName"),
-                                    PmId = reader.GetString("PmId"),
-                                    PmFirstName = reader.GetString("PmFirstName"),
-                                    PmLastName = reader.GetString("PmLastName"),
-                                    PmEmail = reader.GetString("PmEmail"),
-                                    PmPhoneNum = reader.GetString("PmPhoneNum"),
-                                    PmProjectProfession = reader.GetInt32("PmProjectProfession"),
-                                    UserEmail = reader.GetString("UserEmail"),
-                                    UserRole = reader.GetInt32("Role"),
-                                    UserProfession = reader.GetInt32("Profession"),
-                                    Status = reader.GetInt32("Status"),
-                                    CreatedAt = reader.GetDateTime("CreatedAt"),
-                                };
-                                invites.Add(invite);
-                            }
-                        }
-
-                        totalCount = (int)command.Parameters["@TotalCount"].Value;
-                        _logger.LogInfo("Successfully ran query to get project invites");
-                    }
-                }
-
-                return (totalCount, invites);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error getting project invites {ex.StackTrace} {ex.Message}");
-                throw new Exception("Error getting project invites");
-            }
-        }
-
     }
 }
 

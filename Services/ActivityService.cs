@@ -621,8 +621,6 @@ namespace BuildingManager.Services
                 _logger.LogError($"Error getting activities per phase in the service layer {ex.StackTrace} {ex.Message}");
                 throw new Exception("Error getting activities per phase");
             }
-
-            //try-catch here
             
         }
 
@@ -635,8 +633,6 @@ namespace BuildingManager.Services
                     Data = activities,
                     Message = "Successfully got activities"
                 };
-
-            //try-catch here
 
         }
     }    

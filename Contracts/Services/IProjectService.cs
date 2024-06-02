@@ -12,12 +12,14 @@ namespace BuildingManager.Contracts.Services
         Task<(UserRoles, string)> GetUserProjectRole(string projectId,string userId);
         Task<SuccessResponse<ProjectDto>> GetProject (string projectId);
         Task<SuccessResponse<ProjectDto>> UpdateProject(ProjectDto model);
-        //Task<SuccessResponse<ProjectDto>> AddProjectMember(AddProjectMemberDto model);
         Task<SuccessResponse<ProjectDto>> CreateProjectMembershipNotification(InviteNotificationRequestDto model, string pmID);
         Task<PageResponse<IList<ProjectDto>>> GetProjectsPaged(string userId, int pageNumber, int pageSize);
         Task<SuccessResponse<ProjectDto>> ProjectInviteAcceptance(ProjectInviteStatusUpdateDto model, string userId);
-        Task<PageResponse<IList<InviteResponseDto>>> GetProjectInvitesPaged(ProjectInvitesDtoPaged invites, string userId);
-        
+        Task<IList<ReceivedInviteRespDto>> GetReceivedProjectInvites(string userId);
+        Task<PageResponse<IList<SentInviteRespDto>>> GetSentProjectInvites(SentProjInvitesDtoPaged model);
+        //Task<SuccessResponse<ProjectDto>> AddProjectMember(AddProjectMemberDto model);
+
+        //Task<PageResponse<IList<InviteResponseDto>>> GetProjectInvitesPaged(ProjectInvitesDtoPaged invites, string userId);
     }
 }
 

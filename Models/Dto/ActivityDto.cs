@@ -70,6 +70,18 @@ namespace BuildingManager.Models.Dto
         public int StatusAction { get; set; }
     }
 
+    public class ActivityStatusToDoneDto
+    {
+        public string ActivityId { get; set; }
+        public string ProjectId { get; set; }
+
+        //Approval action changes the status of the project. When a project is created it has a default status of 1 which is pending
+        //Pm can change it to 2 to approve or 3 to reject the request.
+        //The OtherPro can then change it to 4 for done
+        //other pro can delete this is only applicable if the project is still pending which is 1 or 3 i.e. pending or rejected
+        //public int StatusAction { get; set; }
+    }
+
     public class ActivityActualDatesDto
     {
         public string ActivityId { get; set; }

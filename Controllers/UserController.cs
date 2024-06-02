@@ -2,6 +2,7 @@
 using BuildingManager.Contracts.Services;
 using BuildingManager.Helpers;
 using BuildingManager.Models.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -24,6 +25,33 @@ namespace BuildingManager.Controllers
         public async Task<IActionResult> LoginUser(UserLoginReq model)
         {
             var response =  await _service.AuthenticationService.Login(model);
+
+            return Ok(response);
+        }
+
+
+        [Authorize]
+        [HttpPost("logout")]
+        //[ProducesResponseType(typeof(SuccessResponse<TokenResponse>), 200)]
+        public async Task<IActionResult> LogoutUser()
+        {
+            if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
+            {
+                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                return Unauthorized(err);
+            }
+
+            var userId = HttpContext.Items["UserId"] as string;
+            var response = await _service.AuthenticationService.Logout(userId);
+
+            return Ok(response);
+        }
+
+        [HttpPost("generateTokens")]
+        [ProducesResponseType(typeof(SuccessResponse<TokenResponse>), 200)]
+        public async Task<IActionResult> GenerateTokens(TokenReq model)
+        {
+            var response = await _service.AuthenticationService.GenerateTokens(model);
 
             return Ok(response);
         }

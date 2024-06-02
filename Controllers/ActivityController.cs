@@ -105,7 +105,7 @@ namespace BuildingManager.Controllers
         [Authorize]
         [HttpPatch("OtherPro/UpdateActivityToDone")]
         [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
-        public async Task<IActionResult> UpdateActivityToDone([FromBody] ActivityStatusUpdateDto model)
+        public async Task<IActionResult> UpdateActivityToDone([FromBody] ActivityStatusToDoneDto model)
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
@@ -124,7 +124,14 @@ namespace BuildingManager.Controllers
                 return StatusCode((int)HttpStatusCode.Forbidden, err);
             }
 
-            var response = await _service.ActivityService.UpdateActivityToDone(model, userId);
+            var newModel = new ActivityStatusUpdateDto
+            {
+                ActivityId = model.ActivityId,
+                ProjectId = model.ProjectId,
+                StatusAction = (int)ActivityStatus.Done 
+            };
+
+            var response = await _service.ActivityService.UpdateActivityToDone(newModel, userId);
 
             return Ok(response);
         }
