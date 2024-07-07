@@ -43,7 +43,7 @@ namespace BuildingManager.Controllers
 
         [Authorize]
         [HttpGet("user/GetProjMemberDetails/{id}")]
-        [ProducesResponseType(typeof(SuccessResponse<ProjectDto>), 200)]
+        [ProducesResponseType(typeof(SuccessResponse<ProjectMemberDetails>), 200)]
         public async Task<IActionResult> GetProjMemberDetails(string id)
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
@@ -95,8 +95,7 @@ namespace BuildingManager.Controllers
             return Ok(response);
         }
 
-            ////carry out pagination
-            [Authorize]
+        [Authorize]
         [HttpGet("user/GetProjects/{pageNumber}/{pageSize}")]
         public async Task<IActionResult> GetProjects (int pageNumber, int pageSize) 
         {
@@ -154,10 +153,9 @@ namespace BuildingManager.Controllers
 
             var userId = HttpContext.Items["UserId"] as string;
             var (userRole, _) = await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
-            if (userRole != Enums.UserRoles.PM)
+            if (userRole != Enums.UserRoles.PM  && userRole != Enums.UserRoles.Client)
             {
                 //_logger.LogError($"Error, only a PM (Project Manager) is allowed to add members to a project. User is not a PM");
-                //throw new RestException(HttpStatusCode.Forbidden, "Only PM is allowed to add members to a Project.");
                 var err = new ErrorResponse<ActivityDto> { Message = "User does not have sufficient permission" };
                 return StatusCode((int)HttpStatusCode.Forbidden, err);
             }
@@ -181,7 +179,7 @@ namespace BuildingManager.Controllers
 
 
         [Authorize]
-        [HttpPatch("OtherPro/InviteAcceptance")]
+        [HttpPatch("user/InviteAcceptance")]
         [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
         public async Task<IActionResult> ProjectInviteAcceptance([FromBody] ProjectInviteStatusUpdateDto model)
         {
@@ -199,7 +197,7 @@ namespace BuildingManager.Controllers
         }
 
         [Authorize]
-        [HttpGet("user/GetReceivedProjectInvites/{pageNumber:int}/{pageSize:int}")]
+        [HttpGet("user/GetReceivedProjectInvites")]
         public async Task<IActionResult> GetReceivedProjectInvites()
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
@@ -215,7 +213,7 @@ namespace BuildingManager.Controllers
 
 
         [Authorize]
-        [HttpGet("user/GetSentProjectInvites/{pageNumber:int}/{pageSize:int}")]
+        [HttpGet("user/GetSentProjectInvites/")]
         public async Task<IActionResult> GetSentProjectInvitesPaged(
             [FromQuery(Name = "pageNumber")] int pageNumber,
             [FromQuery(Name = "pageSize")] int pageSize

@@ -43,7 +43,7 @@ namespace BuildingManager.Models.Dto
         public string PmId { get; set; }
         public string PmFirstName { get; set; }
         public string PmLastName { get; set; }
-        public string UserEmail { get; set; }
+        //public string UserEmail { get; set; }
         public int UserRole { get; set; }
         public int UserProfession { get; set; }
 

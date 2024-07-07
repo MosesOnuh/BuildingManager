@@ -13,6 +13,7 @@ namespace BuildingManager.Services
         private readonly Lazy<ITokenService> _tokenService;
         private readonly Lazy<IProjectService> _projectService;
         private readonly Lazy<IActivityService> _activityService;
+        private readonly Lazy<IPaymentRequestService> _paymentRequestService;
 
         public ServiceManager(
             ILoggerManager logger,
@@ -25,12 +26,14 @@ namespace BuildingManager.Services
             _authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(logger,repositoryManager, this));
             _projectService = new Lazy<IProjectService>(() => new ProjectService(logger, repositoryManager));
             _activityService = new Lazy<IActivityService>(() => new ActivityService(configuration, logger, storageManager, repositoryManager));
+            _paymentRequestService = new Lazy<IPaymentRequestService>(() => new PaymentRequestService(configuration, logger, storageManager, repositoryManager));
         }
 
         public ITokenService TokenService => _tokenService.Value;
         public IAuthenticationService AuthenticationService => _authenticationService.Value;
         public IProjectService ProjectService => _projectService.Value;
         public IActivityService ActivityService => _activityService.Value;
+        public IPaymentRequestService PaymentRequestService => _paymentRequestService.Value;
 
  
     }

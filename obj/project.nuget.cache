@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "PawoViXidNqV2tP/W5lLFxqhXyGSTcXuMZqIBiT2G66VfhPjyiM0EuIRsLqXqiDudwaDob4eN3Bzj8IIoNLc7w==",
+  "dgSpecHash": "8IJ6GdxH4xubSJstvWOWbaL8C6YokUTXqYmFXB/DEhw6MXakWIrIuQsDlJJTPC+0Ii/Hn5cgYM5h9+hyM+HmCg==",
   "success": true,
   "projectFilePath": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\BuildingManager.csproj",
   "expectedPackageFiles": [
@@ -53,11 +53,7 @@
     "C:\\Users\\ADMIN\\.nuget\\packages\\system.security.principal.windows\\4.7.0\\system.security.principal.windows.4.7.0.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\system.text.encoding\\4.3.0\\system.text.encoding.4.3.0.nupkg.sha512",
     "C:\\Users\\ADMIN\\.nuget\\packages\\system.text.encodings.web\\4.7.2\\system.text.encodings.web.4.7.2.nupkg.sha512",
-    "C:\\Users\\ADMIN\\.nuget\\packages\\system.text.json\\4.7.2\\system.text.json.4.7.2.nupkg.sha512",
-    "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.29\\microsoft.windowsdesktop.app.ref.6.0.29.nupkg.sha512",
-    "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.29\\microsoft.netcore.app.ref.6.0.29.nupkg.sha512",
-    "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.29\\microsoft.aspnetcore.app.ref.6.0.29.nupkg.sha512",
-    "C:\\Users\\ADMIN\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.29\\microsoft.netcore.app.host.win-x64.6.0.29.nupkg.sha512"
+    "C:\\Users\\ADMIN\\.nuget\\packages\\system.text.json\\4.7.2\\system.text.json.4.7.2.nupkg.sha512"
   ],
   "logs": []
 }

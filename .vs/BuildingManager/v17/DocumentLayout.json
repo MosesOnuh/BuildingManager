@@ -3,48 +3,56 @@
   "WorkspaceRootPath": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\admin\\desktop\\mosesmscbackup 9 may\\buildingmanager\\services\\servicemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:services\\servicemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\admin\\desktop\\mosesmscbackup 9 may\\buildingmanager\\controllers\\projectcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:controllers\\projectcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\admin\\desktop\\mosesmscbackup 9 may\\buildingmanager\\repository\\paymentrequestrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:repository\\paymentrequestrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\admin\\desktop\\mosesmscbackup 9 may\\buildingmanager\\models\\dto\\paymentrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:models\\dto\\paymentrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\admin\\desktop\\mosesmscbackup 9 may\\buildingmanager\\enums\\userprofession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:enums\\userprofession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\admin\\desktop\\mosesmscbackup 9 may\\buildingmanager\\enums\\userroles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:enums\\userroles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\admin\\desktop\\mosesmscbackup 9 may\\buildingmanager\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\admin\\desktop\\mosesmscbackup 9 may\\buildingmanager\\repository\\notificationrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:repository\\notificationrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\admin\\desktop\\mosesmscbackup 9 may\\buildingmanager\\repository\\projectrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:repository\\projectrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\admin\\desktop\\mosesmscbackup 9 may\\buildingmanager\\repository\\activityrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:repository\\activityrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\admin\\desktop\\mosesmscbackup 9 may\\buildingmanager\\models\\entities\\notification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:models\\entities\\notification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\admin\\desktop\\mosesmscbackup 9 may\\buildingmanager\\services\\paymentrequestservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:services\\paymentrequestservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\admin\\desktop\\mosesmscbackup 9 may\\buildingmanager\\controllers\\activitycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:controllers\\activitycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\admin\\desktop\\mosesmscbackup 9 may\\buildingmanager\\contracts\\repository\\irepositorymanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:contracts\\repository\\irepositorymanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\admin\\desktop\\mosesmscbackup 9 may\\buildingmanager\\contracts\\repository\\ipaymentrequestrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:contracts\\repository\\ipaymentrequestrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\admin\\desktop\\mosesmscbackup 9 may\\buildingmanager\\helpers\\restexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:helpers\\restexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\admin\\desktop\\mosesmscbackup 9 may\\buildingmanager\\contracts\\services\\ipaymentrequestservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:contracts\\services\\ipaymentrequestservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\admin\\desktop\\mosesmscbackup 9 may\\buildingmanager\\buildingmanager.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
-      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:buildingmanager.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\admin\\desktop\\mosesmscbackup 9 may\\buildingmanager\\controllers\\paymentrequestcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:controllers\\paymentrequestcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\admin\\desktop\\mosesmscbackup 9 may\\buildingmanager\\models\\entities\\paymentrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:models\\entities\\paymentrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\admin\\desktop\\mosesmscbackup 9 may\\buildingmanager\\services\\activityservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:services\\activityservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|c:\\users\\admin\\desktop\\mosesmscbackup 9 may\\buildingmanager\\enums\\paymentrequestenums.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7EFD22E0-BB85-4820-A919-4B6957C12009}|BuildingManager.csproj|solutionrelative:enums\\paymentrequestenums.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -53,8 +61,8 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 442,
-          "SelectedChildIndex": 4,
+          "DockedWidth": 394,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -62,146 +70,167 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\appsettings.json",
-              "RelativeDocumentMoniker": "appsettings.json",
-              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\appsettings.json",
-              "RelativeToolTip": "appsettings.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABkAAAABAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-04-02T19:02:18.675Z",
+              "DocumentIndex": 0,
+              "Title": "ProjectController.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Controllers\\ProjectController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ProjectController.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Controllers\\ProjectController.cs",
+              "RelativeToolTip": "Controllers\\ProjectController.cs",
+              "ViewState": "AQIAAG8AAAAAAAAAAAAowGEAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-06T20:13:54.601Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "IRepositoryManager.cs",
-              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Contracts\\Repository\\IRepositoryManager.cs",
-              "RelativeDocumentMoniker": "Contracts\\Repository\\IRepositoryManager.cs",
-              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Contracts\\Repository\\IRepositoryManager.cs",
-              "RelativeToolTip": "Contracts\\Repository\\IRepositoryManager.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAA3AAAA",
+              "DocumentIndex": 3,
+              "Title": "UserProfession.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Enums\\UserProfession.cs",
+              "RelativeDocumentMoniker": "Enums\\UserProfession.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Enums\\UserProfession.cs",
+              "RelativeToolTip": "Enums\\UserProfession.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-02T19:02:18.558Z"
+              "WhenOpened": "2024-07-04T12:25:47.26Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "UserRoles.cs",
               "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Enums\\UserRoles.cs",
               "RelativeDocumentMoniker": "Enums\\UserRoles.cs",
               "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Enums\\UserRoles.cs",
               "RelativeToolTip": "Enums\\UserRoles.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAFAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-02T19:02:18.587Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-04T12:25:39.758Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ServiceManager.cs",
-              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Services\\ServiceManager.cs",
-              "RelativeDocumentMoniker": "Services\\ServiceManager.cs",
-              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Services\\ServiceManager.cs",
-              "RelativeToolTip": "Services\\ServiceManager.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABwAAAAAAAAA",
+              "DocumentIndex": 1,
+              "Title": "PaymentRequestRepository.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Repository\\PaymentRequestRepository.cs",
+              "RelativeDocumentMoniker": "Repository\\PaymentRequestRepository.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Repository\\PaymentRequestRepository.cs",
+              "RelativeToolTip": "Repository\\PaymentRequestRepository.cs",
+              "ViewState": "AQIAAG0DAAAAAAAAAAAiwOQDAABAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-02T19:02:18.602Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "RestException.cs",
-              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Helpers\\RestException.cs",
-              "RelativeDocumentMoniker": "Helpers\\RestException.cs",
-              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Helpers\\RestException.cs",
-              "RelativeToolTip": "Helpers\\RestException.cs",
-              "ViewState": "AQIAAAIAAAAAAAAAAAAwwAwAAABSAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-02T19:02:18.667Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "BuildingManager.csproj",
-              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\BuildingManager.csproj",
-              "RelativeDocumentMoniker": "BuildingManager.csproj",
-              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\BuildingManager.csproj",
-              "RelativeToolTip": "BuildingManager.csproj",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAAKAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2024-04-02T19:02:18.7Z"
-            }
-          ]
-        },
-        {
-          "DockedWidth": 12,
-          "SelectedChildIndex": 0,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "NotificationRepository.cs",
-              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Repository\\NotificationRepository.cs",
-              "RelativeDocumentMoniker": "Repository\\NotificationRepository.cs",
-              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Repository\\NotificationRepository.cs",
-              "RelativeToolTip": "Repository\\NotificationRepository.cs",
-              "ViewState": "AQIAAMAAAAAAAAAAAAAgwMcAAAAnAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-02T19:02:18.633Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-13T14:17:43.663Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "ActivityRepository.cs",
-              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Repository\\ActivityRepository.cs",
-              "RelativeDocumentMoniker": "Repository\\ActivityRepository.cs",
-              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Repository\\ActivityRepository.cs",
-              "RelativeToolTip": "Repository\\ActivityRepository.cs",
-              "ViewState": "AQIAAN4BAAAAAAAAAAAcwC4CAAANAAAA",
+              "Title": "PaymentRequestService.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Services\\PaymentRequestService.cs",
+              "RelativeDocumentMoniker": "Services\\PaymentRequestService.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Services\\PaymentRequestService.cs",
+              "RelativeToolTip": "Services\\PaymentRequestService.cs",
+              "ViewState": "AQIAANUAAAAAAAAAAAAjwPwAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-01T21:27:00.93Z"
+              "WhenOpened": "2024-06-11T07:29:33.376Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "ProjectRepository.cs",
-              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Repository\\ProjectRepository.cs",
-              "RelativeDocumentMoniker": "Repository\\ProjectRepository.cs",
-              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Repository\\ProjectRepository.cs",
-              "RelativeToolTip": "Repository\\ProjectRepository.cs",
-              "ViewState": "AQIAAGoAAAAAAAAAAAAUwIIAAAAgAAAA",
+              "DocumentIndex": 7,
+              "Title": "IPaymentRequestRepository.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Contracts\\Repository\\IPaymentRequestRepository.cs",
+              "RelativeDocumentMoniker": "Contracts\\Repository\\IPaymentRequestRepository.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Contracts\\Repository\\IPaymentRequestRepository.cs",
+              "RelativeToolTip": "Contracts\\Repository\\IPaymentRequestRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAnAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-02T19:02:18.548Z",
+              "WhenOpened": "2024-06-13T18:09:45.389Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "PaymentRequest.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Models\\Entities\\PaymentRequest.cs",
+              "RelativeDocumentMoniker": "Models\\Entities\\PaymentRequest.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Models\\Entities\\PaymentRequest.cs",
+              "RelativeToolTip": "Models\\Entities\\PaymentRequest.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAAjAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-26T07:11:17.454Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "PaymentRequestController.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Controllers\\PaymentRequestController.cs",
+              "RelativeDocumentMoniker": "Controllers\\PaymentRequestController.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Controllers\\PaymentRequestController.cs",
+              "RelativeToolTip": "Controllers\\PaymentRequestController.cs",
+              "ViewState": "AQIAAKsCAAAAAAAAAAAkwNECAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-13T20:17:55.983Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "IPaymentRequestService.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Contracts\\Services\\IPaymentRequestService.cs",
+              "RelativeDocumentMoniker": "Contracts\\Services\\IPaymentRequestService.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Contracts\\Services\\IPaymentRequestService.cs",
+              "RelativeToolTip": "Contracts\\Services\\IPaymentRequestService.cs",
+              "ViewState": "AQIAAAQAAAAAAAAAAAAqwB0AAABAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-12T20:53:27.624Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "PaymentRequestEnums.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Enums\\PaymentRequestEnums.cs",
+              "RelativeDocumentMoniker": "Enums\\PaymentRequestEnums.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Enums\\PaymentRequestEnums.cs",
+              "RelativeToolTip": "Enums\\PaymentRequestEnums.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAkAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-22T12:33:46.993Z"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 112,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PaymentRequestDto.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Models\\Dto\\PaymentRequestDto.cs",
+              "RelativeDocumentMoniker": "Models\\Dto\\PaymentRequestDto.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Models\\Dto\\PaymentRequestDto.cs",
+              "RelativeToolTip": "Models\\Dto\\PaymentRequestDto.cs",
+              "ViewState": "AQIAAMoAAAAAAAAAAAA1wNAAAAArAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-22T12:46:19.605Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 6,
-              "Title": "Notification.cs",
-              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Models\\Entities\\Notification.cs",
-              "RelativeDocumentMoniker": "Models\\Entities\\Notification.cs",
-              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Models\\Entities\\Notification.cs",
-              "RelativeToolTip": "Models\\Entities\\Notification.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T18:57:19.004Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
               "Title": "ActivityController.cs",
               "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Controllers\\ActivityController.cs",
               "RelativeDocumentMoniker": "Controllers\\ActivityController.cs",
               "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Controllers\\ActivityController.cs",
               "RelativeToolTip": "Controllers\\ActivityController.cs",
-              "ViewState": "AQIAACoCAAAAAAAAAAApwDoCAAAMAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAKMBAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-02T19:02:18.2Z"
+              "WhenOpened": "2024-07-04T08:03:22.128Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ActivityService.cs",
+              "DocumentMoniker": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Services\\ActivityService.cs",
+              "RelativeDocumentMoniker": "Services\\ActivityService.cs",
+              "ToolTip": "C:\\Users\\ADMIN\\Desktop\\MosesMscBackup 9 may\\BuildingManager\\Services\\ActivityService.cs",
+              "RelativeToolTip": "Services\\ActivityService.cs",
+              "ViewState": "AQIAAMABAAAAAAAAAAAUwLUBAABJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-04T06:36:18.611Z"
             }
           ]
         }

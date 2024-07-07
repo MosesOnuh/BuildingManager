@@ -200,6 +200,12 @@ namespace BuildingManager.Services
                 _logger.LogError($"Error user is already a member of this project");
                 throw new RestException(HttpStatusCode.Conflict, "Error user is already a member of this project");
             }
+
+            if (returnNum == 2)
+            {
+                _logger.LogError($"Error user has already been invited to join this project and is yet to accept invitation");
+                throw new RestException(HttpStatusCode.Conflict, "Error user has already been invited to join this project and is yet to accept invitation");
+            }
             return new SuccessResponse<ProjectDto>
             {
                 Message = "Project invite successfully sent to user",
