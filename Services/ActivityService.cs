@@ -35,9 +35,6 @@ namespace BuildingManager.Services
         public async Task<SuccessResponse<ActivityDto>> CreateActivity(ActivityRequestDto model, string userId)
         {
 
-            //send file to S3 bucket
-            //write procedure to create Activity
-
             String? fileExt = null;
             String? documentName = null;
 
@@ -46,15 +43,12 @@ namespace BuildingManager.Services
             if (model.File != null)
             {
                 await model.File.CopyToAsync(memoryStream);
-                //var fileExt = Path.GetExtension(model.File.FileName);
                 fileExt = Path.GetExtension(model.File.FileName);
 
-                //var documentName = $"{Guid.NewGuid()}{fileExt}";
                 documentName = $"{Guid.NewGuid()}{fileExt}";
 
                 var s3Object = new StorageObject()
                 {
-                    //use config to get value : _configuration.GetValue
                     BucketName = _configuration["AwsConfiguration:BucketName"],
                     FileStream = memoryStream,
                     Name = documentName
@@ -71,7 +65,6 @@ namespace BuildingManager.Services
                 ProjectId = model.ProjectId,
                 UserId = userId,
                 Name = model.Name,
-                //@Todo: check to ensure type casting works well with Emum
                 Status = (int)ActivityStatus.Pending,
                 Description = model.Description,
                 //@Todo: when validating the request ensure that the value is only possible enum values
@@ -82,16 +75,12 @@ namespace BuildingManager.Services
                 StartDate = model.StartDate,
                 EndDate = model.EndDate,
                 CreatedAt = DateTime.Now,
-                //UpdatedAt = DateTime.Now,
-                //UpdatedAt = null,
             };
-
-            //@todo: try catch: delete file if error occurs here
 
             try 
             {
                 await _repository.ActivityRepository.CreateActivity(activity);
-            } catch (Exception ex)
+            } catch 
             {
                 if (model.File != null) await _storage.DeleteFileAsync(_configuration["AwsConfiguration:BucketName"], documentName);
                 throw new Exception("Error creating new activity");
@@ -101,8 +90,6 @@ namespace BuildingManager.Services
             {
                 Message = "Activity created successfully",
             };
-
-            //  if error occurs delete activityfile for cloud and notify user in error message
         }
 
 
@@ -358,15 +345,9 @@ namespace BuildingManager.Services
 
             if (activity.StorageFileName != null)
             {
-                //_logger.LogError($"Error activity does not have any file stored");
-                //throw new RestException(HttpStatusCode.InternalServerError, "Error activity does not have a file to delete.");
-                //DeleteActivity file gotten from the above function
-                //use config to get value : _configuration.GetValue
                 await _storage.DeleteFileAsync(_configuration["AwsConfiguration:BucketName"], activity.StorageFileName);
             }
            
-
-            //Write procedure to delete only pending activities
             var (rowsDeleted, returnNum) = await _repository.ActivityRepository.DeleteActivity(projId, activityId, userId);
 
             if (rowsDeleted == 0 && returnNum == 0)
@@ -402,7 +383,6 @@ namespace BuildingManager.Services
             //deleteactivity in db
 
             var activity = await _repository.ActivityRepository.GetActivityOtherPro(model.ProjectId, model.ActivityId, userId);
-
             if (activity == null)
             {
                 _logger.LogError($"Error occurred when deleting the activity File. The required activity was not found, check ActivityId, ProjectId and UserId provided");
@@ -410,14 +390,11 @@ namespace BuildingManager.Services
             }
 
 
-
             if (activity.Status != (int)ActivityStatus.Pending)
             {
                 _logger.LogError($"Error attempted to delete the file of an activity that is not pending");
                 throw new Exception("Error cannot delete the file of an activity that is not pending");
             }
-
-
 
             if (activity.StorageFileName == null)
             {

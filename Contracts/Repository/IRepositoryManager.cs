@@ -7,5 +7,6 @@
         IProjectRepository ProjectRepository { get; }
         INotificationRepository NotificationRepository { get; }
         IActivityRepository ActivityRepository { get; }
+        IPaymentRequestRepository PaymentRequestRepository { get; }
     }
 }

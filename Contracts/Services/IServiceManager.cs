@@ -6,5 +6,6 @@
         IAuthenticationService AuthenticationService { get; }
         IProjectService ProjectService { get; }
         IActivityService ActivityService { get; }
+        IPaymentRequestService PaymentRequestService { get; }
     }
 }

@@ -169,7 +169,7 @@ namespace BuildingManager.Repository
                                     PmId = reader.GetString("PmId"),
                                     PmFirstName = reader.GetString("PmFirstName"),
                                     PmLastName = reader.GetString("PmLastName"),
-                                    UserEmail = reader.GetString("Email"),
+                                    //UserEmail = reader.GetString("UserEmail"),
                                     UserRole = reader.GetInt32("Role"),
                                     UserProfession = reader.GetInt32("Profession"),
                                     Status = reader.GetInt32("Status"),

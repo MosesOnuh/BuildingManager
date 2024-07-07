@@ -65,9 +65,9 @@ namespace BuildingManager.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddSeconds(20),
-             
-                //Expires = DateTime.Now.AddMinutes(int.Parse(accessTokenExpiration)),
+                //Expires = DateTime.UtcNow.AddSeconds(20),
+
+                Expires = DateTime.UtcNow.AddMinutes(int.Parse(accessTokenExpiration)),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKey), SecurityAlgorithms.HmacSha256)
             };
 

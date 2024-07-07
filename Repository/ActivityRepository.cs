@@ -61,7 +61,6 @@ namespace BuildingManager.Repository
             catch (Exception ex)
             {
                 _logger.LogError($"Error inserting new activity in DB {ex.StackTrace} {ex.Message}");
-                //throw new Exception("Error creating new activity");
                 throw;
             }
         }
@@ -95,7 +94,6 @@ namespace BuildingManager.Repository
 
                     await connection.OpenAsync();
                     await command.ExecuteNonQueryAsync();
-                    //int returnedNum = (int)command.Parameters["@ResultCode"].Value;
                     _logger.LogInfo("Successfully ran query to update activity approval status");
                     
                     return ((int)command.Parameters["@RowsUpdated"].Value, (int)command.Parameters["@ResultCode"].Value);
@@ -553,6 +551,7 @@ namespace BuildingManager.Repository
             }           
         }
 
+        
         public async Task<(int, IList<ActivityAndMemberDto>)> GetProjectPhaseActivitiesPM(ActivitiesDtoPaged model)
         {
             try

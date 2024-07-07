@@ -12,6 +12,7 @@ namespace BuildingManager.Repository
         private readonly Lazy<IProjectRepository> _projectRepository;
         private readonly Lazy<INotificationRepository> _notificationRepository;
         private readonly Lazy<IActivityRepository> _activityRepository;
+        private readonly Lazy<IPaymentRequestRepository> _paymentRequestRepository;
 
 
         public RepositoryManager(
@@ -24,6 +25,7 @@ namespace BuildingManager.Repository
             _projectRepository = new Lazy<IProjectRepository>(() => new ProjectRepository(configuration, logger));
             _notificationRepository = new Lazy<INotificationRepository>(() => new NotificationRepository(configuration, logger));
             _activityRepository = new Lazy<IActivityRepository>(() => new ActivityRepository(configuration, logger));
+            _paymentRequestRepository = new Lazy<IPaymentRequestRepository>(() => new PaymentRequestRepository(configuration, logger));
 
         }
 
@@ -32,5 +34,6 @@ namespace BuildingManager.Repository
         public IProjectRepository ProjectRepository => _projectRepository.Value;
         public INotificationRepository NotificationRepository => _notificationRepository.Value;
         public IActivityRepository ActivityRepository => _activityRepository.Value;
+        public IPaymentRequestRepository PaymentRequestRepository => _paymentRequestRepository.Value;
     }
 }

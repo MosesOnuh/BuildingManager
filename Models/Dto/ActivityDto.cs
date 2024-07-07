@@ -3,36 +3,16 @@ using System;
 
 namespace BuildingManager.Models.Dto
 {
-    //public class ActivityRequestDto
-    //{
-    //    public string Name { get; set; }
-    //    public string Description { get; set; }
-    //    //Enum 1 for pre-construction, 2 for construction, 3 for Post-construction
-    //    public string ProjectPhase { get; set; }
-    //    public string? FileName { get; set; }
-    //    public string? CloudFileName { get; set; }
-    //    public string? FileType { get; set; }
-    //    public DateTime StartDate { get; set; }
-    //    public DateTime EndDate { get; set; }
-    //    public DateTime? ActualStartDate { get; set; }
-    //    public DateTime? ActualEndDate { get; set; }
-    //}
-
-
     public class ActivityRequestDto
     {
         public string ProjectId { get; set; }
-       // public string UserId { get; set; }
         public string Name { get; set; }
-       // public int Status { get; set; }
         public string Description { get; set; }
         //Enum 1 for pre-construction, 2 for construction, 3 for Post-construction
         public int ProjectPhase { get; set; }
         public IFormFile? File { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        //public DateTime? ActualStartDate { get; set; }
-        //public DateTime? ActualEndDate { get; set; }
     }
 
     //might delete
@@ -96,17 +76,12 @@ namespace BuildingManager.Models.Dto
     {
         public string ActivityId { get; set; }
         public string ProjectId { get; set; }
-        // public string UserId { get; set; }
         public string Name { get; set; }
-        //public int Status { get; set; }
         public string Description { get; set; }
         //Enum 1 for pre-construction, 2 for construction, 3 for Post-construction
         public int ProjectPhase { get; set; }
-        // public IFormFile file { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        //public DateTime? ActualStartDate { get; set; }
-        //public DateTime? ActualEndDate { get; set; }
     }
 
     public class AddActivityFileRequestDto
