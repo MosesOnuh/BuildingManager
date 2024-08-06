@@ -546,7 +546,7 @@ namespace BuildingManager.Services
             };
         }
 
-        public async Task<PageResponse<IList<ActivityDto>>> GetProjectPhaseActivitiesOtherPro(ActivitiesDtoPaged model, string UserId)
+        public async Task<PageResponse<IList<ActivityDto>>> GetProjectPhaseActivitiesOtherPro(ProjectActivitiesReqDto model, string UserId)
         {
 
             var (totalCount, activities) = await _repository.ActivityRepository.GetProjectPhaseActivitiesOtherPro(model, UserId);
@@ -573,8 +573,9 @@ namespace BuildingManager.Services
             }                     
         }
 
-        public async Task<PageResponse<IList<ActivityAndMemberDto>>> GetProjectPhaseActivitiesPM(ActivitiesDtoPaged model)
+        public async Task<PageResponse<IList<ActivityAndMemberDto>>> GetProjectPhaseActivitiesPM(ProjectActivitiesReqDto model)
         {
+            //if model.StartDate.
             var (totalCount, activities) = await _repository.ActivityRepository.GetProjectPhaseActivitiesPM(model);
 
             try 
@@ -601,9 +602,9 @@ namespace BuildingManager.Services
             
         }
 
-        public async Task<SuccessResponse<IList<ActivityAndMemberDto>>> GetProjectActivities(string projectId)
+        public async Task<SuccessResponse<IList<ActivityAndMemberDto>>> GetProjectActivities(ActivityDataReqDto model)
         {
-            var (_, activities) = await _repository.ActivityRepository.GetProjectActivities(projectId);
+            var (_, activities) = await _repository.ActivityRepository.GetProjectActivities(model);
 
                 return new SuccessResponse<IList<ActivityAndMemberDto>>()
                 {
@@ -612,5 +613,6 @@ namespace BuildingManager.Services
                 };
 
         }
+
     }    
 }

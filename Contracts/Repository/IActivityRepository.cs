@@ -20,8 +20,8 @@ namespace BuildingManager.Contracts.Repository
         Task<ActivityAndMemberDto> GetActivityPM(string projId, string activityId);
         Task<(int, int)> DeleteActivity (string projId, string activityId, string userId);
         Task<(int, int)> RemoveActivityFileDetails(string projId, string activityId, string  userId);
-        Task<(int, IList<ActivityDto>)> GetProjectPhaseActivitiesOtherPro (ActivitiesDtoPaged model, string UserId);
-        Task<(int, IList<ActivityAndMemberDto>)> GetProjectPhaseActivitiesPM(ActivitiesDtoPaged model);
-        Task<(int, IList<ActivityAndMemberDto>)> GetProjectActivities(string projectId);
+        Task<(int, IList<ActivityDto>)> GetProjectPhaseActivitiesOtherPro (ProjectActivitiesReqDto model, string UserId);
+        Task<(int, IList<ActivityAndMemberDto>)> GetProjectPhaseActivitiesPM(ProjectActivitiesReqDto model);
+        Task<(int, IList<ActivityAndMemberDto>)> GetProjectActivities(ActivityDataReqDto model);
     }
 }

@@ -10,6 +10,10 @@ using System;
 using BuildingManager.Contracts.Repository;
 using BuildingManager.Models.Entities;
 using System.Reflection;
+using BuildingManager.Validators;
+using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using BuildingManager.Enums;
 
 namespace BuildingManager.Controllers
 {
@@ -19,10 +23,12 @@ namespace BuildingManager.Controllers
     {
         private readonly IServiceManager _service;
         private readonly IRepositoryManager _repository;
+        private readonly GeneralValidator _generalValidator;
         public ProjectController(IServiceManager service, IRepositoryManager repository)
         {
             _service = service;
             _repository = repository;
+            _generalValidator = new GeneralValidator();
         }
 
         [Authorize]
@@ -32,7 +38,7 @@ namespace BuildingManager.Controllers
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
 
@@ -48,19 +54,18 @@ namespace BuildingManager.Controllers
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ProjectMemberDetails> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
 
-            var userId = HttpContext.Items["UserId"] as string;
-            //var projectRole = _service.ProjectService.GetUserProjectRole(userId, id); // where ID is project ID
+            _generalValidator.ValidateString(id, "Id", 50);
 
-            //var (_, projectId) = await _service.ProjectService.GetUserProjectRole(id, userId); // where ID is project ID
+            var userId = HttpContext.Items["UserId"] as string;
 
             var members = await _repository.ProjectRepository.GetProjMemberDetails(id, userId); // where ID is project ID
             
             if (members.Count == 0) {
-                var err = new ErrorResponse<ActivityDto> { Message = "Project with Id provided does not exist or user is not a member of the project" };
+                var err = new ErrorResponse<object> { Message = "Project with Id provided does not exist or user is not a member of the project" };
                 return StatusCode((int)HttpStatusCode.NotFound, err);
             }
 
@@ -75,18 +80,52 @@ namespace BuildingManager.Controllers
         }
 
         [Authorize]
+        [HttpGet("user/ProjectMembers/{id}")]
+        [ProducesResponseType(typeof(SuccessResponse<IList<member>>), 200)]
+        public async Task<IActionResult> ProjectMembers(string id)
+        {
+            if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
+            {
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
+                return Unauthorized(err);
+            }
+
+            _generalValidator.ValidateString(id, "Id", 50);
+
+            var userId = HttpContext.Items["UserId"] as string;
+
+            var members = await _repository.ProjectRepository.GetProjectMembers(id); // where ID is project ID
+
+            if (members.Count == 0)
+            {
+                var err = new ErrorResponse<object> { Message = "Project with Id provided does not exist or user is not a member of the project" };
+                return StatusCode((int)HttpStatusCode.NotFound, err);
+            }
+
+            var response = new SuccessResponse<IList<member>>
+            {
+                Message = "member successfully gotten",
+                Data = members
+            };
+
+
+            return Ok(response);
+        }
+
+        [Authorize]
         [HttpGet("user/GetProject/{id}")]
         [ProducesResponseType(typeof(SuccessResponse<ProjectDto>), 200)]
         public async Task<IActionResult> GetProject(string id)
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
 
+            _generalValidator.ValidateString(id, "Id", 50);
+
             var userId = HttpContext.Items["UserId"] as string;
-            //var projectRole = _service.ProjectService.GetUserProjectRole(userId, id); // where ID is project ID
 
             var (_, projectId) = await _service.ProjectService.GetUserProjectRole(id, userId); // where ID is project ID
 
@@ -97,16 +136,19 @@ namespace BuildingManager.Controllers
 
         [Authorize]
         [HttpGet("user/GetProjects/{pageNumber}/{pageSize}")]
+        [ProducesResponseType(typeof(SuccessResponse<ProjectDto>), 200)]
         public async Task<IActionResult> GetProjects (int pageNumber, int pageSize) 
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
 
+            _generalValidator.ValidateInteger(pageNumber, "pageNumber", int.MaxValue);
+            _generalValidator.ValidateInteger(pageSize, "pageSize", int.MaxValue);
+
             var userId = HttpContext.Items["UserId"] as string;
-            //var response = await _service.ProjectService.GetProjectsPaged(userId, Convert.ToInt32(pageNumber), Convert.ToInt32(pageSize));
             var response = await _service.ProjectService.GetProjectsPaged(userId, pageNumber, pageSize);
             return Ok(response);
         }
@@ -120,7 +162,7 @@ namespace BuildingManager.Controllers
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
 
@@ -130,8 +172,7 @@ namespace BuildingManager.Controllers
             if (userRole != Enums.UserRoles.PM)
             {
                 //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to update a project. User is not a PM");
-                // throw new RestException(HttpStatusCode.Forbidden, "Only PM is allowed to update a Project.");
-                var err = new ErrorResponse<ActivityDto> { Message = "User does not have sufficient permission" };
+                var err = new ErrorResponse<object> { Message = "User does not have sufficient permission" };
                 return StatusCode((int)HttpStatusCode.Forbidden, err);
             }
             var response = await _service.ProjectService.UpdateProject(model);
@@ -143,11 +184,12 @@ namespace BuildingManager.Controllers
         //Put check to ensure that A pm can not send an invite to himself
         [Authorize]
         [HttpPost("PM/ProjectMemberInvite")]
+        [ProducesResponseType(typeof(SuccessResponse<ProjectDto>), 200)]
         public async Task<IActionResult> InviteUserToProject([FromBody] InviteNotificationRequestDto model)
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
 
@@ -156,7 +198,7 @@ namespace BuildingManager.Controllers
             if (userRole != Enums.UserRoles.PM  && userRole != Enums.UserRoles.Client)
             {
                 //_logger.LogError($"Error, only a PM (Project Manager) is allowed to add members to a project. User is not a PM");
-                var err = new ErrorResponse<ActivityDto> { Message = "User does not have sufficient permission" };
+                var err = new ErrorResponse<object> { Message = "User does not have sufficient permission" };
                 return StatusCode((int)HttpStatusCode.Forbidden, err);
             }
 
@@ -176,16 +218,43 @@ namespace BuildingManager.Controllers
         //delete procedure will change status to 3 --> make necessary validation in db that only 3 can be passed. create a rep function that recieves any value
         //response message is based on input passed into the request
 
+        [Authorize]
+        [HttpPatch("PM/UserAccess")]
+        [ProducesResponseType(typeof(SuccessResponse<ProjectDto>), 200)]
+        public async Task<IActionResult> ProjectAccess([FromBody] ProjectAccessDto model)
+        {
+            if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
+            {
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
+                return Unauthorized(err);
+            }
 
+            var userId = HttpContext.Items["UserId"] as string;
+
+
+
+            var (userRole,ownership, projId) = await _service.ProjectService.GetUserProjectRoleAndOwnership(model.ProjectId, userId); // where ID is project ID
+            if (userRole != Enums.UserRoles.PM && userRole != Enums.UserRoles.Client)
+            {
+                //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
+                var err = new ErrorResponse<object> { Message = "User does not have sufficient permission" };
+                return StatusCode((int)HttpStatusCode.Forbidden, err);
+            }
+
+           // var response = await _service.ProjectService.ProjectAccess(model, userId, (ProjectOwner)ownership );
+            var response = await _service.ProjectService.ProjectAccess(model, (ProjectOwner)ownership);
+
+            return Ok(response);
+        }
 
         [Authorize]
         [HttpPatch("user/InviteAcceptance")]
-        [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
+        [ProducesResponseType(typeof(SuccessResponse<ProjectDto>), 200)]
         public async Task<IActionResult> ProjectInviteAcceptance([FromBody] ProjectInviteStatusUpdateDto model)
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
 
@@ -202,7 +271,7 @@ namespace BuildingManager.Controllers
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
 
@@ -213,7 +282,7 @@ namespace BuildingManager.Controllers
 
 
         [Authorize]
-        [HttpGet("user/GetSentProjectInvites/")]
+        [HttpGet("user/GetSentProjectInvites")]
         public async Task<IActionResult> GetSentProjectInvitesPaged(
             [FromQuery(Name = "pageNumber")] int pageNumber,
             [FromQuery(Name = "pageSize")] int pageSize
@@ -221,9 +290,12 @@ namespace BuildingManager.Controllers
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
+
+            _generalValidator.ValidateInteger(pageNumber, "pageNumber", int.MaxValue);
+            _generalValidator.ValidateInteger(pageSize, "pageSize", int.MaxValue);
 
             var userId = HttpContext.Items["UserId"] as string;
 

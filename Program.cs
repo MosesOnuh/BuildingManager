@@ -1,6 +1,8 @@
+using BuildingManager.ActionFilter;
 using BuildingManager.Extensions;
 using BuildingManager.Middlewares;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -23,10 +25,20 @@ builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
 
 builder.Services.AddCors();
-builder.Services.AddControllers();
+//builder.Services.AddScoped<ValidationFilterAttribute>();
+builder.Services.ConfigureModelValidation();
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
+builder.Services.AddScoped<ValidationFilter>();
+builder.Services.AddControllers(options => options.Filters
+  .Add(typeof(ValidationFilter)));
+//builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -47,5 +59,6 @@ app.UseAuthorization();
 app.UseErrorHandler();
 app.UseAuthenticationHandler();
 app.MapControllers();
+app.MapHub<BuildingManager.Services.ChatService>("/hubs/chat");
 
 app.Run();

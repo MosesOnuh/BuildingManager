@@ -3,6 +3,7 @@ using BuildingManager.Enums;
 using BuildingManager.Helpers;
 using BuildingManager.Models.Dto;
 using BuildingManager.Utils.Logger;
+using BuildingManager.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,10 +19,13 @@ namespace BuildingManager.Controllers
     {
         private readonly IServiceManager _service;
         private readonly ILoggerManager _logger;
+        private readonly GeneralValidator _generalValidator;
+
         public ActivityController (IServiceManager service, ILoggerManager logger)
         {
             _service = service;
             _logger = logger;
+            _generalValidator = new GeneralValidator();
         }
 
         [Authorize]
@@ -31,7 +35,7 @@ namespace BuildingManager.Controllers
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
 
@@ -43,23 +47,28 @@ namespace BuildingManager.Controllers
             //ensure the name of the files are in lower case when saving it
 
             // Check file size (max 30MB)
+            //if (model.File != null)
+            //{
+            //    if (model.File.Length > 30 * 1024 * 1024)
+            //    {
+            //        var err = new ErrorResponse<ActivityDto>()
+            //        {
+            //            Message = "File size cannot exceed 30MB"
+            //        };
+            //        return BadRequest(err);
+            //    }
+            //}
+
             if (model.File != null)
             {
-                if (model.File.Length > 30 * 1024 * 1024)
-                {
-                    var err = new ErrorResponse<ActivityDto>()
-                    {
-                        Message = "File size cannot exceed 30MB"
-                    };
-                    return BadRequest(err);
-                }
+                _generalValidator.ValidateFile(model.File);
             }
+                
             
-
             var (userRole, _) = await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
             if (userRole != Enums.UserRoles.OtherPro)
             {
-                var err = new ErrorResponse<ActivityDto> { Message = "User does not have sufficient permission" };
+                var err = new ErrorResponse<object> { Message = "User does not have sufficient permission" };
                 return StatusCode((int)HttpStatusCode.Forbidden, err);
             }
 
@@ -77,7 +86,7 @@ namespace BuildingManager.Controllers
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
 
@@ -87,7 +96,7 @@ namespace BuildingManager.Controllers
             if (userRole != Enums.UserRoles.PM)
             {
                 _logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
-                var err = new ErrorResponse<ActivityDto> { Message = "User does not have sufficient permission" };
+                var err = new ErrorResponse<object> { Message = "User does not have sufficient permission" };
                 return StatusCode((int)HttpStatusCode.Forbidden, err);
             }
 
@@ -106,7 +115,7 @@ namespace BuildingManager.Controllers
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
 
@@ -117,7 +126,7 @@ namespace BuildingManager.Controllers
             {
                 //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
                 //throw new RestException(HttpStatusCode.Forbidden, "Only PM is allowed to approve or reject an activity.");
-                var err = new ErrorResponse<ActivityDto> { Message = "User does not have sufficient permission" };
+                var err = new ErrorResponse<object> { Message = "User does not have sufficient permission" };
                 return StatusCode((int)HttpStatusCode.Forbidden, err);
             }
 
@@ -150,7 +159,7 @@ namespace BuildingManager.Controllers
 
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
 
@@ -161,7 +170,7 @@ namespace BuildingManager.Controllers
             {
                 //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
                 //throw new RestException(HttpStatusCode.Forbidden, "Only PM is allowed to approve or reject an activity.");
-                var err = new ErrorResponse<ActivityDto> { Message = "User does not have sufficient permission" };
+                var err = new ErrorResponse<object> { Message = "User does not have sufficient permission" };
                 return StatusCode((int)HttpStatusCode.Forbidden, err);
             }
 
@@ -179,7 +188,7 @@ namespace BuildingManager.Controllers
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
 
@@ -189,8 +198,7 @@ namespace BuildingManager.Controllers
             if (userRole != Enums.UserRoles.OtherPro)
             {
                 //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
-                //throw new RestException(HttpStatusCode.Forbidden, "Only OtherPro can update a pending activity.");
-                var err = new ErrorResponse<ActivityDto> { Message = "User does not have sufficient permission" };
+                var err = new ErrorResponse<object> { Message = "User does not have sufficient permission" };
                 return StatusCode((int)HttpStatusCode.Forbidden, err);
             }
 
@@ -210,9 +218,11 @@ namespace BuildingManager.Controllers
             
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
+
+             _generalValidator.ValidateFile(model.File);
 
             var userId = HttpContext.Items["UserId"] as string;
 
@@ -224,8 +234,7 @@ namespace BuildingManager.Controllers
             if (userRole != Enums.UserRoles.OtherPro)
             {
                 //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
-                //throw new RestException(HttpStatusCode.Forbidden, "Only OtherPro can update the file of an pending activity.");
-                var err = new ErrorResponse<ActivityDto> { Message = "User does not have sufficient permission" };
+                var err = new ErrorResponse<object> { Message = "User does not have sufficient permission" };
                 return StatusCode((int)HttpStatusCode.Forbidden, err);
             }
 
@@ -265,13 +274,16 @@ namespace BuildingManager.Controllers
         [Authorize]
         [HttpDelete("OtherPro/DeleteActivity/{projectId}/{activityId}")]
         [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
-        public async Task<IActionResult> DeleteActivity( string projectId,string activityId)
+        public async Task<IActionResult> DeleteActivity( string projectId, string activityId)
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
+
+            _generalValidator.ValidateString(projectId, "projectId", 50);
+            _generalValidator.ValidateString(activityId, "activityId", 50);
 
             var userId = HttpContext.Items["UserId"] as string;
 
@@ -280,8 +292,7 @@ namespace BuildingManager.Controllers
             if (userRole != Enums.UserRoles.OtherPro)
             {
                 //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
-                //throw new RestException(HttpStatusCode.Forbidden, "Only OtherPro can delete a pending or rejected activity.");
-                var err = new ErrorResponse<ActivityDto> { Message = "User does not have sufficient permission" };
+                var err = new ErrorResponse<object> { Message = "User does not have sufficient permission" };
                 return StatusCode((int)HttpStatusCode.Forbidden, err);
             }
 
@@ -306,9 +317,13 @@ namespace BuildingManager.Controllers
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
+
+            _generalValidator.ValidateString(projectId, "projectId", 50);
+            _generalValidator.ValidateString(activityId, "activityId", 50);
+            _generalValidator.ValidateString(fileName, "fileName", 50);
 
             var userId = HttpContext.Items["UserId"] as string;
 
@@ -323,8 +338,7 @@ namespace BuildingManager.Controllers
             if (userRole != Enums.UserRoles.OtherPro)
             {
                 //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
-                //throw new RestException(HttpStatusCode.Forbidden, "Only OtherPro can delete a pending or rejected activity.");
-                var err = new ErrorResponse<ActivityDto> { Message = "User does not have sufficient permission" };
+                var err = new ErrorResponse<object> { Message = "User does not have sufficient permission" };
                 return StatusCode((int)HttpStatusCode.Forbidden, err);
             }
 
@@ -351,9 +365,13 @@ namespace BuildingManager.Controllers
 
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
+
+            _generalValidator.ValidateString(projectId, "projectId", 50);
+            _generalValidator.ValidateString(activityId, "activityId", 50);
+            _generalValidator.ValidateString(fileName, "fileName", 50);
 
             var userId = HttpContext.Items["UserId"] as string;
 
@@ -368,7 +386,7 @@ namespace BuildingManager.Controllers
             if (userRole != Enums.UserRoles.OtherPro)
             {
                 //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
-                var err = new ErrorResponse<ActivityDto> { Message = "User does not have sufficient permission" };
+                var err = new ErrorResponse<object> { Message = "User does not have sufficient permission" };
                 return StatusCode((int)HttpStatusCode.Forbidden, err);
             }
 
@@ -387,16 +405,19 @@ namespace BuildingManager.Controllers
         {
 
             //ensure that the user is a pm
-
             //validate input
             //ensure the name of the files are in lower case when saving it 
 
 
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
+
+            _generalValidator.ValidateString(projectId, "projectId", 50);
+            _generalValidator.ValidateString(activityId, "activityId", 50);
+            _generalValidator.ValidateString(fileName, "fileName", 50);
 
             var userId = HttpContext.Items["UserId"] as string;
 
@@ -411,7 +432,7 @@ namespace BuildingManager.Controllers
             if (userRole != Enums.UserRoles.PM && userRole != Enums.UserRoles.Client)
              {
                 //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
-                var err = new ErrorResponse<ActivityDto> { Message = "User does not have sufficient permission" };
+                var err = new ErrorResponse<object> { Message = "User does not have sufficient permission" };
                 return StatusCode((int)HttpStatusCode.Forbidden, err);
             }
 
@@ -427,9 +448,12 @@ namespace BuildingManager.Controllers
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
+
+            _generalValidator.ValidateString(projectId, "projectId", 50);
+            _generalValidator.ValidateString(activityId, "activityId", 50);
 
             var userId = HttpContext.Items["UserId"] as string;
 
@@ -437,7 +461,7 @@ namespace BuildingManager.Controllers
             if (userRole != Enums.UserRoles.OtherPro)
             {
                 //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
-                var err = new ErrorResponse<ActivityDto> { Message = "User does not have sufficient permission" };
+                var err = new ErrorResponse<object> { Message = "User does not have sufficient permission" };
                 return StatusCode((int)HttpStatusCode.Forbidden, err);
             }
 
@@ -445,17 +469,17 @@ namespace BuildingManager.Controllers
             {
                 var response = await _service.ActivityService.GetActivityOtherPro(projId, activityId, userId); //where id = ActivityId
                 return StatusCode(200, response);
-                //return Ok(response);
             }
             catch (Exception ex) 
             {
-                _logger.LogError($"Error sending response{ex.StackTrace} {ex.Message}");
-                throw new Exception("Error sending response");
+                _logger.LogError($"Error getting response{ex.StackTrace} {ex.Message}");
+                throw new Exception("Error getting response. Try again");
             }
+
+
         }
 
 
-        //To be corrected, the response output
         [Authorize]
         [HttpGet("PM/Getactivity/{projectId}/{activityId}")]  //activity Id
         [ProducesResponseType(typeof(SuccessResponse<ActivityAndMemberDto>), 200)]
@@ -463,9 +487,12 @@ namespace BuildingManager.Controllers
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ActivityAndMemberDto> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
+
+            _generalValidator.ValidateString(projectId, "projectId", 50);
+            _generalValidator.ValidateString(activityId, "activityId", 50);
 
             var userId = HttpContext.Items["UserId"] as string;
             //var projectRole = _service.ProjectService.GetUserProjectRole(userId, id); // where ID is project ID
@@ -475,7 +502,7 @@ namespace BuildingManager.Controllers
             if (userRole != Enums.UserRoles.PM && userRole != Enums.UserRoles.Client)
             {
                 //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
-                var err = new ErrorResponse<ActivityAndMemberDto> { Message = "User does not have sufficient permission" };
+                var err = new ErrorResponse<object> { Message = "User does not have sufficient permission" };
                 return StatusCode((int)HttpStatusCode.Forbidden, err);
             }
 
@@ -484,39 +511,28 @@ namespace BuildingManager.Controllers
             return Ok(response);
         }
 
-
-        //carry out pagination
         [Authorize]
         [HttpGet("OtherPro/GetProjectPhaseActivities")]
-        public async Task<IActionResult> GetProjectPhaseActivitiesOtherPro 
-            (
-            [FromQuery(Name = "projectId")] string projectId,
-            [FromQuery(Name = "projectPhase")] int projectPhase,
-            [FromQuery(Name = "pageNumber")] int pageNumber,
-            [FromQuery(Name = "pageSize")] int pageSize
-            )
+        public async Task<IActionResult> GetProjectPhaseActivitiesOtherPro  ([FromQuery] ProjectActivitiesReqDto model)
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ActivityDto> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
 
-            var userId = HttpContext.Items["UserId"] as string;
+            //_generalValidator.ValidateString(projectId, "projectId", 50);
+            //_generalValidator.ValidateInteger(projectPhase, "projectPhase", 3);
+            //_generalValidator.ValidateInteger(pageNumber, "pageNumber", int.MaxValue);
+            //_generalValidator.ValidateInteger(pageSize, "pageSize", int.MaxValue);
 
-            var model = new ActivitiesDtoPaged
-            {
-                ProjectId = projectId,
-                ProjectPhase = projectPhase,
-                PageNumber = pageNumber,
-                PageSize = pageSize
-            };
+            var userId = HttpContext.Items["UserId"] as string;
 
             var (userRole, projId) = await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
             if (userRole != Enums.UserRoles.OtherPro)
             {
                 //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
-                var err = new ErrorResponse<ActivityDto> { Message = "User does not have sufficient permission" };
+                var err = new ErrorResponse<object> { Message = "User does not have sufficient permission" };
                 return StatusCode((int)HttpStatusCode.Forbidden, err);
             }
 
@@ -526,78 +542,60 @@ namespace BuildingManager.Controllers
 
         [Authorize]
         [HttpGet("PM/GetProjectPhaseActivities")]
-        public async Task<IActionResult> GetProjectPhaseActivitiesPM(
-            [FromQuery(Name = "projectId")] string projectId,
-            [FromQuery(Name = "projectPhase")] int projectPhase,
-            [FromQuery(Name = "pageNumber")] int pageNumber,
-            [FromQuery(Name = "pageSize")] int pageSize
-            )
+        public async Task<IActionResult> GetProjectPhaseActivitiesPM([FromQuery] ProjectActivitiesReqDto model)
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ActivityAndMemberDto> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
 
+            //_generalValidator.ValidateString(projectId, "projectId", 50);
+            //_generalValidator.ValidateInteger(projectPhase, "projectPhase", 3);
+            //_generalValidator.ValidateInteger(pageNumber, "pageNumber", int.MaxValue);
+            //_generalValidator.ValidateInteger(pageSize, "pageSize", int.MaxValue);
+
             var userId = HttpContext.Items["UserId"] as string;
 
-            var model = new ActivitiesDtoPaged
-            {
-                ProjectId = projectId,
-                ProjectPhase = projectPhase,
-                PageNumber = pageNumber,
-                PageSize = pageSize
-            };
 
             var (userRole, projId) = await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
             if (userRole != Enums.UserRoles.PM && userRole != Enums.UserRoles.Client)
             {
                 //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
-                var err = new ErrorResponse<ActivityAndMemberDto> { Message = "User does not have sufficient permission" };
+                var err = new ErrorResponse<object> { Message = "User does not have sufficient permission" };
                 return StatusCode((int)HttpStatusCode.Forbidden, err);
             }
 
+           // var response = await _service.ActivityService.GetProjectPhaseActivitiesPMOld(model);
             var response = await _service.ActivityService.GetProjectPhaseActivitiesPM(model);
             return Ok(response);
         }
 
+        //This is used for the gantt chart
         [Authorize]
-        [HttpGet("user/Getactivities/{projectId}")]  //activity Id
+        [HttpGet("user/Getactivities")]  //activity Id
         //[ProducesResponseType(typeof(SuccessResponse<ProjectDto>), 200)]
-        public async Task<IActionResult> Getactivities(string projectId)
+        public async Task<IActionResult> Getactivities([FromQuery] ActivityDataReqDto model)
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                var err = new ErrorResponse<ActivityAndMemberDto> { Message = "No token provided in Authorization header" };
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }
+            _generalValidator.ValidateString(model.ProjectId, "projectId", 50);
 
             var userId = HttpContext.Items["UserId"] as string;
             //var projectRole = _service.ProjectService.GetUserProjectRole(userId, id); // where ID is project ID
 
-             await _service.ProjectService.GetUserProjectRole(projectId, userId); // where ID is project ID
+            await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
 
-            var response = await _service.ActivityService.GetProjectActivities(projectId);
+            var response = await _service.ActivityService.GetProjectActivities(model);
             return Ok(response);
         }
 
-        //create activity                        --- done
-        //@Todo: update pending activity info   ----- done
-        //@Todo: approve or reject a project --done
-        //add activity file                 --done
-        //@Todo: update/add pending activity file  ----done
-        //@Todo: delete activity            --done --in prog
-        //@Todo: delete activity file   --d
-        //@Todo: download activity file     --d
-        //@Todo: change project status to done other pro  --done
-        //@Todo: Add actualstart and actual Finish date --d
+
         //actual start date and actual done date cannot be greater than todays date i.e. date it is being inputted.
-        //@Todo: edit actualstart and actual Finish date --d
-        //PM get activities
-        //OtherPro get my activities
-        //PM get one activity by Id ---D
-        //Otherpro get one activity by Id ----D
-        //@todo procedure to remove FileName, StorageFileName, FileExtension after deleting a file in the database
+
 
         // create enum for activity status
         // validate all request

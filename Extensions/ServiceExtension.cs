@@ -5,11 +5,17 @@ using BuildingManager.Repository;
 using BuildingManager.Services;
 using BuildingManager.Utils.Logger;
 using BuildingManager.Utils.StorageManager;
+using FluentValidation.AspNetCore;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System;
+using Microsoft.AspNetCore.Mvc;
 using System.Text;
+using BuildingManager.Validators;
+using BuildingManager.Middlewares;
 
 namespace BuildingManager.Extensions
 {
@@ -25,6 +31,17 @@ namespace BuildingManager.Extensions
             serviceCollection.AddTransient<IStorageManager, StorageManager>();
         }
 
+        public static void ConfigureModelValidation(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddMvc().ConfigureApiBehaviorOptions(o =>
+            {
+                o.InvalidModelStateResponseFactory = context => new ValidationFailedResult(context.ModelState);
+            });
+            serviceCollection.AddFluentValidationAutoValidation();
+            serviceCollection.AddFluentValidationClientsideAdapters();
+            serviceCollection.AddValidatorsFromAssemblyContaining<UserValidator>();
+            //serviceCollection.AddValidatorsFromAssemblyContaining<LogInUserValidator>();
+        }
 
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration) 
         {

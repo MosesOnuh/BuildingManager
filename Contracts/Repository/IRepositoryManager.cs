@@ -8,5 +8,6 @@
         INotificationRepository NotificationRepository { get; }
         IActivityRepository ActivityRepository { get; }
         IPaymentRequestRepository PaymentRequestRepository { get; }
+        IChatRepository ChatRepository { get; }
     }
 }

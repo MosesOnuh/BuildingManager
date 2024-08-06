@@ -2,6 +2,7 @@
 using BuildingManager.Contracts.Services;
 using BuildingManager.Helpers;
 using BuildingManager.Models.Dto;
+using BuildingManager.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -29,10 +30,8 @@ namespace BuildingManager.Controllers
             return Ok(response);
         }
 
-
         [Authorize]
         [HttpPost("logout")]
-        //[ProducesResponseType(typeof(SuccessResponse<TokenResponse>), 200)]
         public async Task<IActionResult> LogoutUser()
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))

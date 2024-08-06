@@ -485,7 +485,7 @@ namespace BuildingManager.Repository
             }
         }     
 
-        public async Task<(int, IList<ActivityDto>)> GetProjectPhaseActivitiesOtherPro(ActivitiesDtoPaged model, string userId)
+        public async Task<(int, IList<ActivityDto>)> GetProjectPhaseActivitiesOtherPro(ProjectActivitiesReqDto model, string userId)
         {
             try 
             {
@@ -500,10 +500,11 @@ namespace BuildingManager.Repository
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         command.CommandText = "proc_GetProjectPhaseActivitiesPaged";
-
                         command.Parameters.AddWithValue("@ProjectId", model.ProjectId);
                         command.Parameters.AddWithValue("@UserId", userId);
                         command.Parameters.AddWithValue("@ProjectPhase", model.ProjectPhase);
+                        command.Parameters.AddWithValue("@RequiredStatus", model.RequiredStatus);
+                        command.Parameters.AddWithValue("@RequiredDate", model.RequiredDate);
                         command.Parameters.AddWithValue("@PageNumber", model.PageNumber);
                         command.Parameters.AddWithValue("@PageSize", model.PageSize);
 
@@ -552,7 +553,7 @@ namespace BuildingManager.Repository
         }
 
         
-        public async Task<(int, IList<ActivityAndMemberDto>)> GetProjectPhaseActivitiesPM(ActivitiesDtoPaged model)
+        public async Task<(int, IList<ActivityAndMemberDto>)> GetProjectPhaseActivitiesPM(ProjectActivitiesReqDto model)
         {
             try
             {
@@ -569,9 +570,12 @@ namespace BuildingManager.Repository
                         command.CommandText = "proc_GetProjectPhaseActivitiesPagedPM";
 
                         command.Parameters.AddWithValue("@ProjectId", model.ProjectId);
-                        command.Parameters.AddWithValue("@ProjectPhase", model.ProjectPhase);
+                        command.Parameters.AddWithValue("@ProjectPhase", model.ProjectPhase);                        
+                        command.Parameters.AddWithValue("@RequiredStatus", model.RequiredStatus);
+                        command.Parameters.AddWithValue("@RequiredDate", model.RequiredDate);
                         command.Parameters.AddWithValue("@PageNumber", model.PageNumber);
                         command.Parameters.AddWithValue("@PageSize", model.PageSize);
+
 
                         SqlParameter totalCountParameter = new SqlParameter("@TotalCount", SqlDbType.Int);
                         totalCountParameter.Direction = ParameterDirection.Output;
@@ -596,7 +600,6 @@ namespace BuildingManager.Repository
                                     ProjectPhase = reader.GetInt32("ProjectPhase"),
                                     FileName = await reader.IsDBNullAsync(reader.GetOrdinal("FileName")) ? null : reader.GetString("FileName"),
                                     StorageFileName = await reader.IsDBNullAsync(reader.GetOrdinal("StorageFileName")) ? null : reader.GetString("StorageFileName"),
-                                    //FileType = await reader.IsDBNullAsync(reader.GetOrdinal("FileExtension")) ? null : reader.GetString("FileExtension"),
                                     StartDate = reader.GetDateTime("StartDate"),
                                     EndDate = reader.GetDateTime("EndDate"),
                                     ActualStartDate = await reader.IsDBNullAsync(reader.GetOrdinal("ActualStartDate")) ? null : reader.GetDateTime("ActualStartDate"),
@@ -623,7 +626,7 @@ namespace BuildingManager.Repository
 
 
 
-        public async Task<(int, IList<ActivityAndMemberDto>)> GetProjectActivities(string projectId)
+        public async Task<(int, IList<ActivityAndMemberDto>)> GetProjectActivities(ActivityDataReqDto model)
         {
             try
             {
@@ -637,13 +640,10 @@ namespace BuildingManager.Repository
                     using (SqlCommand command = connection.CreateCommand())
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        //command.CommandText = "proc_GetProjectPhaseActivitiesPagedPM";
                         command.CommandText = "proc_GetProjectActivities";
 
-                        command.Parameters.AddWithValue("@ProjectId", projectId);
-                        //command.Parameters.AddWithValue("@ProjectPhase", model.ProjectPhase);
-                        //command.Parameters.AddWithValue("@PageNumber", model.PageNumber);
-                        //command.Parameters.AddWithValue("@PageSize", model.PageSize);
+                        command.Parameters.AddWithValue("@ProjectId", model.ProjectId);
+                        command.Parameters.AddWithValue("@RequiredStatus", model.RequiredStatus);
 
                         SqlParameter totalCountParameter = new SqlParameter("@TotalCount", SqlDbType.Int);
                         totalCountParameter.Direction = ParameterDirection.Output;

@@ -23,8 +23,8 @@ namespace BuildingManager.Contracts.Services
         Task<SuccessResponse<ActivityDto>> GetActivityOtherPro(string projectId, string activityId, string userId);
         Task<SuccessResponse<ActivityAndMemberDto>> GetActivityPM(string projectId, string activityId);
         Task<SuccessResponse<ActivityDto>> UpdateActivityActualDates(ActivityActualDatesDto model, string userId);
-        Task<PageResponse<IList<ActivityDto>>> GetProjectPhaseActivitiesOtherPro(ActivitiesDtoPaged model, string UserId);
-        Task<PageResponse<IList<ActivityAndMemberDto>>> GetProjectPhaseActivitiesPM(ActivitiesDtoPaged model);
-        Task<SuccessResponse<IList<ActivityAndMemberDto>>> GetProjectActivities(string projectId);
+        Task<PageResponse<IList<ActivityDto>>> GetProjectPhaseActivitiesOtherPro(ProjectActivitiesReqDto model, string UserId);
+        Task<PageResponse<IList<ActivityAndMemberDto>>> GetProjectPhaseActivitiesPM(ProjectActivitiesReqDto model);
+        Task<SuccessResponse<IList<ActivityAndMemberDto>>> GetProjectActivities(ActivityDataReqDto model);
     }
 }

@@ -29,7 +29,8 @@ namespace BuildingManager.Repository
             _logger = logger;
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
-        public async Task CreatePaymentRequest(PaymentRequest paymentRequest)
+
+        public async Task CreatePaymentRequest (PaymentRequest paymentRequest)
         {
             try
             {
@@ -45,6 +46,7 @@ namespace BuildingManager.Repository
                                 new SqlParameter("@Id", paymentRequest.Id),
                                 new SqlParameter("@ProjectId", paymentRequest.ProjectId),
                                 new SqlParameter("@UserId", paymentRequest.UserId),
+                                new SqlParameter("@CreatedBy", paymentRequest.CreatedBy),
                                 new SqlParameter("@Name", paymentRequest.Name),
                                 new SqlParameter("@Status", paymentRequest.Status),
                                 new SqlParameter("@Type", paymentRequest.Type),
@@ -78,7 +80,7 @@ namespace BuildingManager.Repository
                             itemsTable.Columns.Add("CreatedAt", typeof(DateTime));
 
                             //Populate DataTable with items
-                            foreach (var item in paymentRequest.Items) 
+                            foreach (var item in paymentRequest.Items)
                             {
                                 itemsTable.Rows.Add(
                                     item.Id,
@@ -131,7 +133,7 @@ namespace BuildingManager.Repository
         }
 
 
-        public async Task<(int, IList<PaymentRequestDto>)> GetPaymentRequestsOtherPro(PaymentRequestDtoPaged model, string userId)
+        public async Task<(int, IList<PaymentRequestDto>)> GetPaymentRequestsOtherPro(PaymentRequestReqPagedDto model, string userId)
         {
             try
             {
@@ -150,6 +152,7 @@ namespace BuildingManager.Repository
 
                         command.Parameters.AddWithValue("@ProjectId", model.ProjectId);
                         command.Parameters.AddWithValue("@UserId", userId);
+                        command.Parameters.AddWithValue("@RequiredStatus", model.RequiredStatus);
                         command.Parameters.AddWithValue("@PageNumber", model.PageNumber);
                         command.Parameters.AddWithValue("@PageSize", model.PageSize);
 
@@ -201,6 +204,7 @@ namespace BuildingManager.Repository
                                 PaymentRequestItemDto payReqItem = new PaymentRequestItemDto
                                 {
                                     Id = reader.GetString("Id"),
+                                    ProjectId = reader.GetString("ProjectId"),
                                     PaymentRequestId = reader.GetString("PrId"),
                                     Name = reader.GetString("Name"),
                                     Price = reader.GetDecimal("Price"),
@@ -229,7 +233,7 @@ namespace BuildingManager.Repository
             }
         }
 
-        public async Task<(int, IList<PaymentRequestAndMemberDto>)> GetPaymentRequestsPM(PaymentRequestDtoPaged model)
+        public async Task<(int, IList<PaymentRequestAndMemberDto>)> GetPaymentRequestsPM(PaymentRequestReqPagedDto model)
         {
             try
             {
@@ -247,6 +251,7 @@ namespace BuildingManager.Repository
 
                         command.Parameters.AddWithValue("@ProjectId", model.ProjectId);
                         //command.Parameters.AddWithValue("@UserId", userId);
+                        command.Parameters.AddWithValue("@RequiredStatus", model.RequiredStatus);
                         command.Parameters.AddWithValue("@PageNumber", model.PageNumber);
                         command.Parameters.AddWithValue("@PageSize", model.PageSize);
 
@@ -305,14 +310,17 @@ namespace BuildingManager.Repository
                                     Id = reader.GetString("Id"),
                                     PaymentRequestId = reader.GetString("PrId"),
                                     //UserId = reader.GetString("UserId"),
+                                    ProjectId = reader.GetString("ProjectId"),
                                     Name = reader.GetString("Name"),
                                     Price = reader.GetDecimal("Price"),
                                     Quantity = reader.GetDecimal("Quantity"),
                                     TotalAmount = reader.GetDecimal("TotalAmount"),
+                                    CreatedAt = reader.GetDateTime("CreatedAt")
                                 };
 
                                 //var paymentRequest = paymentRequests.First(pr => pr.PaymentRequestId == payReqItem.PaymentRequestId && pr.UserId == payReqItem.UserId);
                                 var paymentRequest = paymentRequests.FirstOrDefault(pr => pr.PaymentRequestId == payReqItem.PaymentRequestId);
+                                
 
                                 if (paymentRequest != null)
                                 {
@@ -376,7 +384,7 @@ namespace BuildingManager.Repository
             }
         }
 
-        public async Task<(int, int)> UpdatePendingPaymentRequest(UpdatePaymentRequestDto model, string userId)
+        public async Task<(int, int)> UpdatePendingPaymentRequest(UpdatePaymentRequestDto model, string userId, List<string> itemIdsToDelete)
         {
             try 
             {
@@ -416,7 +424,18 @@ namespace BuildingManager.Repository
 
                             if (rowsUpdated == 1 && resultCode == 2 && model.Items?.Count > 0) 
                             {
-                                SqlCommand PayReqItemsCommand = new("SELECT Id FROM PaymentRequestItem", connection, transaction);
+                                // Deleting specified items from the database
+                                if (itemIdsToDelete?.Count > 0)
+                                {
+                                    string deleteQuery = $"DELETE FROM PaymentRequestItem WHERE Id IN ({string.Join(",", itemIdsToDelete.Select(id => $"'{id}'"))})";
+                                    SqlCommand deleteCommand = new(deleteQuery, connection, transaction);
+                                    await deleteCommand.ExecuteNonQueryAsync();
+                                }
+
+                                //SqlCommand PayReqItemsCommand = new("SELECT Id FROM PaymentRequestItem", connection, transaction);
+                                SqlCommand PayReqItemsCommand = new SqlCommand( "SELECT Id FROM PaymentRequestItem WHERE ProjectId = @ProjectId AND UserId = @UserId", connection, transaction);
+                                PayReqItemsCommand.Parameters.AddWithValue("@ProjectId", model.ProjectId);
+                                PayReqItemsCommand.Parameters.AddWithValue("@UserId", userId);
                                 SqlDataReader reader = await PayReqItemsCommand.ExecuteReaderAsync();
                                 HashSet<string> existingIds = new HashSet<string>();
                                 while (await reader.ReadAsync())
@@ -472,7 +491,7 @@ namespace BuildingManager.Repository
                                         bulkCopy.ColumnMappings.Add("TotalAmount", "TotalAmount");
                                         bulkCopy.ColumnMappings.Add("CreatedAt", "CreatedAt");
 
-                                        await bulkCopy.WriteToServerAsync(itemsTable);
+                                        await bulkCopy.WriteToServerAsync(itemsTable); 
                                     }
                                 }                           
                             }
@@ -481,15 +500,160 @@ namespace BuildingManager.Repository
                             _logger.LogInfo("Successfully ran query to update payment request");
                             return (rowsUpdated, resultCode);
                         }
-                        catch
+                        catch(Exception ex)
                         {
+                            _logger.LogError($"Error updating payment request in DB {ex.StackTrace} {ex.Message}");
                             await transaction.RollbackAsync();
                             throw;
                         }
                     }
                 }
             } catch(Exception ex) {
-                _logger.LogError($"Error updating payment request in DB {ex.StackTrace} {ex.Message}");
+                //_logger.LogError($"Error updating payment request in DB {ex.StackTrace} {ex.Message}");
+                throw new Exception("Error updating payment request");
+
+            }
+        }
+
+        //UpdateSinglePaymentRequestPmDto
+        //public async Task<(int, int)> UpdatePaymentRequestPm(UpdatePaymentRequestPmDto model, string userId, List<string> itemIdsToDelete)
+            public async Task<(int, int)> UpdatePaymentRequestPm(UpdateGroupPaymentRequestPmDto model, string userId, List<string> itemIdsToDelete)
+        {
+            try
+            {
+                using (SqlConnection connection = new(_connectionString))
+                {
+                    int rowsUpdated;
+                    int resultCode;
+                    DateTime timeStamp = DateTime.Now;
+                    await connection.OpenAsync();
+                    using (SqlTransaction transaction = (SqlTransaction)await connection.BeginTransactionAsync())
+                    {
+                        try
+                        {
+                            var parameters = new[]
+                           {
+                                new SqlParameter("@PaymentRequestId", model.Id),
+                                new SqlParameter("@ProjectId", model.ProjectId),
+                                new SqlParameter("@UserId", userId),
+                                new SqlParameter("@Name", model.Name),
+                                new SqlParameter("@Description", model.Description ?? (object)DBNull.Value ),
+                                new SqlParameter("@SumTotalAmount", model.SumTotalAmount),
+                                new SqlParameter("@Status", model.Status),
+                                new SqlParameter("@AssignedTo", model.AssignedTo),
+                                new SqlParameter("@UpdatedAt", timeStamp),
+                                new SqlParameter("@ResultCode", SqlDbType.Int){ Direction = ParameterDirection.Output},
+                                new SqlParameter("@RowsUpdated", SqlDbType.Int){ Direction = ParameterDirection.Output},
+                            };
+
+                            SqlCommand PayReqCommand = new("proc_UpdatePaymentRequestPM", connection, transaction)
+                            {
+                                CommandType = CommandType.StoredProcedure
+                            };
+                            PayReqCommand.Parameters.AddRange(parameters);
+
+                            //Add Payment Request to the Db
+                            await PayReqCommand.ExecuteNonQueryAsync();
+                            rowsUpdated = (int)PayReqCommand.Parameters["@RowsUpdated"].Value;
+                            resultCode = (int)PayReqCommand.Parameters["@ResultCode"].Value;
+
+                            string updateQuery = $"UPDATE PaymentRequestItem SET UserId = @AssignedTo WHERE PrId = @PrId";
+                            SqlCommand updateCommand = new SqlCommand(updateQuery, connection, transaction);
+                            updateCommand.Parameters.AddWithValue("@AssignedTo", model.AssignedTo);
+                            updateCommand.Parameters.AddWithValue("@PrId", model.Id);
+
+                            await updateCommand.ExecuteNonQueryAsync();
+
+
+                            if (rowsUpdated == 1 && resultCode == 2 && model.Items?.Count > 0)
+                            {
+                                if (itemIdsToDelete?.Count > 0)
+                                {
+                                    string deleteQuery = $"DELETE FROM PaymentRequestItem WHERE Id IN ({string.Join(",", itemIdsToDelete.Select(id => $"'{id}'"))})";
+                                    SqlCommand deleteCommand = new(deleteQuery, connection, transaction);
+                                    await deleteCommand.ExecuteNonQueryAsync();
+                                }
+
+                                //SqlCommand PayReqItemsCommand = new("SELECT Id FROM PaymentRequestItem", connection, transaction);
+                                SqlCommand PayReqItemsCommand = new($"SELECT Id, UserId FROM PaymentRequestItem WHERE ProjectId = @ProjectId", connection, transaction);
+                                PayReqItemsCommand.Parameters.AddWithValue("@ProjectId", model.ProjectId);
+                                SqlDataReader reader = await PayReqItemsCommand.ExecuteReaderAsync();
+                                HashSet<string> existingIds = new HashSet<string>();
+                                while (await reader.ReadAsync())
+                                {
+                                    existingIds.Add(reader.GetString("Id"));
+                                }
+                                reader.Close();
+
+                                //In the service layer, loop through items and create Ids for those without Id
+                                // Filter items to only include new ones
+                                var newItems = model.Items?.Where(item => !existingIds.Contains(item.Id)).ToList();
+                                if (newItems.Any())
+                                {
+                                    DataTable itemsTable = new DataTable();
+                                    itemsTable.Columns.Add("Id", typeof(string));
+                                    itemsTable.Columns.Add("PrId", typeof(string));
+                                    itemsTable.Columns.Add("ProjectId", typeof(string));
+                                    itemsTable.Columns.Add("UserId", typeof(string));
+                                    itemsTable.Columns.Add("Name", typeof(string));
+                                    itemsTable.Columns.Add("Price", typeof(decimal));
+                                    itemsTable.Columns.Add("Quantity", typeof(decimal));
+                                    itemsTable.Columns.Add("TotalAmount", typeof(decimal));
+                                    itemsTable.Columns.Add("CreatedAt", typeof(DateTime));
+
+                                    //Populate DataTable with items
+                                    foreach (var item in newItems)
+                                    {
+                                        itemsTable.Rows.Add(
+                                            item.Id,
+                                            item.PaymentRequestId,
+                                            item.ProjectId,
+                                            userId,
+                                            item.Name,
+                                            item.Price,
+                                            item.Quantity,
+                                            item.TotalAmount,
+                                            timeStamp
+                                            );
+                                    }
+
+                                    //use Assignrd To Id
+                                    using (SqlBulkCopy bulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
+                                    {
+                                        bulkCopy.DestinationTableName = "PaymentRequestItem";
+                                        bulkCopy.BulkCopyTimeout = 600;
+
+                                        bulkCopy.ColumnMappings.Add("Id", "Id");
+                                        bulkCopy.ColumnMappings.Add("PrId", "PrId");
+                                        bulkCopy.ColumnMappings.Add("ProjectId", "ProjectId");
+                                        bulkCopy.ColumnMappings.Add("UserId", "UserId");
+                                        bulkCopy.ColumnMappings.Add("Name", "Name");
+                                        bulkCopy.ColumnMappings.Add("Price", "Price");
+                                        bulkCopy.ColumnMappings.Add("Quantity", "Quantity");
+                                        bulkCopy.ColumnMappings.Add("TotalAmount", "TotalAmount");
+                                        bulkCopy.ColumnMappings.Add("CreatedAt", "CreatedAt");
+
+                                        await bulkCopy.WriteToServerAsync(itemsTable);
+                                    }
+                                }
+                            }
+
+                            await transaction.CommitAsync();
+                            _logger.LogInfo("Successfully ran query to update payment request");
+                            return (rowsUpdated, resultCode);
+                        }
+                        catch(Exception ex)
+                        {
+                            _logger.LogError($"Error updating payment request in DB {ex.StackTrace} {ex.Message}");
+                            await transaction.RollbackAsync();
+                            throw;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+               // _logger.LogError($"Error updating payment request in DB {ex.StackTrace} {ex.Message}");
                 throw new Exception("Error updating payment request");
 
             }
@@ -511,10 +675,10 @@ namespace BuildingManager.Repository
                     };
 
                     //procedure returns @ResultCode = 0, @success = 0 if the payment request is not found
-                    //procedure will return @ResultCode = 1, @success = 0  if the payment request is not rejected
+                    //procedure will return @ResultCode = 1, @success = 0  if the payment request is not pending or rejected
                     //procedure will return @ResultCode = 2, , @success = 1  if the payment request was successfully deleted 
 
-                    SqlCommand command = new("proc_DeleteRejectedPaymentRequest", connection)
+                    SqlCommand command = new("proc_DeletePaymentRequest", connection)
                     {
                         CommandType = CommandType.StoredProcedure
                     };
@@ -522,17 +686,54 @@ namespace BuildingManager.Repository
 
                     await connection.OpenAsync();
                     await command.ExecuteNonQueryAsync();
-                    _logger.LogInfo("Successfully ran query to delete pending request");
+                    _logger.LogInfo("Successfully ran query to delete pending or rejected request");
                     return ((int)command.Parameters["@Success"].Value, (int)command.Parameters["@ResultCode"].Value);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Error deleting a pending request in DB {ex.StackTrace} {ex.Message}");
-                throw new Exception("Error deleting a pending request");
+                _logger.LogError($"Error deleting a pending or rejected request in DB {ex.StackTrace} {ex.Message}");
+                throw new Exception("Error deleting payment request");
             }
         }
 
+        public async Task<(int, int)> DeletePaymentRequestPM(string projId, string paymentRequestId, string userId)
+        {
+            try
+            {
+                using (SqlConnection connection = new(_connectionString))
+                {
+                    var parameters = new[]
+                    {
+                        new SqlParameter("@PaymentRequestId", paymentRequestId),
+                        new SqlParameter("@ProjectId", projId),
+                        new SqlParameter("@UserId", userId),
+                        new SqlParameter("@ResultCode", SqlDbType.Int){ Direction = ParameterDirection.Output},
+                        new SqlParameter("@Success", SqlDbType.Int){ Direction = ParameterDirection.Output},
+                    };
+
+                    //procedure returns @ResultCode = 0, @success = 0 if the payment request is not found
+                    //procedure will return @ResultCode = 1, @success = 0  if the payment request is not awaiting confirmation or rejected
+                    //procedure will return @ResultCode = 2, , @success = 1  if the payment request was successfully deleted 
+
+                    SqlCommand command = new("proc_DeletePaymentRequestPM", connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    command.Parameters.AddRange(parameters);
+
+                    await connection.OpenAsync();
+                    await command.ExecuteNonQueryAsync();
+                    _logger.LogInfo("Successfully ran query to delete pending or rejected request");
+                    return ((int)command.Parameters["@Success"].Value, (int)command.Parameters["@ResultCode"].Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error deleting a pending or rejected request in DB {ex.StackTrace} {ex.Message}");
+                throw new Exception("Error deleting payment request");
+            }
+        }
 
         public async Task<PaymentRequest> GetPaymentRequestDetailsOtherPro(string projId, string paymentRequestId, string userId)
         {
@@ -896,7 +1097,8 @@ namespace BuildingManager.Repository
                                     Oct = reader.GetDecimal("Oct"),
                                     Nov = reader.GetDecimal("Nov"),
                                     Dec = reader.GetDecimal("Dec"),
-                                };
+                            };
+                                item.CalculateTotal();
                                 data.Add(item);
                             }
                         }
@@ -947,6 +1149,7 @@ namespace BuildingManager.Repository
                                     Wk4 = reader.GetDecimal("Wk4"),
                                     Wk5 = reader.GetDecimal("Wk5"),
                                 };
+                                item.CalculateTotal();
                                 data.Add(item);
                             }
                         }
@@ -999,6 +1202,7 @@ namespace BuildingManager.Repository
                                     Sat = reader.GetDecimal("Sat"),
                                     Sun = reader.GetDecimal("Sun"),
                                 };
+                                item.CalculateTotal();
                                 data.Add(item);
                             }
                         }

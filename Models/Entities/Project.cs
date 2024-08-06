@@ -23,6 +23,8 @@ namespace BuildingManager.Models.Entities
         public int Role { get; set; }
         //public string Profession { get; set; }
         public int Profession { get; set; }
+        public int UserAccess { get; set; }
+        public int ProjOwner { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }
@@ -39,6 +41,23 @@ namespace BuildingManager.Models.Entities
         //Enum 1 for PM, 2 for Other-Pro, 3 for Client
         public int Role { get; set; }
         public int Profession { get; set; }
+        public DateTime CreatedAt { get; set; }
+    }
+
+    public class member
+    {
+        public string ProjectId { get; set; }
+        public string UserId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
+
+        //Enum 1 for PM, 2 for Other-Pro, 3 for Client
+        public int Role { get; set; }
+        public int Profession { get; set; }
+        public int UserAccess { get; set; }
+        public int ProjOwner { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 
