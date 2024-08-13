@@ -1,4 +1,5 @@
 ﻿using BuildingManager.Contracts.Repository;
+using BuildingManager.Enums;
 using BuildingManager.Models.Dto;
 using BuildingManager.Models.Entities;
 using BuildingManager.Utils.Logger;
@@ -73,6 +74,7 @@ namespace BuildingManager.Repository
                         new SqlParameter("@ProjectId", model.ProjectId),
                         new SqlParameter("@UserId", model.UserId),
                         new SqlParameter("@Role", model.Role),
+                        new SqlParameter("@Owner", (int)ProjectOwner.Owner),
                         new SqlParameter("@Profession", model.Profession),
                         new SqlParameter("@CreatedAt", model.CreatedAt),
                         new SqlParameter("@UpdatedAt", DBNull.Value),
