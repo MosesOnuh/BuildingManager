@@ -35,8 +35,9 @@ namespace BuildingManager.Repository
                         new SqlParameter("@Id", activity.Id),
                         new SqlParameter("@ProjectId", activity.ProjectId),
                         new SqlParameter("@UserId", activity.UserId),
+                        new SqlParameter("@CreatedBy", activity.CreatedBy),
                         new SqlParameter("@Name", activity.Name),
-                        new SqlParameter("@Status", activity.Status),
+                        new SqlParameter("@Status", activity.Status),                         
                         new SqlParameter("@Description", activity.Description),
                         new SqlParameter("@ProjectPhase", activity.ProjectPhase),
                         new SqlParameter("@FileName", activity.FileName == null? DBNull.Value : activity.FileName),
@@ -84,7 +85,7 @@ namespace BuildingManager.Repository
                         };
 
                     //procedure returns @ResultCode = 0, @RowsUpdated = 0 if the activity is not found
-                    //procedure will return @ResultCode = 1, @RowsUpdated = 0 if the activity is not pending
+                    //procedure will return @ResultCode = 1, @RowsUpdated = 0 if the activity is not awaiting approval
                     //procedure will return  @ResultCode = 2, @RowsUpdated = 1; if the update is successful
                     SqlCommand command = new("proc_UpdateActivityApprovalStatus", connection)
                     {
@@ -103,6 +104,46 @@ namespace BuildingManager.Repository
             {
                 _logger.LogError($"Error updating activity approval status in DB {ex.StackTrace} {ex.Message}");
                 throw new Exception("Error updating activity approval status");
+            }
+        }
+
+
+        public async Task<(int, int)> SendActivityForApproval(ActivityStatusUpdateDto model, string userId)
+        {
+            try
+            {
+                using (SqlConnection connection = new(_connectionString))
+                {
+                    var parameters = new[]
+                    {
+                            new SqlParameter("@ActivityId", model.ActivityId),
+                            new SqlParameter("@ProjectId", model.ProjectId),
+                            new SqlParameter("@UserId", userId),
+                            new SqlParameter("@UpdatedStatus", model.StatusAction),
+                            new SqlParameter("@ResultCode", SqlDbType.Int){ Direction = ParameterDirection.Output},
+                            new SqlParameter("@RowsUpdated", SqlDbType.Int){ Direction = ParameterDirection.Output},
+                        };
+
+                    //procedure returns @ResultCode = 0, @RowsUpdated = 0 if the activity is not found
+                    //procedure will return @ResultCode = 1, @RowsUpdated = 0 if the activity is not pending
+                    //procedure will return  @ResultCode = 2, @RowsUpdated = 1; if the update is successful
+                    SqlCommand command = new("proc_SendActivityForApproval", connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    command.Parameters.AddRange(parameters);
+
+                    await connection.OpenAsync();
+                    await command.ExecuteNonQueryAsync();
+                    _logger.LogInfo("Successfully ran query to send activity for approval");
+
+                    return ((int)command.Parameters["@RowsUpdated"].Value, (int)command.Parameters["@ResultCode"].Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error sending activity for approval in DB {ex.StackTrace} {ex.Message}");
+                throw new Exception("Error  sending activity for approval");
             }
         }
 
@@ -236,6 +277,55 @@ namespace BuildingManager.Repository
             }
         }
 
+
+        public async Task<(int, int)> UpdateActivityPM(UpdateActivityPmDetailsDto model, string userId)
+        {
+            try
+            {
+                using (SqlConnection connection = new(_connectionString))
+                {
+                    var parameters = new[]
+                    {
+                        new SqlParameter("@ActivityId", model.ActivityId),
+                        new SqlParameter("@ProjectId", model.ProjectId),
+                        new SqlParameter("@UserId", userId),
+                        new SqlParameter("@Name", model.Name),
+                        new SqlParameter("@Status", model.Status),
+                        new SqlParameter("@AssignedTo", model.AssignedTo),
+                        new SqlParameter("@Description", model.Description),
+                        new SqlParameter("@ProjectPhase", model.ProjectPhase),
+                        new SqlParameter("@StartDate", model.StartDate),
+                        new SqlParameter("@EndDate", model.EndDate),
+                        new SqlParameter("@UpdatedAt", DateTime.Now),
+                        new SqlParameter("@ResultCode", SqlDbType.Int){ Direction = ParameterDirection.Output},
+                        new SqlParameter("@RowsUpdated", SqlDbType.Int){ Direction = ParameterDirection.Output},
+                    };
+
+                    //check if the activity belongs to the project with the userId passed-- This is done in the controller
+                    //Procedure should ensure that only pending activity can be updated and it is for the user
+
+                    //procedure returns @ResultCode = 0, @RowsUpdated = 0 if the activity is not found
+                    //procedure will return @ResultCode = 1, @RowsUpdated = 0  if the activity is not awaiting approval
+                    //procedure will return @ResultCode = 2, , @RowsUpdated = 1  if the activity has been updated.
+                    SqlCommand command = new("proc_UpdateActivityDetailsPM", connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    command.Parameters.AddRange(parameters);
+
+                    await connection.OpenAsync();
+                    await command.ExecuteNonQueryAsync();
+                    _logger.LogInfo("Successfully ran query to update activity");
+                    return ((int)command.Parameters["@RowsUpdated"].Value, (int)command.Parameters["@ResultCode"].Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error updating the details of an activity in DB {ex.StackTrace} {ex.Message}");
+                throw new Exception("Error updating the details of an activity");
+            }
+        }
+
         public async Task<(int, int)> AddActivityFile(AddActivityFileDto model, string userId)
         {
             try
@@ -278,6 +368,48 @@ namespace BuildingManager.Repository
             }
         }
 
+        public async Task<(int, int)> AddActivityFilePM(AddActivityFileDto model, string userId)
+        {
+            try
+            {
+                using (SqlConnection connection = new(_connectionString))
+                {
+                    var parameters = new[]
+                    {
+                        new SqlParameter("@ActivityId", model.ActivityId),
+                        new SqlParameter("@ProjectId", model.ProjectId),
+                        new SqlParameter("@UserId", userId),
+                        new SqlParameter("@FileName", model.FileName),
+                        new SqlParameter("@StorageFileName", model.StorageFileName),
+                        new SqlParameter("@FileExtension", model.FileExtension),
+                        new SqlParameter("@UpdatedAt", DateTime.Now),
+                        new SqlParameter("@ResultCode", SqlDbType.Int){ Direction = ParameterDirection.Output},
+                        new SqlParameter("@RowsUpdated", SqlDbType.Int){ Direction = ParameterDirection.Output},
+                    };
+
+                    //procedure returns @ResultCode = 0, @RowsUpdated = 0 if the activity is not found
+                    //procedure will return @ResultCode = 1, @RowsUpdated = 0  if the activity is not awaiting approval
+                    //procedure will return @ResultCode = 2, , @RowsUpdated = 0  if the activity already has file 
+                    //procedure will return @ResultCode = 3, , @RowsUpdated = 1  if the activity file have been updated 
+                    SqlCommand command = new("proc_AddActivityFileDetailsPM", connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    command.Parameters.AddRange(parameters);
+
+                    await connection.OpenAsync();
+                    await command.ExecuteNonQueryAsync();
+                    _logger.LogInfo("Successfully ran query to update awaiting activity file");
+                    return ((int)command.Parameters["@RowsUpdated"].Value, (int)command.Parameters["@ResultCode"].Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error updating the file details of an activity in DB {ex.StackTrace} {ex.Message}");
+                throw new Exception("Error updating the file details of an activity");
+            }
+        }
+
         public async Task<(int, int)> RemoveActivityFileDetails(string projId, string activityId, string userId) 
         {
             try
@@ -298,6 +430,44 @@ namespace BuildingManager.Repository
                     //procedure will return @ResultCode = 1, @RowsUpdated = 0  if the activity is not pending
                     //procedure will return @ResultCode = 2, , @RowsUpdated = 1  if the activity file details have been removed 
                     SqlCommand command = new("proc_RemoveActivityFileDetails", connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    command.Parameters.AddRange(parameters);
+
+                    await connection.OpenAsync();
+                    await command.ExecuteNonQueryAsync();
+                    _logger.LogInfo("Successfully ran query to remove activity file details");
+                    return ((int)command.Parameters["@RowsUpdated"].Value, (int)command.Parameters["@ResultCode"].Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error updating the file details of an activity in DB {ex.StackTrace} {ex.Message}");
+                throw new Exception("Error updating the file details of an activity");
+            }
+        }
+
+        public async Task<(int, int)> RemoveActivityFileDetailsPM(string projId, string activityId, string userId)
+        {
+            try
+            {
+                using (SqlConnection connection = new(_connectionString))
+                {
+                    var parameters = new[]
+                    {
+                        new SqlParameter("@ActivityId", activityId),
+                        new SqlParameter("@ProjectId", projId),
+                        new SqlParameter("@UserId", userId),
+                        new SqlParameter("@UpdatedAt", DateTime.Now),
+                        new SqlParameter("@ResultCode", SqlDbType.Int){ Direction = ParameterDirection.Output},
+                        new SqlParameter("@RowsUpdated", SqlDbType.Int){ Direction = ParameterDirection.Output},
+                    };
+
+                    //procedure returns @ResultCode = 0, @RowsUpdated = 0 if the activity is not found
+                    //procedure will return @ResultCode = 1, @RowsUpdated = 0  if the activity is not awaiting approval
+                    //procedure will return @ResultCode = 2, , @RowsUpdated = 1  if the activity file details have been removed 
+                    SqlCommand command = new("proc_RemoveActivityFileDetailsPM", connection)
                     {
                         CommandType = CommandType.StoredProcedure
                     };
@@ -466,7 +636,7 @@ namespace BuildingManager.Repository
                     //procedure returns @ResultCode = 0, @RowsDeleted = 0 if the activity is not found
                     //procedure will return @ResultCode = 1, @RowsDeleted = 0  if the activity is not rejected
                     //procedure will return @ResultCode = 2, , @RowsDeleted = 1  if the activity was successfully deleted 
-                    SqlCommand command = new("proc_DeleteRejectedActivity", connection)
+                    SqlCommand command = new("proc_DeleteActivity", connection)
                     {
                         CommandType = CommandType.StoredProcedure
                     };
@@ -483,7 +653,44 @@ namespace BuildingManager.Repository
                 _logger.LogError($"Error deleting an activity in DB {ex.StackTrace} {ex.Message}");
                 throw new Exception("Error deleting an activity");
             }
-        }     
+        }
+
+        public async Task<(int, int)> DeleteActivityPM(string projId, string activityId, string userId)
+        {
+            try
+            {
+                using (SqlConnection connection = new(_connectionString))
+                {
+                    var parameters = new[]
+                    {
+                        new SqlParameter("@ActivityId", activityId),
+                        new SqlParameter("@ProjectId", projId),
+                        new SqlParameter("@UserId", userId),
+                        new SqlParameter("@ResultCode", SqlDbType.Int){ Direction = ParameterDirection.Output},
+                        new SqlParameter("@RowsDeleted", SqlDbType.Int){ Direction = ParameterDirection.Output},
+                    };
+
+                    //procedure returns @ResultCode = 0, @RowsDeleted = 0 if the activity is not found
+                    //procedure will return @ResultCode = 1, @RowsDeleted = 0  if the activity is not awaiting approval or rejected
+                    //procedure will return @ResultCode = 2, , @RowsDeleted = 1  if the activity was successfully deleted 
+                    SqlCommand command = new("proc_DeleteActivityPM", connection)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    command.Parameters.AddRange(parameters);
+
+                    await connection.OpenAsync();
+                    await command.ExecuteNonQueryAsync();
+                    _logger.LogInfo("Successfully ran query to delete activity");
+                    return ((int)command.Parameters["@RowsDeleted"].Value, (int)command.Parameters["@ResultCode"].Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error deleting an activity in DB {ex.StackTrace} {ex.Message}");
+                throw new Exception("Error deleting an activity");
+            }
+        }
 
         public async Task<(int, IList<ActivityDto>)> GetProjectPhaseActivitiesOtherPro(ProjectActivitiesReqDto model, string userId)
         {

@@ -14,6 +14,18 @@ namespace BuildingManager.Models.Dto
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
     }
+    public class ActivityPmRequestDto
+    {
+        public string ProjectId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        //Enum 1 for pre-construction, 2 for construction, 3 for Post-construction
+        public int ProjectPhase { get; set; }
+        public IFormFile? File { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public string AssignedTo { get; set; }
+    }
 
     //might delete
     public class ActivityDto
@@ -82,6 +94,33 @@ namespace BuildingManager.Models.Dto
         public int ProjectPhase { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+    }
+
+    public class UpdateActivityPmDetailsReqDto
+    {
+        public string ActivityId { get; set; }
+        public string ProjectId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        //Enum 1 for pre-construction, 2 for construction, 3 for Post-construction
+        public int ProjectPhase { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public string AssignedTo { get; set; }
+    }
+
+    public class UpdateActivityPmDetailsDto
+    {
+        public string ActivityId { get; set; }
+        public string ProjectId { get; set; }
+        public string Name { get; set; }
+        public int Status { get; set; }
+        public string Description { get; set; }
+        //Enum 1 for pre-construction, 2 for construction, 3 for Post-construction
+        public int ProjectPhase { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public string AssignedTo { get; set; }  
     }
 
     public class AddActivityFileRequestDto

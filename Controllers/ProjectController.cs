@@ -62,6 +62,8 @@ namespace BuildingManager.Controllers
 
             var userId = HttpContext.Items["UserId"] as string;
 
+            var (_, _) = await _service.ProjectService.GetUserProjectRole(id, userId);
+
             var members = await _repository.ProjectRepository.GetProjMemberDetails(id, userId); // where ID is project ID
             
             if (members.Count == 0) {
@@ -93,6 +95,8 @@ namespace BuildingManager.Controllers
             _generalValidator.ValidateString(id, "Id", 50);
 
             var userId = HttpContext.Items["UserId"] as string;
+
+            var ( _ , _) = await _service.ProjectService.GetUserProjectRole(id, userId);
 
             var members = await _repository.ProjectRepository.GetProjectMembers(id); // where ID is project ID
 

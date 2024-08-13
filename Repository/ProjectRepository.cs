@@ -170,6 +170,7 @@ namespace BuildingManager.Repository
                                 UserId = reader.GetString("UserId"),
                                 Role = reader.GetInt32("Role"),
                                 Profession = reader.GetInt32("Profession"),
+                                UserAccess = reader.GetInt32("UserAccess"),
                                 ProjOwner = reader.GetInt32("ProjOwner"),
                                 CreatedAt = reader.GetDateTime("CreatedAt"),
                                 //UpdatedAt = reader.GetDateTime("UpdatedAt"),
@@ -336,15 +337,6 @@ namespace BuildingManager.Repository
                 {
                     await connection.OpenAsync();
 
-                    //var parameters = new[]
-                    //{
-                    //    new SqlParameter("@UserId", userId),
-                    //    new SqlParameter("@PageNumber", pageNumber),
-                    //    new SqlParameter("@PageSize", pageSize),
-                    //    new SqlParameter("@TotalCount", SqlDbType.Int) {Direction = ParameterDirection.Output},
-                    //};
-
-                    //using (SqlCommand command = new SqlCommand("proc_GetProjectsPaged"))
                     using (SqlCommand command = connection.CreateCommand())
                     {
                         command.CommandType = CommandType.StoredProcedure;
@@ -356,8 +348,6 @@ namespace BuildingManager.Repository
                         SqlParameter totalCountParameter = new SqlParameter("@TotalCount", SqlDbType.Int);
                         totalCountParameter.Direction = ParameterDirection.Output;
                         command.Parameters.Add(totalCountParameter);
-                        //command.CommandType = CommandType.StoredProcedure;
-                        //command.Parameters.AddRange(parameters);
 
                         using (SqlDataReader reader = await command.ExecuteReaderAsync())
                         {

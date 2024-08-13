@@ -40,7 +40,7 @@ namespace BuildingManager.Validators
 
         public void ValidateFile(IFormFile file)
         {
-            var maxSize = 30 * 1024 * 1024; // 30 MB limit
+            var maxSize = 300 * 1024 * 1024; // 30 MB limit
             var _allowedExtensions = new string[] { ".jpg", ".jpeg", ".png", ".docx", ".doc", ".pdf" }; // Allowed extensions
             var allowableExtensions = string.Join (", ", _allowedExtensions.Select(x => x.ToUpperInvariant()));
 

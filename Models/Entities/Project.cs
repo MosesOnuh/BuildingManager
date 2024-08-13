@@ -26,7 +26,7 @@ namespace BuildingManager.Models.Entities
         public int UserAccess { get; set; }
         public int ProjOwner { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime? UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; } = null;
     }
 
 

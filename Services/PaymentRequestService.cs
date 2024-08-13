@@ -524,23 +524,13 @@ namespace BuildingManager.Services
 
             if (rowsUpdated == 0)
             {
-                _logger.LogError($"Error failed to csend a payment request for confirmation ");
-                throw new Exception("Error failed to send a payment request for confirmation t");
+                _logger.LogError($"Error failed to send a payment request for confirmation");
+                throw new Exception("Error failed to send a payment request for confirmation");
             }
-
-
-            if (model.StatusAction == (int)PaymentRequestStatus.Confirmed)
-            {
-                return new SuccessResponse<PaymentRequestDto>
-                {
-                    Message = "Payment Request status updated to confirmed successfully",
-                };
-            }
-
 
             return new SuccessResponse<PaymentRequestDto>
             {
-                Message = "Payment Request status updated to rejected successfully",
+                Message = "Payment Request sent for confirmation successfully",
             };
         }
 

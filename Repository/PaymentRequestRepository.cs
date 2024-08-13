@@ -1034,12 +1034,9 @@ namespace BuildingManager.Repository
                             new SqlParameter("@RowsUpdated", SqlDbType.Int){ Direction = ParameterDirection.Output},
                         };
 
-                    //procedure returns @ResultCode = 0, @RowsUpdated = 0 if the activity is not found
-                    //procedure will return @ResultCode = 1, @RowsUpdated = 0 if the activity is not awaiting confirmation
+                    //procedure returns @ResultCode = 0, @RowsUpdated = 0 if the payment request is not found
+                    //procedure will return @ResultCode = 1, @RowsUpdated = 0 if the payment request is not pending
                     //procedure will return  @ResultCode = 2, @RowsUpdated = 1; if the update is successful
-
-                    //SqlCommand command = new("proc_UpdateActivityApprovalStatus", connection)
-
                     SqlCommand command = new("proc_SendPayReqForConfirmation", connection)
                     {
                         CommandType = CommandType.StoredProcedure

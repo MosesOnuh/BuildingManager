@@ -80,6 +80,39 @@ namespace BuildingManager.Controllers
 
 
         [Authorize]
+        [HttpPost("PM/CreateActivity")]
+        [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
+        public async Task<IActionResult> CreateActivityPm([FromForm] ActivityPmRequestDto model)
+        {
+            if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
+            {
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
+                return Unauthorized(err);
+            }
+
+            var userId = HttpContext.Items["UserId"] as string;
+
+            if (model.File != null)
+            {
+                _generalValidator.ValidateFile(model.File);
+            }
+
+
+            var (userRole, _) = await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
+            if (userRole != Enums.UserRoles.PM)
+            {
+                var err = new ErrorResponse<object> { Message = "User does not have sufficient permission" };
+                return StatusCode((int)HttpStatusCode.Forbidden, err);
+            }
+
+            //create acctivity in db and store file in cloud
+            var response = await _service.ActivityService.CreateActivityPm(model, userId);
+
+            return Ok(response);
+        }
+
+
+        [Authorize]
         [HttpPatch("PM/ActivityApproval")]
         [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
         public async Task<IActionResult> ActivityApproval([FromBody] ActivityStatusUpdateDto model)
@@ -107,7 +140,34 @@ namespace BuildingManager.Controllers
             return Ok(response);
         }
 
-       
+        [Authorize]
+        [HttpPatch("OtherPro/SendForApproval")]
+        [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
+        public async Task<IActionResult> SendActivityForApproval([FromBody] ActivityStatusUpdateDto model)
+        {
+            if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
+            {
+                _logger.LogError($"Error, no token provided in Authorization header");
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
+                return Unauthorized(err);
+            }
+
+            var userId = HttpContext.Items["UserId"] as string;
+
+            var (userRole, _) = await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
+            if (userRole != Enums.UserRoles.OtherPro)
+            {
+                _logger.LogError($"Error, only OtherPro has permission");
+                var err = new ErrorResponse<object> { Message = "User does not have sufficient permission" };
+                return StatusCode((int)HttpStatusCode.Forbidden, err);
+            }
+
+            var response = await _service.ActivityService.SendActivityForApproval(model, userId);
+
+            return Ok(response);
+        }
+
+
         [Authorize]
         [HttpPatch("OtherPro/UpdateActivityToDone")]
         [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
@@ -122,7 +182,7 @@ namespace BuildingManager.Controllers
             var userId = HttpContext.Items["UserId"] as string;
 
             var (userRole, _) = await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
-            if (userRole != Enums.UserRoles.OtherPro)
+            if (userRole != Enums.UserRoles.OtherPro && userRole != Enums.UserRoles.PM)
             {
                 //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
                 //throw new RestException(HttpStatusCode.Forbidden, "Only PM is allowed to approve or reject an activity.");
@@ -166,7 +226,7 @@ namespace BuildingManager.Controllers
             var userId = HttpContext.Items["UserId"] as string;
 
             var (userRole, _) = await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
-            if (userRole != Enums.UserRoles.OtherPro)
+            if (userRole != Enums.UserRoles.OtherPro && userRole != Enums.UserRoles.PM)
             {
                 //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
                 //throw new RestException(HttpStatusCode.Forbidden, "Only PM is allowed to approve or reject an activity.");
@@ -208,6 +268,33 @@ namespace BuildingManager.Controllers
             return Ok(response);
         }
 
+        [Authorize]
+        [HttpPatch("PM/UpdateActivityDetails")]
+        [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
+        public async Task<IActionResult> UpdateActivityPM ([FromBody] UpdateActivityPmDetailsReqDto model)
+        {
+            if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
+            {
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
+                return Unauthorized(err);
+            }
+
+            var userId = HttpContext.Items["UserId"] as string;
+
+            var (userRole, projectId) = await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
+            if (userRole != Enums.UserRoles.PM)
+            {
+                //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
+                var err = new ErrorResponse<object> { Message = "User does not have sufficient permission" };
+                return StatusCode((int)HttpStatusCode.Forbidden, err);
+            }
+
+            //OtherPro can only update his own pending or rejected activity
+            var response = await _service.ActivityService.UpdateActivityPM(model, userId);
+
+            return Ok(response);
+        }
+
         //otherpro can add a file to a pending  activity
         //validate form request and ensure that a file is always passed to the request
         [Authorize]
@@ -244,31 +331,39 @@ namespace BuildingManager.Controllers
             return Ok(response);
         }
 
-        //[Authorize]
-        //[HttpPost("PM/ResendActivity")]
-        //[ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
-        //public async Task<IActionResult> ResendRejectedActivity([FromForm] ActivityStatusUpdateDto model)
-        //{
-        //    if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
-        //    {
-        //        throw new RestException(HttpStatusCode.Unauthorized, "No token provided in Authorization header");
-        //    }
+        [Authorize]
+        [HttpPatch("PM/AddActivityFile")]
+        [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
+        public async Task<IActionResult> AddActivityFilePM([FromForm] AddActivityFileRequestDto model)
+        {
 
-        //    var userId = HttpContext.Items["UserId"] as string;
+            if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
+            {
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
+                return Unauthorized(err);
+            }
 
-        //    var (userRole, projectId) = await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
-        //    if (userRole != Enums.UserRoles.OtherPro)
-        //    {
-        //        //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
-        //        throw new RestException(HttpStatusCode.Forbidden, "Only OtherPro can resend a rejected activity.");
-        //    }
+            _generalValidator.ValidateFile(model.File);
 
-        //    //OtherPro can resend any of his activity that was rejected
-        //    var response = await _service.ActivityService.ResendRejectedActivity(model, userId);
+            var userId = HttpContext.Items["UserId"] as string;
 
-        //    return Ok(response);
-        //}
+            //@Todo
+            //validate input
+            //ensure the name of the files are in lower case when saving it
 
+            var (userRole, projectId) = await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
+            if (userRole != Enums.UserRoles.PM)
+            {
+                //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
+                var err = new ErrorResponse<object> { Message = "User does not have sufficient permission" };
+                return StatusCode((int)HttpStatusCode.Forbidden, err);
+            }
+
+            //check if a file exist for the activity, if it doesn't then create a file for the user
+            var response = await _service.ActivityService.UpdateActivityFilePM(model, userId);
+
+            return Ok(response);
+        }
 
         //Delete pending activity
         [Authorize]
@@ -304,8 +399,41 @@ namespace BuildingManager.Controllers
             return Ok(response);
         }
 
+        [Authorize]
+        [HttpDelete("PM/DeleteActivity/{projectId}/{activityId}")]
+        [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
+        public async Task<IActionResult> DeleteActivityPM(string projectId, string activityId)
+        {
+            if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
+            {
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
+                return Unauthorized(err);
+            }
 
-        //Delete pending activity
+            _generalValidator.ValidateString(projectId, "projectId", 50);
+            _generalValidator.ValidateString(activityId, "activityId", 50);
+
+            var userId = HttpContext.Items["UserId"] as string;
+
+
+            var (userRole, projId) = await _service.ProjectService.GetUserProjectRole(projectId, userId); // where ID is project ID
+            if (userRole != Enums.UserRoles.PM)
+            {
+                //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
+                var err = new ErrorResponse<object> { Message = "User does not have sufficient permission" };
+                return StatusCode((int)HttpStatusCode.Forbidden, err);
+            }
+
+            //OtherPro can delete only pending activity
+            var response = await _service.ActivityService.DeleteActivityPM(projectId, activityId, userId);
+
+            //@Todo: Delete activity storage file function 
+
+            return Ok(response);
+        }
+
+
+
         [Authorize]
         [HttpDelete("OtherPro/DeletePendingActivityFile")]
         [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
@@ -344,6 +472,47 @@ namespace BuildingManager.Controllers
 
             //OtherPro can delete only pending activity
             var response = await _service.ActivityService.DeleteActivityFile(model, userId);
+            return Ok(response);
+        }
+
+        [Authorize]
+        [HttpDelete("PM/DeleteActivityFile")]
+        [ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
+        public async Task<IActionResult> DeleteActivityFilePM(
+            [FromQuery(Name = "projectId")] string projectId,
+            [FromQuery(Name = "ActivityId")] string activityId,
+            [FromQuery(Name = "FileName")] string fileName
+            )
+        {
+            if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
+            {
+                var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
+                return Unauthorized(err);
+            }
+
+            _generalValidator.ValidateString(projectId, "projectId", 50);
+            _generalValidator.ValidateString(activityId, "activityId", 50);
+            _generalValidator.ValidateString(fileName, "fileName", 50);
+
+            var userId = HttpContext.Items["UserId"] as string;
+
+            var model = new ActivityFileDto
+            {
+                ProjectId = projectId,
+                ActivityId = activityId,
+                FileName = fileName
+            };
+
+            var (userRole, projId) = await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
+            if (userRole != Enums.UserRoles.PM)
+            {
+                //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
+                var err = new ErrorResponse<object> { Message = "User does not have sufficient permission" };
+                return StatusCode((int)HttpStatusCode.Forbidden, err);
+            }
+
+            //OtherPro can delete only pending activity
+            var response = await _service.ActivityService.DeleteActivityFilePM(model, userId);
             return Ok(response);
         }
 
@@ -476,7 +645,6 @@ namespace BuildingManager.Controllers
                 throw new Exception("Error getting response. Try again");
             }
 
-
         }
 
 
@@ -521,10 +689,10 @@ namespace BuildingManager.Controllers
                 return Unauthorized(err);
             }
 
-            //_generalValidator.ValidateString(projectId, "projectId", 50);
-            //_generalValidator.ValidateInteger(projectPhase, "projectPhase", 3);
-            //_generalValidator.ValidateInteger(pageNumber, "pageNumber", int.MaxValue);
-            //_generalValidator.ValidateInteger(pageSize, "pageSize", int.MaxValue);
+            _generalValidator.ValidateString(model.ProjectId, "projectId", 50);
+            _generalValidator.ValidateInteger(model.ProjectPhase, "projectPhase", 3);
+            _generalValidator.ValidateInteger(model.PageNumber, "pageNumber", int.MaxValue);
+            _generalValidator.ValidateInteger(model.PageSize, "pageSize", int.MaxValue);
 
             var userId = HttpContext.Items["UserId"] as string;
 
@@ -550,10 +718,10 @@ namespace BuildingManager.Controllers
                 return Unauthorized(err);
             }
 
-            //_generalValidator.ValidateString(projectId, "projectId", 50);
-            //_generalValidator.ValidateInteger(projectPhase, "projectPhase", 3);
-            //_generalValidator.ValidateInteger(pageNumber, "pageNumber", int.MaxValue);
-            //_generalValidator.ValidateInteger(pageSize, "pageSize", int.MaxValue);
+            _generalValidator.ValidateString(model.ProjectId, "projectId", 50);
+            _generalValidator.ValidateInteger(model.ProjectPhase, "projectPhase", 3);
+            _generalValidator.ValidateInteger(model.PageNumber, "pageNumber", int.MaxValue);
+            _generalValidator.ValidateInteger(model.PageSize, "pageSize", int.MaxValue);
 
             var userId = HttpContext.Items["UserId"] as string;
 
@@ -592,6 +760,32 @@ namespace BuildingManager.Controllers
             var response = await _service.ActivityService.GetProjectActivities(model);
             return Ok(response);
         }
+
+
+        //[Authorize]
+        //[HttpPost("PM/ResendActivity")]
+        //[ProducesResponseType(typeof(SuccessResponse<ActivityDto>), 200)]
+        //public async Task<IActionResult> ResendRejectedActivity([FromForm] ActivityStatusUpdateDto model)
+        //{
+        //    if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
+        //    {
+        //        throw new RestException(HttpStatusCode.Unauthorized, "No token provided in Authorization header");
+        //    }
+
+        //    var userId = HttpContext.Items["UserId"] as string;
+
+        //    var (userRole, projectId) = await _service.ProjectService.GetUserProjectRole(model.ProjectId, userId); // where ID is project ID
+        //    if (userRole != Enums.UserRoles.OtherPro)
+        //    {
+        //        //_logger.LogError($"Error, only a  PM (Project Manager) is allowed to approve or reject a project. User is not a PM");
+        //        throw new RestException(HttpStatusCode.Forbidden, "Only OtherPro can resend a rejected activity.");
+        //    }
+
+        //    //OtherPro can resend any of his activity that was rejected
+        //    var response = await _service.ActivityService.ResendRejectedActivity(model, userId);
+
+        //    return Ok(response);
+        //}
 
 
         //actual start date and actual done date cannot be greater than todays date i.e. date it is being inputted.

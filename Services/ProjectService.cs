@@ -76,8 +76,9 @@ namespace BuildingManager.Services
             {
                 if (member.UserId == userId)
                 {
-                    if ((ProjectUserAccess)member.UserAccess == ProjectUserAccess.Blocked)
-                    {
+                    //if ((ProjectUserAccess)member.UserAccess == ProjectUserAccess.Blocked)
+                        if (member.UserAccess == (int)ProjectUserAccess.Blocked)
+                        {
                         throw new RestException(HttpStatusCode.Forbidden, "User is blocked from having access to this project");
                     }
 

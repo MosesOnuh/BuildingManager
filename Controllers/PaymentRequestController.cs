@@ -611,7 +611,7 @@ namespace BuildingManager.Controllers
         {
             if (string.IsNullOrWhiteSpace(HttpContext.Request.Headers["Authorization"]))
             {
-                _logger.LogError($"Error, no token provided in Authorization header ");
+                _logger.LogError($"Error, no token provided in Authorization header");
                 var err = new ErrorResponse<object> { Message = "No token provided in Authorization header" };
                 return Unauthorized(err);
             }

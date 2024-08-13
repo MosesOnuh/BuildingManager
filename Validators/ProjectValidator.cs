@@ -86,4 +86,14 @@ namespace BuildingManager.Validators
             RuleFor(x => x.Profession).Cascade(CascadeMode.Stop).NotEmpty().GreaterThan(0).LessThanOrEqualTo(13);
         }
     }
+
+    public class ProjectAccessDtoValidator : AbstractValidator<ProjectAccessDto>
+    {
+        public ProjectAccessDtoValidator()
+        {
+            RuleFor(x => x.ProjectId).Cascade(CascadeMode.Stop).NotEmpty().MaximumLength(50);
+            RuleFor(x => x.ProjectId).Cascade(CascadeMode.Stop).NotEmpty().MaximumLength(50);
+            RuleFor(x => x.StatusAction).Cascade(CascadeMode.Stop).NotEmpty().GreaterThan(0).LessThanOrEqualTo(2);
+        }
+    }
 }
