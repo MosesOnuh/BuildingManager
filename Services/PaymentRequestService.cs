@@ -122,7 +122,7 @@ namespace BuildingManager.Services
         //    };
 
         //}
-        public async Task<SuccessResponse<PaymentRequestDto>> CreatePaymentRequest (PaymentRequestReqDto model, string userId) {
+        public async Task<SuccessResponse<PaymentRequestDto>> CreatePaymentRequestOtherPro (PaymentRequestReqDto model, string userId) {
             var PayReqId = Guid.NewGuid().ToString();
 
             IList<PaymentRequestItem> newItems = new List<PaymentRequestItem>();
@@ -152,8 +152,67 @@ namespace BuildingManager.Services
                 Id = PayReqId,
                 ProjectId = model.ProjectId,
                 UserId = userId,
+                CreatedBy = userId,
                 Name = model.Name,
                 Status = (int)PaymentRequestStatus.Pending,
+                Type = model.Type,
+                Description = model.Description,
+                SumTotalAmount = model.SumTotalAmount,
+                Items = newItems,
+                UserFileName = null,
+                UserStorageFileName = null,
+                CreatedAt = DateTime.Now,
+            };
+
+            try
+            {
+                await _repository.PaymentRequestRepository.CreatePaymentRequest(paymentRequest);
+            }
+            catch
+            {
+                throw new Exception("Error creating new payment request");
+            }
+
+            return new SuccessResponse<PaymentRequestDto>
+            {
+                Message = "Payment Request created successfully",
+            };
+        }
+
+        public async Task<SuccessResponse<PaymentRequestDto>> CreatePaymentRequestPm (PaymentRequestPmReqDto model, string userId)
+        {
+            var PayReqId = Guid.NewGuid().ToString();
+
+            IList<PaymentRequestItem> newItems = new List<PaymentRequestItem>();
+
+            if (model.Items != null && model.Type == (int)PaymentRequestType.Group)
+            {
+                foreach (var item in model.Items)
+                {
+                    PaymentRequestItem input = new PaymentRequestItem
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        PaymentRequestId = PayReqId,
+                        ProjectId = item.ProjectId,
+                        UserId = userId,
+                        Name = item.Name,
+                        Price = item.Price,
+                        Quantity = item.Quantity,
+                        TotalAmount = item.TotalAmount
+                    };
+
+                    newItems.Add(input);
+                }
+            }
+
+            var paymentRequest = new PaymentRequest
+            {
+                Id = PayReqId,
+                ProjectId = model.ProjectId,
+                UserId = model.AssignedTo,
+                CreatedBy = userId,
+                Name = model.Name,
+                Status =    model.AssignedTo.Equals(userId)  ? (int)PaymentRequestStatus.AwaitingConfirmation : (int)PaymentRequestStatus.Pending,
                 Type = model.Type,
                 Description = model.Description,
                 SumTotalAmount = model.SumTotalAmount,
@@ -179,7 +238,7 @@ namespace BuildingManager.Services
 
         }
 
-        public async Task<PageResponse<IList<PaymentRequestDto>>> GetPaymentRequestsOtherPro(PaymentRequestDtoPaged model, string UserId)
+        public async Task<PageResponse<IList<PaymentRequestDto>>> GetPaymentRequestsOtherPro(PaymentRequestReqPagedDto model, string UserId)
         {
 
             var (totalCount, payReqs) = await _repository.PaymentRequestRepository.GetPaymentRequestsOtherPro(model, UserId);
@@ -207,12 +266,18 @@ namespace BuildingManager.Services
             }
         }
 
-        public async Task<PageResponse<IList<PaymentRequestAndMemberDto>>> GetPaymentRequestsPM(PaymentRequestDtoPaged model)
+        public async Task<PageResponse<IList<PaymentRequestAndMemberDto>>> GetPaymentRequestsPM(PaymentRequestReqPagedDto model)
         {
             var (totalCount, payReqs) = await _repository.PaymentRequestRepository.GetPaymentRequestsPM(model);
             try
             {
                 int totalPages = (int)Math.Ceiling((double)totalCount / (double)model.PageSize);
+
+                //foreach (var v in payReqs)
+                //{
+                //    if (v.Items != null) v.Items.OrderBy(v => v.CreatedAt);
+
+                //}
 
                 return new PageResponse<IList<PaymentRequestAndMemberDto>>()
                 {
@@ -459,27 +524,17 @@ namespace BuildingManager.Services
 
             if (rowsUpdated == 0)
             {
-                _logger.LogError($"Error failed to csend a payment request for confirmation ");
-                throw new Exception("Error failed to send a payment request for confirmation t");
+                _logger.LogError($"Error failed to send a payment request for confirmation");
+                throw new Exception("Error failed to send a payment request for confirmation");
             }
-
-
-            if (model.StatusAction == (int)PaymentRequestStatus.Confirmed)
-            {
-                return new SuccessResponse<PaymentRequestDto>
-                {
-                    Message = "Payment Request status updated to confirmed successfully",
-                };
-            }
-
 
             return new SuccessResponse<PaymentRequestDto>
             {
-                Message = "Payment Request status updated to rejected successfully",
+                Message = "Payment Request sent for confirmation successfully",
             };
         }
 
-        public async Task<SuccessResponse<PaymentRequestDto>> UpdatePendingPaymentRequest(UpdatePaymentRequestDto model, string userId)
+        public async Task<SuccessResponse<PaymentRequestDto>> UpdatePendingPaymentRequest(UpdateGroupPaymentRequestDto model, string userId)
         {
             if (model.Items != null)
             {
@@ -489,8 +544,26 @@ namespace BuildingManager.Services
                 }
 
             }
+
+            List<string> deleteItemsId = new();
+            if (model.DeletedItems != null && model.DeletedItems.Count > 0)
+            {
+                deleteItemsId = model.DeletedItems.Select(v => v.Id).ToList();
+            }
+
+            var newModel = new UpdatePaymentRequestDto
+            {
+                Id = model.Id,
+                ProjectId = model.ProjectId,
+                Name = model.Name,
+                Description = model.Description,
+                Items = model.Items,
+                SumTotalAmount = model.SumTotalAmount,
+            };
+            //List<string> itemIdsToDelete
+           
           
-            var (rowsUpdated, returnNum) = await _repository.PaymentRequestRepository.UpdatePendingPaymentRequest(model, userId);
+            var (rowsUpdated, returnNum) = await _repository.PaymentRequestRepository.UpdatePendingPaymentRequest(newModel, userId, deleteItemsId);
 
             if (rowsUpdated == 0 && returnNum == 0)
             {
@@ -516,6 +589,60 @@ namespace BuildingManager.Services
             };
         }
 
+        public async Task<SuccessResponse<PaymentRequestDto>> UpdatePaymentRequestPm(UpdateGroupPaymentRequestPmDto model, string userId)
+        {
+            if (model.Items != null)
+            {
+                foreach (var item in model.Items)
+                {
+                    if (item.Id == null) item.Id = Guid.NewGuid().ToString();
+                }
+
+            }
+
+            List<string> deleteItemsId = new();
+            if (model.DeletedItems != null && model.DeletedItems.Count > 0)
+            {
+                deleteItemsId = model.DeletedItems.Select(v => v.Id).ToList();
+            }
+
+            //var newModel = new UpdatePaymentRequestPmDto
+            //{
+            //    Id = model.Id,
+            //    ProjectId = model.ProjectId,
+            //    Name = model.Name,
+            //    Description = model.Description,
+            //    Items = model.Items,
+            //    SumTotalAmount = model.SumTotalAmount,
+            //    AssignedTo = model.AssignedTo,
+            //};
+          
+
+            var (rowsUpdated, returnNum) = await _repository.PaymentRequestRepository.UpdatePaymentRequestPm(model, userId, deleteItemsId);
+
+            if (rowsUpdated == 0 && returnNum == 0)
+            {
+                _logger.LogError($"Error occurred when updating the payment request. The required payment request may not exist, check PaymentRequestId, ProjectId  and UserId provided");
+                throw new RestException(HttpStatusCode.NotFound, "Error failed to update payment request.");
+            }
+
+            if (rowsUpdated == 0 && returnNum == 1)
+            {
+                _logger.LogError($"Error attempted to update the details of a payment request that is that is not awaiting confirmation");
+                throw new Exception("Error cannot update a payment request that is that is not awaiting confirmation");
+            }
+
+            if (rowsUpdated == 0)
+            {
+                _logger.LogError($"Error failed to update a payment request");
+                throw new Exception("Error failed to update a payment request");
+            }
+
+            return new SuccessResponse<PaymentRequestDto>
+            {
+                Message = "Activity details updated successfully",
+            };
+        }
 
         public async Task DeletePaymentRequest(string projId, string paymentRequestId, string userId)
         {
@@ -527,10 +654,11 @@ namespace BuildingManager.Services
                 throw new RestException(HttpStatusCode.NotFound, "Error activity to be deleted was not found.");
             }
 
-            if (payReq.Status != (int)PaymentRequestStatus.Rejected)
+            //if (payReq.Status != (int)PaymentRequestStatus.Rejected)
+            if (payReq.Status == (int)PaymentRequestStatus.AwaitingConfirmation || payReq.Status == (int)PaymentRequestStatus.Confirmed)
             {
-                _logger.LogError($"Error attempted to delete a payment request that is not rejected");
-                throw new Exception("Error cannot delete a payment request that is not rejected");
+                _logger.LogError($"Error attempted to delete a payment request that is not pending or rejected");
+                throw new Exception("Error cannot delete a payment request that is not pending or rejected");
             }
 
             if (payReq.UserStorageFileName != null)
@@ -548,8 +676,8 @@ namespace BuildingManager.Services
 
             if (rowsDeleted == 0 && returnNum == 1)
             {
-                _logger.LogError($"Error attempted to delete a payment request that is not rejected");
-                throw new Exception("Error cannot delete a payment request that is not rejected");
+                _logger.LogError($"Error attempted to delete a payment request that is not pending or rejected");
+                throw new Exception("Error cannot delete a payment request that is not pending or rejected");
             }
 
             if (rowsDeleted == 0)
@@ -557,6 +685,51 @@ namespace BuildingManager.Services
                 _logger.LogError($"Error failed to delete a payment request");
                 throw new RestException(HttpStatusCode.NotFound, "Error failed to delete a payment request");
             }          
+        }
+
+        public async Task DeletePaymentRequestPM(string projId, string paymentRequestId, string userId)
+        {
+            var payReq = await _repository.PaymentRequestRepository.GetPaymentRequestDetailsOtherPro(projId, paymentRequestId, userId);
+
+            if (payReq == null)
+            {
+                _logger.LogError($"Error occurred when deleting the payment request. The required payment request was not found, check paymentRequestId, ProjectId and UserId provided");
+                throw new RestException(HttpStatusCode.NotFound, "Error activity to be deleted was not found.");
+            }
+
+            //if (payReq.Status != (int)PaymentRequestStatus.Rejected)
+            if (payReq.Status == (int)PaymentRequestStatus.Pending || payReq.Status == (int)PaymentRequestStatus.Confirmed)
+            {
+                _logger.LogError($"Error attempted to delete a payment request that is not awaiting confirmation or rejected");
+                throw new Exception("Error cannot delete a payment request that is not awaiting confirmation or rejected");
+            }
+
+
+            //check and remove if not relevant
+            if (payReq.UserStorageFileName != null)
+            {
+                await _storage.DeleteFileAsync(_configuration["AwsConfiguration:BucketName"], payReq.UserStorageFileName);
+            }
+
+            var (rowsDeleted, returnNum) = await _repository.PaymentRequestRepository.DeletePaymentRequestPM(projId, paymentRequestId, userId);
+
+            if (rowsDeleted == 0 && returnNum == 0)
+            {
+                _logger.LogError($"Error occurred when deleting the payment request. The required payment request was not found, check paymentRequestId, ProjectId and UserId provided");
+                throw new RestException(HttpStatusCode.NotFound, "Error failed to delete payment request.");
+            }
+
+            if (rowsDeleted == 0 && returnNum == 1)
+            {
+                _logger.LogError($"Error attempted to delete a payment request that is not awaiting confirmation or rejected");
+                throw new Exception("Error cannot delete a payment request that is not awaiting confirmation or rejected");
+            }
+
+            if (rowsDeleted == 0)
+            {
+                _logger.LogError($"Error failed to delete a payment request");
+                throw new RestException(HttpStatusCode.NotFound, "Error failed to delete a payment request");
+            }
         }
 
         public async Task<SuccessResponse<PaymentRequestDto>> UpdatePendingPaymentRequestFile(AddPaymentRequestFileReqDto model, string userId)

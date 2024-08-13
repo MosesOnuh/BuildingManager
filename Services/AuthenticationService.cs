@@ -34,8 +34,8 @@ namespace BuildingManager.Services
         public async Task<SuccessResponse<TokenResponse>> Login(UserLoginReq model)
         {
             _logger.LogInfo("Logging in a user");
-            var validate = new UserValidator();
-            validate.ValidateUserUserLoginReq(model);
+            //var validate = new UserValidator();
+            //validate.ValidateUserUserLoginReq(model);
 
             var user = await _repository.UserRepository.GetUserByEmail(model.Email);
             if (user == null) {
@@ -103,8 +103,8 @@ namespace BuildingManager.Services
         public async Task<SuccessResponse<UserDto>> SignUp(UserCreateDto model)
         {
             _logger.LogInfo("Signing up a user");
-            var  validate = new UserValidator();
-            validate.ValidateUserCreateDto(model);
+            //var  validate = new UserValidator();
+            //validate.ValidateUserCreateDto(model);
 
             bool emailExist = await _repository.UserRepository.CheckEmailExists(model.Email);
             if (emailExist)

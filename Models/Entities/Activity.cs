@@ -7,6 +7,7 @@ namespace BuildingManager.Models.Entities
         public string Id { get; set; }
         public string ProjectId { get; set; }
         public string UserId { get; set; }
+        public string CreatedBy { get; set; }
         public string Name { get; set; }
         //Enum showing if the task is pending, accepted or done;
         public int Status { get; set; }

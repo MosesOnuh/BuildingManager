@@ -2,6 +2,7 @@
 using BuildingManager.Contracts.Services;
 using BuildingManager.Enums;
 using BuildingManager.Helpers;
+using BuildingManager.Models;
 using BuildingManager.Models.Dto;
 using BuildingManager.Models.Entities;
 using BuildingManager.Utils.Logger;
@@ -9,6 +10,7 @@ using BuildingManager.Validators;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace BuildingManager.Services
@@ -28,8 +30,6 @@ namespace BuildingManager.Services
         public async Task<SuccessResponse<ProjectDto>> CreateProject(ProjectRequestDto model, string userId)
         {
             _logger.LogInfo("Creating a new Project");
-            var validate = new ProjectValidator();
-            validate.ValidateProjectRequestDto(model);
 
             Project project = new Project
             {
@@ -38,10 +38,9 @@ namespace BuildingManager.Services
                 Address = model.Address,
                 State = model.State,
                 Country = model.Country,
-                StartDate = DateTime.Now,
-                EndDate = DateTime.Now,
+                StartDate = model.StartDate,
+                EndDate = model.EndDate,
                 CreatedAt = DateTime.Now,
-                //UpdatedAt = DateTime.Now,
             };
 
             await _repository.ProjectRepository.CreateProject(project);
@@ -56,12 +55,6 @@ namespace BuildingManager.Services
             };
 
             await _repository.ProjectRepository.CreateProjectMembership(memberShip);
-            //var returnNum = await _repository.ProjectRepository.CreateProjectMembership(memberShip);
-            //if ( returnNum == 1)
-            //{
-            //    _logger.LogError($"Error user is already a member of this project");
-            //    throw new RestException(HttpStatusCode.Conflict, "Error user is already a member of this project");
-            //}
 
             return new SuccessResponse<ProjectDto>
             {
@@ -72,6 +65,7 @@ namespace BuildingManager.Services
         public async Task<(UserRoles, string)> GetUserProjectRole(string projectId, string userId)
         {
             _logger.LogInfo("Getting User's Project role");
+
             IList<ProjectMember> roleDetails = await _repository.ProjectRepository.GetProjectMemberInfo(projectId);
             if (roleDetails.Count == 0)
             {
@@ -82,9 +76,39 @@ namespace BuildingManager.Services
             {
                 if (member.UserId == userId)
                 {
+                    //if ((ProjectUserAccess)member.UserAccess == ProjectUserAccess.Blocked)
+                        if (member.UserAccess == (int)ProjectUserAccess.Blocked)
+                        {
+                        throw new RestException(HttpStatusCode.Forbidden, "User is blocked from having access to this project");
+                    }
+
                     if (member.Role == 1) return (UserRoles.PM, member.ProjectId);
                     else if (member.Role == 2) return (UserRoles.OtherPro, member.ProjectId);
                     else if (member.Role == 3) return (UserRoles.Client, member.ProjectId);
+                    else throw new Exception("Invalid user role");
+                }
+            }
+
+            throw new RestException(HttpStatusCode.Forbidden, "User is not a member of this project");
+        }
+
+        public async Task<(UserRoles, int, string)> GetUserProjectRoleAndOwnership(string projectId, string userId)
+        {
+            _logger.LogInfo("Getting User's Project role");
+
+            IList<ProjectMember> roleDetails = await _repository.ProjectRepository.GetProjectMemberInfo(projectId);
+            if (roleDetails.Count == 0)
+            {
+                throw new RestException(HttpStatusCode.NotFound, "Project with Id provided does not exist or user is not a member of the project");
+            }
+
+            foreach (ProjectMember member in roleDetails)
+            {
+                if (member.UserId == userId)
+                {
+                    if (member.Role == 1) return (UserRoles.PM, member.ProjOwner, member.ProjectId);
+                    else if (member.Role == 2) return (UserRoles.OtherPro, member.ProjOwner, member.ProjectId);
+                    else if (member.Role == 3) return (UserRoles.Client, member.ProjOwner, member.ProjectId);
                     else throw new Exception("Invalid user role");
                 }
             }
@@ -121,8 +145,6 @@ namespace BuildingManager.Services
         public async Task<SuccessResponse<ProjectDto>> UpdateProject(ProjectDto model)
         {
             _logger.LogInfo("Updating a Project");
-            var validate = new ProjectValidator();
-            //validate.ValidateProjectRequestDto(model);
 
             await _repository.ProjectRepository.UpdateProject(model);
             return new SuccessResponse<ProjectDto>
@@ -240,6 +262,62 @@ namespace BuildingManager.Services
             
         }
 
+        //ProjectAccess(model, userId, userRole)
+        public async Task<SuccessResponse<ProjectDto>> ProjectAccess(ProjectAccessDto model, Enums.ProjectOwner ownership)
+        {      
+            if (model.StatusAction != (int)ProjectUserAccess.Allowed && model.StatusAction != (int)ProjectUserAccess.Blocked)
+            {
+                throw new RestException(HttpStatusCode.BadRequest, "Error StatusAction can only be to Allow or Block a User to a Project");
+            }
+
+            if (ownership == ProjectOwner.NotOwner) { 
+            
+                var (rowsUpdated, returnNum) = await _repository.ProjectRepository.UpdateProjectUserAccessPm(model);
+                if (rowsUpdated == 0 && returnNum == 0)
+                {
+                    _logger.LogError($"Error occurred when updating project user access status. The required project may not exist, check UserId and ProjectId provided");
+                    throw new RestException(HttpStatusCode.NotFound, "Error failed to update project user access status");
+                }
+
+                if (rowsUpdated == 0 && returnNum == 1)
+                {
+                    _logger.LogError($"Error attempted to change user project access of an project manager or client; Insufficient Permission");
+                    throw new Exception("Error attempted to change user project access of an project manager or client; Insufficient Permission");
+                }
+
+                if (rowsUpdated == 0)
+                {
+                    _logger.LogError($"Error failed to change project access");
+                    throw new Exception("Error failed to change project access");
+                }
+
+
+                return new SuccessResponse<ProjectDto>
+                {
+                    Message = "User Project Access Updated successfully",
+                };
+            }
+
+             var (rowsUpdated1, returnNum1) = await _repository.ProjectRepository.UpdateProjectUserAccessOwner(model);
+            if (rowsUpdated1 == 0 && returnNum1 == 0)
+            {
+                _logger.LogError($"Error occurred when updating project user access status. The required project may not exist, check UserId and ProjectId provided");
+                throw new RestException(HttpStatusCode.NotFound, "Error failed to update project user access status");
+            }
+
+            if (rowsUpdated1 == 0)
+            {
+                _logger.LogError($"Error failed to change project access");
+                throw new Exception("Error failed to change project access");
+            }
+
+
+            return new SuccessResponse<ProjectDto>
+            {
+                Message = "User Project Access Updated successfully",
+            };
+        }
+
         public async Task<SuccessResponse<ProjectDto>> ProjectInviteAcceptance(ProjectInviteStatusUpdateDto model, string userId)
         {
             //write procedure to check the status of the activity and if the status is one then 
@@ -303,7 +381,6 @@ namespace BuildingManager.Services
                 Message = "Successfully rejected request to join project",
             };
         }
-            
 
         public async Task<IList<ReceivedInviteRespDto>> GetReceivedProjectInvites( string userId)
         {

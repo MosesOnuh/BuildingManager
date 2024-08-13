@@ -18,6 +18,17 @@ namespace BuildingManager.Models.Dto
         public decimal SumTotalAmount { get; set; }
         public int Type { get; set; }
     }
+    public class PaymentRequestPmReqDto
+    {
+        public string ProjectId { get; set; }
+        public string Name { get; set; }
+        public string? Description { get; set; } = null;
+        public IList<PaymentRequestItemReqDto> Items { get; set; }
+        public decimal SumTotalAmount { get; set; }
+        public int Type { get; set; }
+        public string AssignedTo { get; set; }
+    }
+
     //public class PaymentRequestReqDto
     //{
     //    //public string Id { get; set; }
@@ -33,12 +44,12 @@ namespace BuildingManager.Models.Dto
     //    //public DateTime EndDate { get; set; }
     //}
 
-    public class PaymentRequestDtoPaged
-    {
-        public string ProjectId { get; set; }
-        public int PageNumber { get; set; }
-        public int PageSize { get; set; }
-    }
+    //public class PaymentRequestDtoPaged
+    //{
+    //    public string ProjectId { get; set; }
+    //    public int PageNumber { get; set; }
+    //    public int PageSize { get; set; }
+    //}
 
     public class PaymentRequestDto
     {
@@ -74,12 +85,14 @@ namespace BuildingManager.Models.Dto
     public class PaymentRequestItemDto
     {
         public string Id { get; set; }
+        public string ProjectId { get; set; }
         public string PaymentRequestId { get; set; }
         //public string? UserId { get; set; } = null;
         public string Name { get; set; }
         public decimal Price { get; set; }
         public decimal Quantity { get; set; }
         public decimal TotalAmount { get; set; }
+        public DateTime? CreatedAt { get; set; }
     }
 
 
@@ -133,10 +146,25 @@ namespace BuildingManager.Models.Dto
         public string ProjectId { get; set; }
         // public string UserId { get; set; }
         public string Name { get; set; }
-        //public int Status { get; set; }
+        public int? Status { get; set; } = null;
         public string? Description { get; set; } = null;
         public decimal SumTotalAmount { get; set; }
         public IList<UpdatePaymentRequestItemDto>? Items { get; set; } = null;
+        //public string? AssignedTo { get; set; } = null;
+    }
+
+    public class UpdateGroupPaymentRequestDto
+    {
+        public string Id { get; set; }
+        public string ProjectId { get; set; }
+        // public string UserId { get; set; }
+        public string Name { get; set; }
+        public int? Status { get; set; } = null;
+        public string? Description { get; set; } = null;
+        public decimal SumTotalAmount { get; set; }
+        public IList<UpdatePaymentRequestItemDto>? Items { get; set; } = null;
+        public IList<UpdatePaymentRequestItemDto>? DeletedItems { get; set; } = null;
+        public string? AssignedTo { get; set; } = null;
     }
 
     public class UpdateSinglePaymentRequestDto
@@ -148,9 +176,50 @@ namespace BuildingManager.Models.Dto
         //public int Status { get; set; }
         public string? Description { get; set; } = null;
         public decimal SumTotalAmount { get; set; }
+       
     }
 
-    //public class AddPaymentRequestFileRequestDto
+    public class UpdatePaymentRequestPmDto
+    {
+        public string Id { get; set; }
+        public string ProjectId { get; set; }
+        // public string UserId { get; set; }
+        public string Name { get; set; }
+        //public int Status { get; set; }
+        public string? Description { get; set; } = null;
+        public decimal SumTotalAmount { get; set; }
+        public IList<UpdatePaymentRequestItemDto>? Items { get; set; } = null;
+        public IList<UpdatePaymentRequestItemDto>? DeletedItems { get; set; } = null;
+        public string AssignedTo { get; set; }
+    }
+
+    public class UpdateGroupPaymentRequestPmDto
+    {
+        public string Id { get; set; }
+        public string ProjectId { get; set; }
+        // public string UserId { get; set; }
+        public string Name { get; set; }
+        public int? Status { get; set; } = null;
+        public string? Description { get; set; } = null;
+        public decimal SumTotalAmount { get; set; }
+        public IList<UpdatePaymentRequestItemDto> Items { get; set; } = null;
+        public IList<UpdatePaymentRequestItemDto>? DeletedItems { get; set; } = null;
+        public string AssignedTo { get; set; }
+    }
+
+    public class UpdateSinglePaymentRequestPmDto
+    {
+        public string Id { get; set; }
+        public string ProjectId { get; set; }
+        // public string UserId { get; set; }
+        public string Name { get; set; }
+        //public int Status { get; set; }
+        public string? Description { get; set; } = null;
+        public decimal SumTotalAmount { get; set; }
+        public string AssignedTo { get; set; }
+    }
+
+
     public class AddPaymentRequestFileReqDto
     {
         public string ProjectId { get; set; }
@@ -191,7 +260,13 @@ namespace BuildingManager.Models.Dto
         public decimal Oct { get; set; } = 0.00m;
         public decimal Nov { get; set; } = 0.00m;
         public decimal Dec { get; set; } = 0.00m;
-        public decimal? Total { get; set; } = null;
+        public decimal Total { get; set; } = 0.00m;
+
+        public void CalculateTotal()
+        {
+            Total = Jan + Feb + Mar + Apr + May + Jun + Jul + Aug + Sep + Oct + Nov + Dec;
+
+        }
     }
 
     public class PayReqWeeklyDataDto
@@ -202,6 +277,12 @@ namespace BuildingManager.Models.Dto
         public decimal Wk3 { get; set; } = 0.00m;
         public decimal Wk4 { get; set; } = 0.00m;
         public decimal Wk5 { get; set; } = 0.00m;
+        public decimal Total { get; set; } = 0.00m;
+
+        public void CalculateTotal()
+        {
+            Total = Wk1 + Wk2 + Wk3 + + Wk4 + Wk5;
+        }
     }
 
     public class PayReqDailyDataDto
@@ -214,7 +295,20 @@ namespace BuildingManager.Models.Dto
         public decimal Fri { get; set; } = 0.00m;
         public decimal Sat { get; set; } = 0.00m;
         public decimal Sun { get; set; } = 0.00m;
+        public decimal Total { get; set; } = 0.00m;
+
+        public void CalculateTotal()
+        {
+            Total = Mon + Tue + Wed + Thu + Fri + Sat + Sun;
         }
+    }
+
+    public class PaymentRequestReqPagedDto {
+        public string ProjectId { get; set; }
+        public int? RequiredStatus { get; set; } = null;
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
+    }
 
 }
 

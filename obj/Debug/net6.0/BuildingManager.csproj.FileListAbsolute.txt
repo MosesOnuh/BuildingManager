@@ -173,3 +173,10 @@ C:\Users\ADMIN\Desktop\MosesMscBackup 9 may\BuildingManager\obj\Debug\net6.0\ref
 C:\Users\ADMIN\Desktop\MosesMscBackup 9 may\BuildingManager\obj\Debug\net6.0\BuildingManager.pdb
 C:\Users\ADMIN\Desktop\MosesMscBackup 9 may\BuildingManager\obj\Debug\net6.0\BuildingManager.genruntimeconfig.cache
 C:\Users\ADMIN\Desktop\MosesMscBackup 9 may\BuildingManager\obj\Debug\net6.0\ref\BuildingManager.dll
+C:\Users\ADMIN\Desktop\MosesMscBackup 9 may\BuildingManager\bin\Debug\net6.0\FluentValidation.dll
+C:\Users\ADMIN\Desktop\MosesMscBackup 9 may\BuildingManager\bin\Debug\net6.0\FluentValidation.AspNetCore.dll
+C:\Users\ADMIN\Desktop\MosesMscBackup 9 may\BuildingManager\bin\Debug\net6.0\FluentValidation.DependencyInjectionExtensions.dll
+C:\Users\ADMIN\Desktop\MosesMscBackup 9 may\BuildingManager\bin\Debug\net6.0\Microsoft.AspNet.SignalR.Core.dll
+C:\Users\ADMIN\Desktop\MosesMscBackup 9 may\BuildingManager\bin\Debug\net6.0\Microsoft.Owin.dll
+C:\Users\ADMIN\Desktop\MosesMscBackup 9 may\BuildingManager\bin\Debug\net6.0\Microsoft.Owin.Security.dll
+C:\Users\ADMIN\Desktop\MosesMscBackup 9 may\BuildingManager\bin\Debug\net6.0\Owin.dll
